@@ -13,15 +13,17 @@ export default defineConfig({
   ],
   retries: process.env.CI ? 2 : 0,
   testDir: './tests/e2e',
-  webServer: process.env.UGP_BASE_URL
-    ? undefined
+  ...(process.env.UGP_BASE_URL
+    ? {}
     : {
-        command:
-          'pnpm --filter @ui-grounding/example-bi-dashboard dev --host 127.0.0.1 --port 4173',
-        reuseExistingServer: !process.env.CI,
-        timeout: 60_000,
-        url: baseURL,
-      },
+        webServer: {
+          command:
+            'pnpm --filter @ui-grounding/example-bi-dashboard dev --host 127.0.0.1 --port 4173',
+          reuseExistingServer: !process.env.CI,
+          timeout: 60_000,
+          url: baseURL,
+        },
+      }),
   use: {
     baseURL,
     screenshot: 'only-on-failure',

@@ -142,3 +142,21 @@ test('M5-09 disabling UGP preserves business layout and controls', async ({
     'east',
   );
 });
+
+test('M5-11 a real Canvas drag resolves an interval referent', async ({
+  page,
+}) => {
+  await page.getByRole('button', { name: '▱ Region' }).click();
+  await page.locator('#trend-chart').scrollIntoViewIfNeeded();
+  const box = await page.locator('#trend-chart').boundingBox();
+  expect(box).not.toBeNull();
+  const xAt = (index: number) => box!.x + 28 + (index / 23) * (box!.width - 48);
+  await page.mouse.move(xAt(14), box!.y + 45);
+  await page.mouse.down();
+  await page.mouse.move(xAt(16), box!.y + box!.height - 45, { steps: 6 });
+  await page.mouse.up();
+  const result = await page.evaluate(() => window.ugpBiLab!.grounding);
+  expect(result?.referents[0]?.nodeId).toBe(
+    'interval:revenue:2026-03..2026-05',
+  );
+});

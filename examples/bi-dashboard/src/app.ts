@@ -410,10 +410,46 @@ export function createBiLab(root: HTMLElement): BiLabApi {
     };
   }
 
-  const handleOverlaySelection = (selection: Selection): void => {
-    resolve(
-      selection.mode === 'text' ? prepareTextFragment(selection) : selection,
+  const routeChartInterval = (selection: Selection): Selection => {
+    const geometry = selection.geometry;
+    if (
+      selection.mode !== 'region' ||
+      geometry?.kind !== 'rect' ||
+      geometry.coordinateSpace !== 'viewport'
+    ) {
+      return selection;
+    }
+    const rect = canvas.getBoundingClientRect();
+    const right = geometry.x + geometry.width;
+    const bottom = geometry.y + geometry.height;
+    if (
+      right < rect.left ||
+      geometry.x > rect.right ||
+      bottom < rect.top ||
+      geometry.y > rect.bottom
+    ) {
+      return selection;
+    }
+    const plotLeft = rect.left + 28;
+    const plotWidth = Math.max(1, rect.width - 48);
+    const lastIndex = dashboard.revenueSeries.length - 1;
+    const indexAt = (x: number) =>
+      Math.max(
+        0,
+        Math.min(
+          lastIndex,
+          Math.round(((x - plotLeft) / plotWidth) * lastIndex),
+        ),
+      );
+    return chartAdapter.intervalSelection(
+      indexAt(Math.max(geometry.x, plotLeft)),
+      indexAt(Math.min(right, plotLeft + plotWidth)),
     );
+  };
+
+  const handleOverlaySelection = (selection: Selection): void => {
+    const routed = routeChartInterval(selection);
+    resolve(routed.mode === 'text' ? prepareTextFragment(routed) : routed);
   };
   const createOverlay = (): SelectionOverlay =>
     new SelectionOverlay({
