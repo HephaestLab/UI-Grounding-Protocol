@@ -1,0 +1,13 @@
+packages:
+  - packages/*
+  - examples/*
+
+catalog:
+  typescript: 6.0.3
+  vite: 8.2.2
+  vitest: 4.1.11
+
+# Temporary allowlist for the exact Node declarations used by this lockfile.
+# Remove after the configured supply-chain release-age window has elapsed.
+minimumReleaseAgeExclude:
+  - '@types/node@26.4.0'

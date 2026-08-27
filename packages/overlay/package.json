@@ -1,0 +1,38 @@
+{
+  "name": "@ui-grounding/overlay",
+  "version": "0.0.0",
+  "description": "Reference point, region, and text-selection overlay for UGP.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "vite build --config ../../tooling/vite.library.ts && tsc -p tsconfig.build.json",
+    "test": "vitest run --root . --passWithNoTests",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@ui-grounding/core": "workspace:^",
+    "@ui-grounding/protocol": "workspace:^"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  }
+}

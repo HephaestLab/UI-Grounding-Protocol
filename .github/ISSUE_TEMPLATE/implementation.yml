@@ -1,0 +1,54 @@
+name: Implementation task
+description: Track a scoped UGP protocol, SDK, fixture, or acceptance change.
+title: '[UGP-] '
+body:
+  - type: textarea
+    id: objective
+    attributes:
+      label: Objective
+    validations:
+      required: true
+  - type: textarea
+    id: requirements
+    attributes:
+      label: Protocol requirements
+      description:
+        List the UGP-REQ identifiers this work implements or verifies.
+    validations:
+      required: true
+  - type: textarea
+    id: inputs
+    attributes:
+      label: Inputs
+  - type: textarea
+    id: deliverables
+    attributes:
+      label: Deliverables
+    validations:
+      required: true
+  - type: textarea
+    id: non_goals
+    attributes:
+      label: Non-goals
+  - type: textarea
+    id: fixtures
+    attributes:
+      label: Conformance fixtures
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Automated and browser acceptance
+  - type: textarea
+    id: security
+    attributes:
+      label: Performance and security impact
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencies
+  - type: textarea
+    id: done
+    attributes:
+      label: Definition of Done
+    validations:
+      required: true

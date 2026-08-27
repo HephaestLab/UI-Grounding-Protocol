@@ -1,0 +1,39 @@
+{
+  "name": "@ui-grounding/react",
+  "version": "0.0.0",
+  "description": "React bindings for UGP surfaces and semantic nodes.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "vite build --config ../../tooling/vite.library.ts && tsc -p tsconfig.build.json",
+    "test": "vitest run --root . --passWithNoTests",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@ui-grounding/core": "workspace:^",
+    "@ui-grounding/protocol": "workspace:^"
+  },
+  "peerDependencies": {
+    "react": ">=18.3"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  }
+}
