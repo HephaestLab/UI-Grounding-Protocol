@@ -134,4 +134,11 @@ test('M5-09 disabling UGP preserves business layout and controls', async ({
   await expect(page.getByRole('heading', { name: heading! })).toBeVisible();
   await page.locator('[data-action="filter"]').click();
   await expect(page.locator('.revision strong')).toHaveText('q-002');
+  await page.locator('[data-action="sort"]').click();
+  await expect(page.locator('[data-action="filter"]')).toContainText(
+    'East region',
+  );
+  await expect(page.locator('.table-row .region-cell').first()).toHaveText(
+    'east',
+  );
 });

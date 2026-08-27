@@ -51,9 +51,11 @@ export class BiScenarioBackend {
     if (!isScenarioMutation(value))
       throw new TypeError('Invalid scenario mutation');
     this.#revision += 1;
+    const regionId =
+      value.regionId === undefined ? this.#state.regionId : value.regionId;
     this.#state = {
       sort: value.sort ?? this.#state.sort,
-      ...(value.regionId ? { regionId: value.regionId } : {}),
+      ...(regionId ? { regionId } : {}),
     };
     return this.dashboard();
   }

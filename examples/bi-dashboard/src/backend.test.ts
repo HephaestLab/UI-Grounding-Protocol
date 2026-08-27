@@ -29,6 +29,11 @@ describe('BI deterministic backend', () => {
     expect(ascending.records[0]!.revenue).toBeLessThanOrEqual(
       ascending.records[1]!.revenue,
     );
+    expect(ascending.state.regionId).toBe('east');
+    expect(
+      ascending.records.every((record) => record.regionId === 'east'),
+    ).toBe(true);
+    expect(backend.mutate({ regionId: null }).state.regionId).toBeUndefined();
     expect(backend.reset().state.regionId).toBeUndefined();
     expect(() => backend.mutate({ unknown: true })).toThrow('Invalid');
   });
