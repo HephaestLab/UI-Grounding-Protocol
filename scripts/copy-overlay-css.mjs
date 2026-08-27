@@ -1,6 +1,6 @@
 import { copyFile, mkdir } from 'node:fs/promises';
 import { join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { URL, fileURLToPath } from 'node:url';
 
 const packageRoot = fileURLToPath(
   new URL('../packages/overlay/', import.meta.url),

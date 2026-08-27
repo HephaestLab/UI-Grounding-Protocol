@@ -7,6 +7,12 @@
     "build": "vite build",
     "dev": "vite"
   },
+  "dependencies": {
+    "@ui-grounding/core": "workspace:^",
+    "@ui-grounding/dom": "workspace:^",
+    "@ui-grounding/overlay": "workspace:^",
+    "@ui-grounding/protocol": "workspace:^"
+  },
   "devDependencies": {
     "typescript": "catalog:",
     "vite": "catalog:"

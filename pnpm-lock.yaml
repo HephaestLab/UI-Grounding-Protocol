@@ -104,6 +104,19 @@ importers:
         version: 4.1.11(@types/node@26.4.0)(@vitest/browser-playwright@4.1.11)(@vitest/coverage-v8@4.1.11)(vite@8.2.2(@types/node@26.4.0)(esbuild@0.28.2)(tsx@4.23.12)(yaml@2.9.0))
 
   examples/bi-dashboard:
+    dependencies:
+      '@ui-grounding/core':
+        specifier: workspace:^
+        version: link:../../packages/core
+      '@ui-grounding/dom':
+        specifier: workspace:^
+        version: link:../../packages/dom
+      '@ui-grounding/overlay':
+        specifier: workspace:^
+        version: link:../../packages/overlay
+      '@ui-grounding/protocol':
+        specifier: workspace:^
+        version: link:../../packages/protocol
     devDependencies:
       typescript:
         specifier: 'catalog:'
