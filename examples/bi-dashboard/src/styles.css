@@ -595,6 +595,9 @@ h1 {
   font-size: 9px;
   font-weight: 700;
 }
+.bundle-button[hidden] {
+  display: none;
+}
 .bundle-button span {
   color: #2563eb;
   font-family: ui-monospace, monospace;

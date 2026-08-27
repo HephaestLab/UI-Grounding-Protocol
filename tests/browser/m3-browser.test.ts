@@ -12,11 +12,12 @@ import type { GroundingBundle, Selection } from '@ui-grounding/protocol';
 import {
   GroundingSurfaceProvider,
   useGroundingNode,
+  useGroundingRuntime,
   useGroundingSnapshot,
 } from '@ui-grounding/react';
 import { createElement, StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 function semanticNode(nodeId: string) {
   return {
@@ -378,5 +379,234 @@ describe('M3 browser components', () => {
     });
     expect(materialized).toBe(false);
     expect(bundle.authorization.filtered).toBe(true);
+  });
+
+  it('fails closed for hidden DOM and cleans every registration path', () => {
+    const detached = document.createElement('div');
+    expect(measureDomElement(detached).visibility).toBe('offscreen');
+
+    const hidden = document.createElement('div');
+    hidden.style.width = '20px';
+    hidden.style.height = '20px';
+    hidden.style.display = 'none';
+    document.body.append(hidden);
+    expect(measureDomElement(hidden).visibility).toBe('offscreen');
+    hidden.style.display = 'block';
+    hidden.style.visibility = 'hidden';
+    expect(measureDomElement(hidden).visibility).toBe('offscreen');
+    hidden.style.visibility = 'visible';
+    hidden.style.opacity = '0';
+    expect(measureDomElement(hidden).visibility).toBe('offscreen');
+
+    const empty = document.createElement('span');
+    document.body.append(empty);
+    expect(measureDomElement(empty).visibility).toBe('offscreen');
+
+    const offscreen = document.createElement('div');
+    Object.assign(offscreen.style, {
+      position: 'absolute',
+      left: '-100px',
+      top: '-100px',
+      width: '20px',
+      height: '20px',
+    });
+    document.body.append(offscreen);
+    expect(measureDomElement(offscreen).visibility).toBe('offscreen');
+
+    const visible = document.createElement('div');
+    Object.assign(visible.style, { width: '20px', height: '20px' });
+    document.body.append(visible);
+    const elementsFromPoint = vi
+      .spyOn(document, 'elementsFromPoint')
+      .mockReturnValue([]);
+    expect(measureDomElement(visible).visibility).toBe('visible');
+    elementsFromPoint.mockRestore();
+
+    const registry = new SemanticRegistry({
+      surfaceId: 'surface:cleanup',
+      surfaceRevision: '1',
+    });
+    registry.registerNode(semanticNode('cleanup'));
+    const dom = new DomAnchorRegistry({
+      registry,
+      surfaceRevision: () => 'custom-revision',
+    });
+    const aborted = new AbortController();
+    aborted.abort();
+    expect(() =>
+      dom.register(visible, 'cleanup', { signal: aborted.signal }),
+    ).toThrowError(DOMException);
+
+    const controller = new AbortController();
+    const registration = dom.register(visible, 'cleanup', {
+      priority: 8,
+      signal: controller.signal,
+    });
+    expect(registration.anchorId).toContain('dom:cleanup');
+    expect(registry.getAnchor(registration.anchorId)).toMatchObject({
+      priority: 8,
+      surfaceRevision: 'custom-revision',
+    });
+    registration.refresh();
+    controller.abort();
+    expect(visible.hasAttribute('data-ugp-anchor')).toBe(false);
+    registration.dispose();
+    dom.dispose();
+    dom.dispose();
+    expect(() => dom.register(visible, 'cleanup')).toThrow('disposed');
+  });
+
+  it('ignores invalid overlay gestures and empty ambiguity input', () => {
+    const selections: Selection[] = [];
+    const overlay = new SelectionOverlay({
+      surfaceId: 'surface:overlay-branches',
+      surfaceRevision: () => '1',
+      minRegionSize: 10,
+      onSelection: (selection) => selections.push(selection),
+    });
+    const overlayUi = document.createElement('button');
+    overlayUi.dataset.ugpOverlayUi = 'true';
+    document.body.append(overlayUi);
+    overlayUi.dispatchEvent(
+      new PointerEvent('pointerdown', { bubbles: true, pointerId: 1 }),
+    );
+    document.dispatchEvent(
+      new PointerEvent('pointerdown', {
+        bubbles: true,
+        button: 2,
+        pointerId: 2,
+      }),
+    );
+    overlay.setMode('region');
+    document.dispatchEvent(
+      new PointerEvent('pointermove', { bubbles: true, pointerId: 99 }),
+    );
+    document.dispatchEvent(
+      new PointerEvent('pointerdown', {
+        bubbles: true,
+        clientX: 10,
+        clientY: 10,
+        pointerId: 3,
+      }),
+    );
+    document.dispatchEvent(
+      new PointerEvent('pointerup', {
+        bubbles: true,
+        clientX: 14,
+        clientY: 14,
+        pointerId: 3,
+      }),
+    );
+    expect(selections).toEqual([]);
+
+    document.getSelection()?.removeAllRanges();
+    overlay.setMode('text');
+    document.dispatchEvent(new PointerEvent('pointerup', { bubbles: true }));
+    expect(selections).toEqual([]);
+    overlay.dispose();
+    overlay.dispose();
+
+    const dispose = renderAmbiguityChooser(
+      document.body,
+      {
+        ambiguity: { requiresDisambiguation: false },
+      } as unknown as GroundingBundle,
+      () => undefined,
+    );
+    expect(document.querySelector('.ugp-ambiguity')).toBeNull();
+    dispose();
+  });
+
+  it('updates React nodes and late-bound Context providers', async () => {
+    const mount = document.createElement('div');
+    document.body.append(mount);
+    let runtime: ReturnType<typeof useGroundingRuntime> | undefined;
+
+    function Probe(props: { label: string; value: string }) {
+      runtime = useGroundingRuntime();
+      const binding = useGroundingNode(
+        { ...semanticNode('react-context'), label: props.label },
+        {
+          contexts: [
+            {
+              descriptor: {
+                name: 'summary',
+                description: 'Summary',
+                schema: { type: 'string' },
+                sensitivity: 'internal',
+                freshness: 'on-demand',
+              },
+              materialize: () => props.value,
+              options: { nodeRevision: '1' },
+            },
+          ],
+        },
+      );
+      return createElement('div', { ref: binding.ref }, props.label);
+    }
+
+    const root = createRoot(mount);
+    const render = (label: string, value: string) =>
+      root.render(
+        createElement(
+          GroundingSurfaceProvider,
+          { surfaceId: 'surface:react-context', surfaceRevision: '1' },
+          createElement(Probe, { label, value }),
+        ),
+      );
+    render('First label', 'first');
+    await until(() => {
+      expect(runtime?.registry.getNode('react-context')?.label).toBe(
+        'First label',
+      );
+      expect(runtime?.registry.getSnapshot().anchors).toHaveLength(1);
+    });
+    render('Updated label', 'updated');
+    await until(() => {
+      expect(runtime?.registry.getNode('react-context')?.label).toBe(
+        'Updated label',
+      );
+    });
+    const context = await runtime!.contextRegistry.materialize({
+      grounding: {
+        groundingId: 'grounding:react-context',
+        selection: {
+          selectionId: 'selection:react-context',
+          surfaceId: 'surface:react-context',
+          mode: 'semantic',
+          selectors: [{ type: 'UGPSemanticSelector', nodeId: 'react-context' }],
+          surfaceRevision: '1',
+          createdAt: new Date().toISOString(),
+          source: 'application',
+        },
+        referents: [
+          {
+            nodeId: 'react-context',
+            type: 'org.example.analytics.metric',
+            label: 'Updated label',
+            authority: 'authoritative',
+            confidence: 1,
+            relation: 'exact',
+            evidence: [
+              {
+                kind: 'semantic-selector',
+                authority: 'authoritative',
+              },
+            ],
+            surfaceRevision: '1',
+            nodeRevision: '1',
+          },
+        ],
+        ambiguity: { requiresDisambiguation: false },
+        generatedAt: new Date().toISOString(),
+      },
+      purpose: 'inspect',
+      requestedContexts: ['summary'],
+      budgetBytes: 100,
+      signal: new AbortController().signal,
+      authorize: () => true,
+    });
+    expect(context.referentContexts[0]?.contexts.summary).toBe('updated');
+    root.unmount();
   });
 });

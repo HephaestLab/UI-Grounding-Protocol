@@ -43,7 +43,7 @@ export class SemanticRegistry {
   #children = new Map<string, Set<string>>();
   #listeners = new Set<Listener>();
   #cleanups = new Map<string, () => void>();
-  #snapshot: RegistrySnapshot;
+  #snapshot: RegistrySnapshot | undefined;
   #disposed = false;
 
   constructor(options: { surfaceId: string; surfaceRevision: string }) {
@@ -222,7 +222,10 @@ export class SemanticRegistry {
       .map(cloneNode);
   }
 
-  getSnapshot = (): RegistrySnapshot => this.#snapshot;
+  getSnapshot = (): RegistrySnapshot => {
+    this.#snapshot ??= this.#createSnapshot();
+    return this.#snapshot;
+  };
 
   subscribe = (listener: Listener): (() => void) => {
     this.#assertActive();
@@ -298,7 +301,7 @@ export class SemanticRegistry {
 
   #mutated(): void {
     this.#semanticRevision += 1;
-    this.#snapshot = this.#createSnapshot();
+    this.#snapshot = undefined;
     for (const listener of [...this.#listeners]) listener();
   }
 

@@ -72,6 +72,7 @@
         "points": {
           "type": "array",
           "minItems": 3,
+          "maxItems": 2048,
           "items": {
             "type": "object",
             "additionalProperties": false,

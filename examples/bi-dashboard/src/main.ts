@@ -1,8 +1,12 @@
 import './styles.css';
 
+import { UGP_PROTOCOL_VERSION } from '@ui-grounding/protocol';
+
 import { createBiLab } from './app.js';
 
 document.documentElement.dataset.ugpExample = 'bi-dashboard';
+const buildCommit = import.meta.env.VITE_BUILD_COMMIT || 'development';
+const debugEnabled = import.meta.env.VITE_UGP_DEBUG === 'true';
 
 document.querySelector<HTMLElement>('#app')!.innerHTML = `
   <header class="topbar">
@@ -17,7 +21,7 @@ document.querySelector<HTMLElement>('#app')!.innerHTML = `
       <div><p class="eyebrow">OPERATING REVIEW · Q2 2026</p><h1>Revenue intelligence</h1><p class="subtitle">Select anything visible to inspect its authoritative business meaning.</p></div>
       <div class="selection-mode" data-ugp-overlay-ui="true" aria-label="Selection mode"><button class="active" data-mode="point" type="button">↖ Point</button><button data-mode="region" type="button">▱ Region</button><button data-mode="text" type="button">T Text</button></div>
     </section>
-    <section class="filters" aria-label="Dashboard filters"><span class="filter-label">Filters</span><button class="filter-chip" data-action="filter" type="button">All regions <b>×</b></button><button class="filter-chip" type="button">24 months <b>×</b></button><button class="filter-add" type="button">＋ Add filter</button><span class="revision">Query revision <strong>q-001</strong></span></section>
+    <section class="filters" aria-label="Dashboard filters"><span class="filter-label">Filters</span><button class="filter-chip" data-action="filter" type="button">All regions <b>×</b></button><button class="filter-chip" type="button">24 months <b>×</b></button><button class="filter-add" type="button">＋ Add filter</button><span class="revision">UGP <b>${UGP_PROTOCOL_VERSION}</b> · build <b>${buildCommit}</b> · query <strong>q-001</strong></span></section>
     <section class="kpis" aria-label="Key performance indicators">
       <article class="kpi selected" data-metric-id="revenue"><div class="kpi-top"><span>Revenue</span><em>Authoritative</em></div><strong data-metric-value="revenue">$8.42M</strong><p class="positive">↗ 12.4% <span>vs prior period</span></p><div class="sparkline s1"></div></article>
       <article class="kpi" data-metric-id="orders"><div class="kpi-top"><span>Orders</span><em>Authoritative</em></div><strong data-metric-value="orders">12,840</strong><p class="positive">↗ 8.1% <span>vs prior period</span></p><div class="sparkline s2"></div></article>
@@ -36,7 +40,7 @@ document.querySelector<HTMLElement>('#app')!.innerHTML = `
     <div class="selection-preview"><span class="crosshair">⌖</span><div><small>POINT SELECTION</small><strong>x 184 · y 236</strong></div><b>1.8ms</b></div>
     <div class="referent-card"><span class="authority">AUTHORITATIVE</span><h3>Revenue</h3><code>org.ugp.demo.bi.metric</code><dl><div><dt>entityRef</dt><dd>metrics/revenue</dd></div><div><dt>relation</dt><dd>contains-selection</dd></div><div><dt>confidence</dt><dd>1.00</dd></div><div><dt>revision</dt><dd>q-001</dd></div></dl></div>
     <div class="evidence"><h3>Evidence <span>2</span></h3><div><i>01</i><p><strong>anchor-hit</strong><small>DOM · visible ratio 1.00</small></p></div><div><i>02</i><p><strong>semantic-selector</strong><small>Declared by application</small></p></div></div>
-    <button class="bundle-button" data-action="bundle" type="button">View GroundingBundle <span>{ }</span></button><pre class="bundle-json" hidden></pre>
+    <button class="bundle-button" data-action="bundle" type="button"${debugEnabled ? '' : ' hidden'}>View GroundingBundle <span>{ }</span></button><pre class="bundle-json" hidden></pre>
   </aside>`;
 
 const canvas = document.querySelector<HTMLCanvasElement>('#trend-chart')!;

@@ -8,6 +8,7 @@ export type Selection = {
   mode: 'point' | 'region' | 'lasso' | 'text' | 'semantic' | 'programmatic';
   /**
    * @minItems 1
+   * @maxItems 64
    */
   selectors: [Selector, ...Selector[]];
   geometry?: Point | Rect | Polygon;
@@ -117,6 +118,7 @@ export interface Polygon {
   coordinateSpace: 'viewport' | 'surface' | 'anchor';
   /**
    * @minItems 3
+   * @maxItems 2048
    */
   points: [
     {

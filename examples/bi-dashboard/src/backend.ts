@@ -1,6 +1,6 @@
 import type { ResolvedReferent } from '@ui-grounding/protocol';
 
-import { isScenarioMutation } from './api-schemas.js';
+import { isContextRequest, isScenarioMutation } from './api-schemas.js';
 import { createScenarioData } from './data.js';
 import type {
   DashboardResponse,
@@ -131,6 +131,12 @@ export class BiScenarioBackend {
     referent: ResolvedReferent,
     role: Role,
   ): { projection: Record<string, unknown>; omittedFields: string[] } {
+    if (!this.#isKnownReferent(referent)) {
+      return {
+        projection: {},
+        omittedFields: ['not-found-or-unauthorized'],
+      };
+    }
     const projection: Record<string, unknown> = {
       entityRef: referent.entityRef,
       label: referent.label,
@@ -203,10 +209,9 @@ export class BiScenarioBackend {
         });
       }
       if (request.method === 'POST' && url.pathname === '/api/context') {
-        const body = (await request.json()) as {
-          referent: ResolvedReferent;
-          principal: Role;
-        };
+        const body = await request.json();
+        if (!isContextRequest(body))
+          throw new TypeError('Invalid context request');
         return json(this.context(body.referent, body.principal));
       }
       return json({ error: 'Not found' }, 404);
@@ -216,6 +221,44 @@ export class BiScenarioBackend {
         400,
       );
     }
+  }
+
+  #isKnownReferent(referent: ResolvedReferent): boolean {
+    const entity = referent.entityRef;
+    if (!entity) return false;
+    if (entity.namespace === 'metrics') {
+      return this.data.metrics.some((metric) => metric.id === entity.id);
+    }
+    if (entity.namespace === 'metric-values') {
+      return this.data.metrics.some((metric) =>
+        entity.id.startsWith(`${metric.id}@`),
+      );
+    }
+    if (entity.namespace === 'orders') {
+      return this.data.records.some((record) => record.id === entity.id);
+    }
+    if (entity.namespace === 'regions') {
+      return this.data.regions.some((region) => region.id === entity.id);
+    }
+    const known = new Map<string, Set<string>>([
+      ['dashboards', new Set(['operating-review'])],
+      ['charts', new Set(['revenue-trend', 'region-breakdown'])],
+      ['series', new Set(['revenue:all'])],
+      ['filters', new Set(['region:all'])],
+      ['insights', new Set(['revenue-drop'])],
+      ['widgets', new Set(['records'])],
+    ]);
+    if (known.get(entity.namespace)?.has(entity.id)) return true;
+    if (entity.namespace === 'points') {
+      return /^revenue:\d{4}-\d{2}:all$/u.test(entity.id);
+    }
+    if (entity.namespace === 'interval') {
+      return /^revenue:\d{4}-\d{2}\.\.\d{4}-\d{2}$/u.test(entity.id);
+    }
+    return (
+      entity.namespace === 'text-fragments' &&
+      /^revenue-drop:\d+$/u.test(entity.id)
+    );
   }
 }
 

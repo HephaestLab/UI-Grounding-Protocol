@@ -44,3 +44,39 @@ export function isScenarioMutation(value: unknown): value is {
       ['revenue-desc', 'revenue-asc', 'id'].includes(String(record.sort)))
   );
 }
+
+export function isContextRequest(value: unknown): value is {
+  referent: ResolvedReferent;
+  principal: 'analyst' | 'viewer';
+  purpose: string;
+} {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
+  const record = value as Record<string, unknown>;
+  if (
+    Object.keys(record).some(
+      (key) => !['referent', 'principal', 'purpose'].includes(key),
+    )
+  ) {
+    return false;
+  }
+  const referent = record.referent as Record<string, unknown> | undefined;
+  const entityRef = referent?.entityRef as Record<string, unknown> | undefined;
+  return (
+    Boolean(referent) &&
+    !Array.isArray(referent) &&
+    typeof referent?.nodeId === 'string' &&
+    typeof referent.type === 'string' &&
+    typeof referent.label === 'string' &&
+    ['authoritative', 'derived', 'inferred'].includes(
+      String(referent.authority),
+    ) &&
+    Boolean(entityRef) &&
+    typeof entityRef?.namespace === 'string' &&
+    typeof entityRef.id === 'string' &&
+    ['analyst', 'viewer'].includes(String(record.principal)) &&
+    typeof record.purpose === 'string' &&
+    record.purpose.length > 0 &&
+    record.purpose.length <= 128
+  );
+}
+import type { ResolvedReferent } from '@ui-grounding/protocol';

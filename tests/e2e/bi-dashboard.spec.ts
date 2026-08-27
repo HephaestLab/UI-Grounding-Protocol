@@ -5,6 +5,23 @@ test.beforeEach(async ({ page }) => {
   await page.waitForFunction(() => Boolean(window.ugpBiLab));
 });
 
+test.afterEach(async ({ page }, testInfo) => {
+  const bundles = await page.evaluate(() => ({
+    context: window.ugpBiLab?.context,
+    grounding: window.ugpBiLab?.grounding,
+  }));
+  await testInfo.attach('ugp-bundles', {
+    body: Buffer.from(JSON.stringify(bundles, null, 2)),
+    contentType: 'application/json',
+  });
+  if (/BI-(01|04|07|13|14|18)\b/u.test(testInfo.title)) {
+    await testInfo.attach('key-path', {
+      body: await page.screenshot(),
+      contentType: 'image/png',
+    });
+  }
+});
+
 test('BI-01 click Revenue KPI resolves authoritative metric', async ({
   page,
 }) => {
@@ -248,9 +265,9 @@ test('BI-20 10K records stay virtualized and repeated regions meet budget', asyn
   page,
 }) => {
   const result = await page.evaluate(() => ({
-    records: window.ugpBiLab!.backend.data.records.length,
+    records: window.ugpBiLab!.diagnostics().logicalRecords,
     benchmark: window.ugpBiLab!.benchmark(500),
-    registeredNodes: window.ugpBiLab!.registry.getSnapshot().nodes.length,
+    registeredNodes: window.ugpBiLab!.diagnostics().registeredNodes,
     visibleRows: document.querySelectorAll('[data-record-id]').length,
   }));
   expect(result.records).toBe(10_000);

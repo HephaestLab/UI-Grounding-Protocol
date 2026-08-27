@@ -98,9 +98,8 @@ function delay(signal: AbortSignal, milliseconds: number): Promise<void> {
 }
 
 export interface BiLabApi {
-  readonly backend: BiScenarioBackend;
-  readonly registry: SemanticRegistry;
   readonly surfaceId: string;
+  readonly debugEnabled: boolean;
   readonly overlayEnabled: boolean;
   readonly role: Role;
   readonly grounding: GroundingBundle | undefined;
@@ -123,6 +122,12 @@ export interface BiLabApi {
   ): Promise<ContextBundle>;
   toggleOverlay(enabled: boolean): void;
   benchmark(iterations?: number): { iterations: number; durationMs: number };
+  diagnostics(): {
+    logicalRecords: number;
+    registeredAnchors: number;
+    registeredNodes: number;
+    surfaceRevision: string;
+  };
   destroy(): void;
 }
 
@@ -475,9 +480,8 @@ export function createBiLab(root: HTMLElement): BiLabApi {
     });
 
   const api: BiLabApi = {
-    backend,
-    registry,
     surfaceId: registry.surfaceId,
+    debugEnabled: import.meta.env.VITE_UGP_DEBUG === 'true',
     get overlayEnabled() {
       return Boolean(overlay);
     },
@@ -631,6 +635,15 @@ export function createBiLab(root: HTMLElement): BiLabApi {
         resolveSelection(snapshot, selection);
       }
       return { iterations, durationMs: performance.now() - started };
+    },
+    diagnostics() {
+      const snapshot = registry.getSnapshot();
+      return {
+        logicalRecords: backend.data.records.length,
+        registeredAnchors: snapshot.anchors.length,
+        registeredNodes: snapshot.nodes.length,
+        surfaceRevision: snapshot.surfaceRevision,
+      };
     },
     destroy() {
       chooserDispose?.();

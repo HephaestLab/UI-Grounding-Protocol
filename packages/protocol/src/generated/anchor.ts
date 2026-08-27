@@ -112,6 +112,7 @@ export interface Polygon {
   coordinateSpace: 'viewport' | 'surface' | 'anchor';
   /**
    * @minItems 3
+   * @maxItems 2048
    */
   points: [
     {
@@ -148,6 +149,7 @@ export interface Text {
   visibility?: 'visible' | 'occluded' | 'offscreen' | 'unknown';
   /**
    * @minItems 1
+   * @maxItems 64
    */
   selectors: [Selector, ...Selector[]];
   geometry?: Point | Rect | Polygon;

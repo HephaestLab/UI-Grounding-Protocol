@@ -37,6 +37,7 @@ describe('geometry core', () => {
         expect(normalized.height).toBeGreaterThanOrEqual(0);
         expect(rectArea(rect)).toBeGreaterThanOrEqual(0);
       }),
+      { numRuns: 10_000, seed: 20_260_827 },
     );
   });
 
@@ -55,6 +56,7 @@ describe('geometry core', () => {
           rectIntersection(second, first),
         );
       }),
+      { numRuns: 10_000, seed: 20_260_827 },
     );
     expect(
       rectIntersection(
@@ -204,6 +206,7 @@ describe('geometry core', () => {
         expect(restored.x).toBeCloseTo(x, 6);
         expect(restored.y).toBeCloseTo(y, 6);
       }),
+      { numRuns: 10_000, seed: 20_260_827 },
     );
     expect(() => invertTransform([1, 2, 2, 4, 0, 0])).toThrow('not invertible');
   });
