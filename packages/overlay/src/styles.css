@@ -1,0 +1,30 @@
+.ugp-selection-region {
+  position: fixed;
+  z-index: 2147483646;
+  box-sizing: border-box;
+  border: 2px solid #2563eb;
+  border-radius: 4px;
+  background: rgb(37 99 235 / 12%);
+  pointer-events: none;
+}
+
+.ugp-ambiguity {
+  position: fixed;
+  z-index: 2147483647;
+  display: grid;
+  gap: 6px;
+  max-width: 320px;
+  padding: 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background: white;
+  box-shadow: 0 12px 32px rgb(15 23 42 / 20%);
+}
+
+.ugp-ambiguity button {
+  padding: 7px 10px;
+  border: 0;
+  border-radius: 6px;
+  text-align: left;
+  cursor: pointer;
+}

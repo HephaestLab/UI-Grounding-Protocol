@@ -8,6 +8,7 @@
     "*.config.ts",
     "conformance/**/*.ts",
     "packages/**/*.ts",
+    "tests/**/*.ts",
     "examples/**/*.ts",
     "tooling/**/*.ts"
   ]

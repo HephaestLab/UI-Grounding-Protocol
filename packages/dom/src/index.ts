@@ -1,2 +1,10 @@
-// DOM bindings begin in milestone M3, after core conformance is established.
-export {};
+export {
+  domPath,
+  measureDomElement,
+  type DomMeasurement,
+} from './measurement.js';
+export {
+  DomAnchorRegistry,
+  type DomAnchorOptions,
+  type DomAnchorRegistration,
+} from './registry.js';

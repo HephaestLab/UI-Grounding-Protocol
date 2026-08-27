@@ -1,2 +1,6 @@
-// The reference overlay begins in milestone M3.
-export {};
+export { renderAmbiguityChooser } from './ambiguity.js';
+export {
+  SelectionOverlay,
+  type OverlayMode,
+  type SelectionOverlayOptions,
+} from './selection-overlay.js';

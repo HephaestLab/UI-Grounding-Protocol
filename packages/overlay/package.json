@@ -17,10 +17,11 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
-    }
+    },
+    "./styles.css": "./dist/styles.css"
   },
   "scripts": {
-    "build": "vite build --config ../../tooling/vite.library.ts && tsc -p tsconfig.build.json",
+    "build": "vite build --config ../../tooling/vite.library.ts && tsc -p tsconfig.build.json && node ../../scripts/copy-overlay-css.mjs",
     "test": "vitest run --root . --passWithNoTests",
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
