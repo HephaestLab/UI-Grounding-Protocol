@@ -149,6 +149,7 @@ export function createBiLab(root: HTMLElement): BiLabApi {
   let currentGrounding: GroundingBundle | undefined;
   let currentContext: ContextBundle | undefined;
   let overlay: SelectionOverlay | undefined;
+  let overlayMode: OverlayMode = 'point';
   let chooserDispose: (() => void) | undefined;
   let fragmentSequence = 0;
 
@@ -332,9 +333,12 @@ export function createBiLab(root: HTMLElement): BiLabApi {
     const preview = inspector.querySelector('.selection-preview')!;
     preview.innerHTML = `<span class="crosshair">⌖</span><div><small>${currentGrounding?.selection.mode.toUpperCase() ?? 'NO'} SELECTION</small><strong>${currentGrounding?.selection.selectionId ?? 'Choose a target'}</strong></div><b>${elapsedMs.toFixed(2)}ms</b>`;
     const card = inspector.querySelector('.referent-card')!;
+    const groundingProblem = currentGrounding?.problem;
     card.innerHTML = referent
       ? `<span class="authority">${referent.authority.toUpperCase()}</span><h3>${referent.label}</h3><code>${referent.type}</code><dl><div><dt>entityRef</dt><dd>${referent.entityRef ? `${referent.entityRef.namespace}/${referent.entityRef.id}` : referent.nodeId}</dd></div><div><dt>relation</dt><dd>${referent.relation}</dd></div><div><dt>confidence</dt><dd>${referent.confidence.toFixed(2)}</dd></div><div><dt>revision</dt><dd>${referent.nodeRevision ?? referent.surfaceRevision}</dd></div></dl>`
-      : '<h3>No referent</h3><code>Select a visible object</code>';
+      : groundingProblem
+        ? `<span class="problem-code">${groundingProblem.code}</span><h3>${groundingProblem.title}</h3><code>${groundingProblem.detail}</code>`
+        : '<h3>No referent</h3><code>Select a visible object</code>';
     const evidence = inspector.querySelector('.evidence')!;
     evidence.innerHTML = `<h3>Evidence <span>${referent?.evidence.length ?? 0}</span></h3>${(referent?.evidence ?? []).map((item, index) => `<div><i>${String(index + 1).padStart(2, '0')}</i><p><strong>${item.kind}</strong><small>${item.authority} · score ${item.score?.toFixed(2) ?? 'n/a'}</small></p></div>`).join('')}`;
     const bundleJson = inspector.querySelector<HTMLElement>('.bundle-json')!;
@@ -343,6 +347,23 @@ export function createBiLab(root: HTMLElement): BiLabApi {
       null,
       2,
     );
+    const contextButton = inspector.querySelector<HTMLButtonElement>(
+      '[data-action="context"]',
+    )!;
+    contextButton.disabled = !referent;
+    const contextSummary =
+      inspector.querySelector<HTMLElement>('.context-summary')!;
+    contextSummary.hidden = !currentContext;
+    if (currentContext) {
+      const emitted = currentContext.referentContexts.flatMap((item) =>
+        Object.keys(item.contexts),
+      );
+      emitted.sort();
+      const omitted = currentContext.referentContexts.flatMap(
+        (item) => item.omitted ?? [],
+      );
+      contextSummary.textContent = `${role} · approved: ${emitted.join(', ') || 'none'} · omitted: ${omitted.map((item) => `${item.name} (${item.reason})`).join(', ') || 'none'}`;
+    }
     chooserDispose?.();
     if (currentGrounding) {
       chooserDispose = renderAmbiguityChooser(
@@ -461,6 +482,62 @@ export function createBiLab(root: HTMLElement): BiLabApi {
     });
   overlay = createOverlay();
 
+  const tooltip = root.querySelector<HTMLElement>('.chart-tooltip')!;
+  const hideTooltip = (): void => {
+    tooltip.hidden = true;
+  };
+  const showTooltip = (event: PointerEvent, text: string): void => {
+    if (overlay && overlayMode !== 'point') {
+      hideTooltip();
+      return;
+    }
+    tooltip.textContent = text;
+    tooltip.style.left = `${Math.min(window.innerWidth - 190, event.clientX + 12)}px`;
+    tooltip.style.top = `${Math.min(window.innerHeight - 54, event.clientY + 12)}px`;
+    tooltip.hidden = false;
+  };
+  canvas.addEventListener('pointermove', (event) => {
+    const rect = canvas.getBoundingClientRect();
+    const plotWidth = Math.max(1, rect.width - 46);
+    const index = Math.max(
+      0,
+      Math.min(
+        dashboard.revenueSeries.length - 1,
+        Math.round(
+          ((event.clientX - rect.left - 28) / plotWidth) *
+            (dashboard.revenueSeries.length - 1),
+        ),
+      ),
+    );
+    const point = dashboard.revenueSeries[index];
+    if (point) {
+      showTooltip(
+        event,
+        `${point.period} · Revenue $${Math.round(point.value).toLocaleString()}`,
+      );
+    }
+  });
+  canvas.addEventListener('pointerleave', hideTooltip);
+  svg.addEventListener('pointermove', (event) => {
+    const bar = (event.target as Element).closest<SVGRectElement>(
+      '[data-region-id]',
+    );
+    if (!bar) {
+      hideTooltip();
+      return;
+    }
+    const member = dashboard.regionBreakdown.find(
+      (item) => item.id === bar.dataset.regionId,
+    );
+    if (member) {
+      showTooltip(
+        event,
+        `${member.label} · Revenue $${Math.round(member.value).toLocaleString()}`,
+      );
+    }
+  });
+  svg.addEventListener('pointerleave', hideTooltip);
+
   function updateDashboard(next: DashboardResponse): void {
     dashboard = next;
     registry.setSurfaceRevision(next.state.queryRevision);
@@ -482,20 +559,28 @@ export function createBiLab(root: HTMLElement): BiLabApi {
     root
       .querySelectorAll('.selection-mode button')
       .forEach((item) => item.classList.toggle('active', item === button));
-    overlay?.setMode(button.dataset.mode as OverlayMode);
+    overlayMode = button.dataset.mode as OverlayMode;
+    overlay?.setMode(overlayMode);
+    hideTooltip();
   });
   root.querySelector('[data-action="role"]')!.addEventListener('click', () => {
     role = role === 'analyst' ? 'viewer' : 'analyst';
+    currentContext = undefined;
     root.querySelector('[data-action="role"]')!.firstChild!.textContent =
       role === 'analyst' ? 'Analyst ' : 'Viewer ';
+    renderInspector(0);
   });
   root
     .querySelector('[data-action="filter"]')!
     .addEventListener('click', () => {
+      const previousSelection = currentGrounding?.selection;
       const regionId = backend.state.regionId ? undefined : 'east';
       updateDashboard(backend.mutate({ regionId: regionId ?? null }));
       root.querySelector('[data-action="filter"]')!.childNodes[0]!.textContent =
         regionId ? 'East region ' : 'All regions ';
+      if (previousSelection) {
+        resolve(previousSelection as unknown as Selection);
+      }
     });
   root.querySelector('[data-action="sort"]')!.addEventListener('click', () => {
     const sort =
@@ -503,10 +588,28 @@ export function createBiLab(root: HTMLElement): BiLabApi {
     updateDashboard(backend.mutate({ sort }));
   });
   root.querySelector('.inspector')!.addEventListener('click', (event) => {
-    const button = (event.target as Element).closest('[data-action="bundle"]');
-    if (button) {
+    const action = (event.target as Element).closest<HTMLButtonElement>(
+      '[data-action]',
+    );
+    if (action?.dataset.action === 'bundle') {
       const bundle = root.querySelector<HTMLElement>('.bundle-json')!;
       bundle.hidden = !bundle.hidden;
+    }
+    if (action?.dataset.action === 'context') {
+      action.disabled = true;
+      action.firstChild!.textContent = 'Requesting context ';
+      void api
+        .requestContext(['summary', 'cost'], 4096)
+        .catch((error: unknown) => {
+          const summary = root.querySelector<HTMLElement>('.context-summary')!;
+          summary.hidden = false;
+          summary.textContent =
+            error instanceof Error ? error.message : 'Context request failed';
+        })
+        .finally(() => {
+          action.firstChild!.textContent = 'Request approved context ';
+          action.disabled = !currentGrounding?.referents[0];
+        });
     }
   });
   root
@@ -662,6 +765,7 @@ export function createBiLab(root: HTMLElement): BiLabApi {
       }
       document.body.classList.toggle('overlay-disabled', !enabled);
       root.querySelector('.inspector')!.toggleAttribute('hidden', !enabled);
+      hideTooltip();
     },
     benchmark(iterations = 200) {
       const selection = chartAdapter.regionSelection(['east', 'west']);

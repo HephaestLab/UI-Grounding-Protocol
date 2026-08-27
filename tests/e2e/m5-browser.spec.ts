@@ -160,3 +160,59 @@ test('M5-11 a real Canvas drag resolves an interval referent', async ({
     'interval:revenue:2026-03..2026-05',
   );
 });
+
+test('M5-12 changing a filter visibly rejects the stale selection', async ({
+  page,
+}) => {
+  await page.locator('[data-metric-id="revenue"]').click();
+  await expect(page.locator('.referent-card h3')).toContainText('Revenue');
+  await page.locator('[data-action="filter"]').click();
+  await expect(page.locator('.problem-code')).toHaveText('SURFACE_STALE');
+  await expect(page.locator('.referent-card h3')).toHaveText(
+    'Surface state is stale',
+  );
+});
+
+test('M5-13 role policy is visible and confidential context never leaks', async ({
+  page,
+}) => {
+  await page.locator('[data-metric-id="revenue"]').click();
+  await page.locator('[data-action="role"]').click();
+  await page.locator('[data-action="context"]').click();
+  await expect(page.locator('.context-summary')).toContainText('viewer');
+  await expect(page.locator('.context-summary')).toContainText(
+    'cost (unauthorized)',
+  );
+
+  await page.locator('[data-action="role"]').click();
+  await page.locator('[data-action="context"]').click();
+  await expect(page.locator('.context-summary')).toContainText(
+    'analyst · approved: cost, summary',
+  );
+  await expect(page.locator('body')).not.toContainText('@example.invalid');
+});
+
+test('M5-14 chart tooltips work without conflicting with selection mode', async ({
+  page,
+}) => {
+  const canvas = page.locator('#trend-chart');
+  await canvas.scrollIntoViewIfNeeded();
+  let canvasBox = await canvas.boundingBox();
+  expect(canvasBox).not.toBeNull();
+  await page.mouse.move(
+    canvasBox!.x + canvasBox!.width / 2,
+    canvasBox!.y + canvasBox!.height / 2,
+  );
+  await expect(page.locator('.chart-tooltip')).toContainText('Revenue');
+
+  await page.getByRole('button', { name: '▱ Region' }).click();
+  await canvas.scrollIntoViewIfNeeded();
+  canvasBox = await canvas.boundingBox();
+  expect(canvasBox).not.toBeNull();
+  await page.mouse.move(canvasBox!.x + 90, canvasBox!.y + 90);
+  await expect(page.locator('.chart-tooltip')).toBeHidden();
+
+  await page.evaluate(() => window.ugpBiLab!.toggleOverlay(false));
+  await page.mouse.move(canvasBox!.x + 120, canvasBox!.y + 90);
+  await expect(page.locator('.chart-tooltip')).toContainText('Revenue');
+});

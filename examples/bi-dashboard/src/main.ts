@@ -34,12 +34,14 @@ document.querySelector<HTMLElement>('#app')!.innerHTML = `
       <article class="panel records-panel"><div class="panel-head"><div><p class="eyebrow">DETAIL</p><h2>Order records</h2></div><button class="record-count" data-action="sort" type="button">10,000 logical rows · sort</button></div><div class="table-head"><span>Order</span><span>Region</span><span>Segment</span><span>Revenue</span><span>Margin</span></div><div class="virtual-viewport" tabindex="0"><div class="virtual-spacer"><div class="virtual-rows"></div></div></div></article>
       <article class="panel insight-panel"><div class="panel-head"><div><p class="eyebrow">NARRATIVE INSIGHT</p><h2>What changed?</h2></div><span class="ai-badge">Deterministic</span></div><p data-insight-id="revenue-drop"><mark>Revenue softened in the East region between March and May</mark>, driven by inventory constraints in the Enterprise segment. Conversion recovered after the June restock.</p><button class="explain" type="button">Explain this insight →</button></article>
     </section>
+    <div class="chart-tooltip" role="status" hidden></div>
   </main>
   <aside class="inspector" data-ugp-overlay-ui="true">
     <div class="inspector-head"><div><p class="eyebrow">GROUNDING INSPECTOR</p><h2>Resolved referent</h2></div><button type="button">×</button></div>
     <div class="selection-preview"><span class="crosshair">⌖</span><div><small>POINT SELECTION</small><strong>x 184 · y 236</strong></div><b>1.8ms</b></div>
     <div class="referent-card"><span class="authority">AUTHORITATIVE</span><h3>Revenue</h3><code>org.ugp.demo.bi.metric</code><dl><div><dt>entityRef</dt><dd>metrics/revenue</dd></div><div><dt>relation</dt><dd>contains-selection</dd></div><div><dt>confidence</dt><dd>1.00</dd></div><div><dt>revision</dt><dd>q-001</dd></div></dl></div>
     <div class="evidence"><h3>Evidence <span>2</span></h3><div><i>01</i><p><strong>anchor-hit</strong><small>DOM · visible ratio 1.00</small></p></div><div><i>02</i><p><strong>semantic-selector</strong><small>Declared by application</small></p></div></div>
+    <button class="bundle-button context-button" data-action="context" type="button">Request approved context <span>→</span></button><div class="context-summary" role="status" hidden></div>
     <button class="bundle-button" data-action="bundle" type="button"${debugEnabled ? '' : ' hidden'}>View GroundingBundle <span>{ }</span></button><pre class="bundle-json" hidden></pre>
   </aside>`;
 

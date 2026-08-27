@@ -602,6 +602,20 @@ h1 {
   color: #2563eb;
   font-family: ui-monospace, monospace;
 }
+.bundle-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+.problem-code {
+  display: inline-flex;
+  padding: 3px 6px;
+  border-radius: 4px;
+  color: #b91c1c;
+  background: #fee2e2;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+}
 .bundle-json {
   max-height: 260px;
   overflow: auto;
@@ -619,6 +633,23 @@ h1 {
   color: #475569;
   background: #f8fafc;
   font-size: 9px;
+}
+.chart-tooltip {
+  position: fixed;
+  z-index: 100;
+  max-width: 178px;
+  padding: 8px 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: 7px;
+  color: #f8fafc;
+  background: rgb(15 23 42 / 94%);
+  box-shadow: 0 8px 22px rgb(15 23 42 / 18%);
+  font-size: 10px;
+  font-weight: 700;
+  pointer-events: none;
+}
+.chart-tooltip[hidden] {
+  display: none;
 }
 .inspector.empty .referent-card,
 .inspector.empty .evidence {
