@@ -10,6 +10,8 @@
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
+    "@ui-grounding/core": "workspace:^",
+    "@ui-grounding/protocol": "workspace:^",
     "ajv": "8.20.0",
     "ajv-formats": "3.0.1"
   },

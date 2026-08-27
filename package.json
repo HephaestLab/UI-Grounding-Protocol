@@ -12,7 +12,7 @@
   "scripts": {
     "build": "pnpm --recursive build",
     "changeset": "changeset",
-    "check": "pnpm lint && pnpm format:check && pnpm generate:types:check && pnpm typecheck && pnpm test && pnpm test:conformance",
+    "check": "pnpm lint && pnpm format:check && pnpm generate:types:check && pnpm typecheck && pnpm test:coverage && pnpm test:conformance",
     "clean": "node scripts/clean.mjs",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
@@ -36,6 +36,7 @@
     "@vitest/browser-playwright": "4.1.11",
     "@vitest/coverage-v8": "4.1.11",
     "eslint": "10.9.1",
+    "fast-check": "4.9.0",
     "json-schema-to-typescript": "15.0.4",
     "prettier": "3.9.6",
     "tsx": "4.23.12",

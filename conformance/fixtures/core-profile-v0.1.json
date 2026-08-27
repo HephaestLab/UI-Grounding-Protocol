@@ -1,0 +1,181 @@
+{
+  "suiteVersion": "0.1",
+  "resolution": [
+    {
+      "id": "core-point-exact-deterministic",
+      "profiles": ["Core", "Point"],
+      "nodes": [{ "nodeId": "metric" }],
+      "anchors": [{ "nodeId": "metric", "point": [10, 10] }],
+      "selection": { "mode": "point", "point": [10, 10] },
+      "repeat": 1000,
+      "expected": { "referentIds": ["metric"] }
+    },
+    {
+      "id": "core-point-nested-child",
+      "profiles": ["Core", "Point"],
+      "nodes": [
+        { "nodeId": "card" },
+        { "nodeId": "metric", "parentNodeId": "card" }
+      ],
+      "anchors": [
+        { "nodeId": "card", "rect": [0, 0, 100, 100] },
+        { "nodeId": "metric", "rect": [10, 10, 30, 30] }
+      ],
+      "selection": { "mode": "point", "point": [20, 20] },
+      "expected": {
+        "referentIds": ["metric"],
+        "omittedReasons": ["parent-collapsed"]
+      }
+    },
+    {
+      "id": "core-region-multiple",
+      "profiles": ["Core", "Region"],
+      "nodes": [{ "nodeId": "a" }, { "nodeId": "b" }],
+      "anchors": [
+        { "nodeId": "a", "rect": [0, 0, 20, 20] },
+        { "nodeId": "b", "rect": [30, 0, 20, 20] }
+      ],
+      "selection": { "mode": "region", "rect": [0, 0, 50, 20] },
+      "expected": { "referentIds": ["a", "b"] }
+    },
+    {
+      "id": "core-region-parent-collapse",
+      "profiles": ["Core", "Region"],
+      "nodes": [
+        { "nodeId": "chart" },
+        { "nodeId": "a", "parentNodeId": "chart" },
+        { "nodeId": "b", "parentNodeId": "chart" }
+      ],
+      "anchors": [
+        { "nodeId": "chart", "rect": [0, 0, 100, 100] },
+        { "nodeId": "a", "rect": [0, 0, 40, 40] },
+        { "nodeId": "b", "rect": [60, 60, 40, 40] }
+      ],
+      "selection": { "mode": "region", "rect": [0, 0, 100, 100] },
+      "expected": {
+        "referentIds": ["chart"],
+        "omittedReasons": ["parent-collapsed", "parent-collapsed"]
+      }
+    },
+    {
+      "id": "core-point-ambiguous-overlap",
+      "profiles": ["Core", "Point"],
+      "nodes": [{ "nodeId": "a" }, { "nodeId": "b" }],
+      "anchors": [
+        { "nodeId": "a", "rect": [0, 0, 20, 20] },
+        { "nodeId": "b", "rect": [0, 0, 20, 20] }
+      ],
+      "selection": { "mode": "point", "point": [10, 10] },
+      "expected": {
+        "referentIds": ["a", "b"],
+        "problemCode": "AMBIGUOUS_REFERENT",
+        "ambiguity": true
+      }
+    },
+    {
+      "id": "core-text-quote-position",
+      "profiles": ["Core", "Text"],
+      "nodes": [{ "nodeId": "insight" }],
+      "anchors": [
+        {
+          "nodeId": "insight",
+          "kind": "text",
+          "quote": "Revenue increased",
+          "position": [10, 27]
+        }
+      ],
+      "selection": {
+        "mode": "text",
+        "quote": "Revenue",
+        "position": [10, 17]
+      },
+      "expected": { "referentIds": ["insight"] }
+    },
+    {
+      "id": "core-stale-surface-fails-closed",
+      "profiles": ["Core", "Security"],
+      "nodes": [{ "nodeId": "metric" }],
+      "anchors": [{ "nodeId": "metric", "rect": [0, 0, 20, 20] }],
+      "selection": {
+        "mode": "point",
+        "point": [10, 10],
+        "surfaceRevision": "0"
+      },
+      "expected": {
+        "referentIds": [],
+        "problemCode": "SURFACE_STALE"
+      }
+    },
+    {
+      "id": "core-stale-node-and-anchor",
+      "profiles": ["Core", "Security"],
+      "nodes": [
+        { "nodeId": "node-stale", "expiresAt": "2026-08-27T11:59:59.000Z" },
+        { "nodeId": "anchor-stale" }
+      ],
+      "anchors": [
+        { "nodeId": "node-stale", "rect": [0, 0, 20, 20] },
+        {
+          "nodeId": "anchor-stale",
+          "rect": [0, 0, 20, 20],
+          "expiresAt": "2026-08-27T11:59:59.000Z"
+        }
+      ],
+      "selection": { "mode": "point", "point": [10, 10] },
+      "expected": {
+        "referentIds": [],
+        "problemCode": "NO_REFERENT",
+        "omittedReasons": ["stale", "stale"]
+      }
+    },
+    {
+      "id": "core-same-entity-multiple-views",
+      "profiles": ["Core", "Entity"],
+      "nodes": [
+        {
+          "nodeId": "table-view",
+          "entityRef": { "namespace": "orders", "id": "42" }
+        },
+        {
+          "nodeId": "chart-view",
+          "entityRef": { "namespace": "orders", "id": "42" }
+        }
+      ],
+      "anchors": [
+        { "nodeId": "table-view", "rect": [0, 0, 20, 20] },
+        { "nodeId": "chart-view", "rect": [0, 0, 20, 20] }
+      ],
+      "selection": { "mode": "point", "point": [10, 10] },
+      "expected": {
+        "referentIds": ["chart-view"],
+        "omittedReasons": ["duplicate"]
+      }
+    }
+  ],
+  "context": [
+    {
+      "id": "core-context-unauthorized",
+      "profiles": ["Core", "Context", "Security"],
+      "authorized": false,
+      "budgetBytes": 1024,
+      "value": { "secret": true },
+      "expected": {
+        "omittedReason": "unauthorized",
+        "truncated": false,
+        "materializerCalls": 0
+      }
+    },
+    {
+      "id": "core-context-budget-truncation",
+      "profiles": ["Core", "Context"],
+      "authorized": true,
+      "budgetBytes": 4,
+      "value": { "summary": "too large" },
+      "expected": {
+        "omittedReason": "budget",
+        "truncated": true,
+        "materializerCalls": 1
+      }
+    }
+  ]
+}
