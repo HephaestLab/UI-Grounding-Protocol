@@ -216,3 +216,92 @@ test('M5-14 chart tooltips work without conflicting with selection mode', async 
   await page.mouse.move(canvasBox!.x + 120, canvasBox!.y + 90);
   await expect(page.locator('.chart-tooltip')).toContainText('Revenue');
 });
+
+test('M5-15 real SVG clicks resolve the current dimension member', async ({
+  page,
+}) => {
+  await page.locator('#bar-east').click();
+  await expect(page.locator('.referent-card h3')).toHaveText('East');
+  await page.locator('#bar-west').click();
+  await expect(page.locator('.referent-card h3')).toHaveText('West');
+  const result = await page.evaluate(() => window.ugpBiLab!.grounding);
+  expect(result?.referents[0]?.entityRef).toEqual({
+    namespace: 'regions',
+    id: 'west',
+  });
+});
+
+test('M5-16 a real SVG brush returns two stable members', async ({ page }) => {
+  await page.getByRole('button', { name: '▱ Region' }).click();
+  const chart = page.locator('.bar-chart');
+  await chart.scrollIntoViewIfNeeded();
+  const east = await page.locator('#bar-east').boundingBox();
+  const west = await page.locator('#bar-west').boundingBox();
+  expect(east).not.toBeNull();
+  expect(west).not.toBeNull();
+  await page.mouse.move(east!.x - 3, east!.y - 3);
+  await page.mouse.down();
+  await page.mouse.move(
+    Math.max(east!.x + east!.width, west!.x + west!.width) + 3,
+    west!.y + west!.height + 3,
+    { steps: 6 },
+  );
+  await page.mouse.up();
+  const result = await page.evaluate(() => window.ugpBiLab!.grounding);
+  expect(result?.referents.map((referent) => referent.entityRef?.id)).toEqual([
+    'east',
+    'west',
+  ]);
+});
+
+test('M5-17 a native text drag resolves a fragment with its parent insight', async ({
+  page,
+}) => {
+  await page.getByRole('button', { name: 'T Text' }).click();
+  const mark = page.locator('[data-insight-id="revenue-drop"] mark');
+  await mark.scrollIntoViewIfNeeded();
+  const rects = await mark.evaluate((element) => {
+    const range = document.createRange();
+    range.selectNodeContents(element);
+    return [...range.getClientRects()].map((rect) => ({
+      left: rect.left,
+      right: rect.right,
+      top: rect.top,
+      bottom: rect.bottom,
+    }));
+  });
+  expect(rects.length).toBeGreaterThan(0);
+  const first = rects[0]!;
+  const last = rects.at(-1)!;
+  await page.mouse.move(first.left + 2, (first.top + first.bottom) / 2);
+  await page.mouse.down();
+  await page.mouse.move(last.right - 2, (last.top + last.bottom) / 2, {
+    steps: 10,
+  });
+  await page.mouse.up();
+  const result = await page.evaluate(() => window.ugpBiLab!.grounding);
+  expect(result?.referents[0]?.type).toBe('ugp.ui.text-fragment');
+  expect(result?.relationships?.[0]?.sourceNodeId).toBe('insight:revenue-drop');
+});
+
+test('M5-18 recycled virtual rows resolve the currently visible record', async ({
+  page,
+}) => {
+  const viewport = page.locator('.virtual-viewport');
+  await viewport.scrollIntoViewIfNeeded();
+  await viewport.evaluate(async (element) => {
+    element.scrollTop = element.scrollHeight / 2;
+    await new Promise<void>((resolve) =>
+      requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
+    );
+  });
+  await expect(page.locator('.table-row').first()).toBeVisible();
+  const row = page.locator('.table-row').first();
+  const expectedId = await row.getAttribute('data-record-id');
+  await row.click();
+  const result = await page.evaluate(() => window.ugpBiLab!.grounding);
+  expect(result?.referents[0]?.entityRef).toEqual({
+    namespace: 'orders',
+    id: expectedId,
+  });
+});

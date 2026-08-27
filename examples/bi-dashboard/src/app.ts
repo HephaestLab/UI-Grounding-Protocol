@@ -469,6 +469,11 @@ export function createBiLab(root: HTMLElement): BiLabApi {
   };
 
   const handleOverlaySelection = (selection: Selection): void => {
+    // A browser may scroll a compact layout while bringing the pointer target
+    // into view. Refresh custom and DOM anchors at the interaction boundary so
+    // viewport-space geometry always describes the frame the user clicked.
+    domRegistry.refresh();
+    chartAdapter.refresh();
     const routed = routeChartInterval(selection);
     resolve(routed.mode === 'text' ? prepareTextFragment(routed) : routed);
   };
