@@ -1,0 +1,101 @@
+[
+  {
+    "scenario": "viewer",
+    "bundle": {
+      "contextId": "context:grounding:selection:mtbsgefv:1:r247:cost,summary",
+      "groundingId": "grounding:selection:mtbsgefv:1:r247",
+      "referentContexts": [
+        {
+          "nodeId": "metric:revenue",
+          "entityRef": {
+            "namespace": "metrics",
+            "id": "revenue"
+          },
+          "contexts": {
+            "summary": {
+              "entityRef": {
+                "namespace": "metrics",
+                "id": "revenue"
+              },
+              "label": "Revenue",
+              "queryRevision": "q-001",
+              "unit": "currency"
+            }
+          },
+          "freshness": {
+            "generatedAt": "2026-08-27T17:20:20.814Z"
+          },
+          "omitted": [
+            {
+              "name": "cost",
+              "reason": "unauthorized"
+            }
+          ]
+        }
+      ],
+      "budget": {
+        "requestedBytes": 4096,
+        "emittedBytes": 124,
+        "truncated": false
+      },
+      "authorization": {
+        "principalRef": "role:viewer",
+        "purpose": "explain",
+        "filtered": true
+      },
+      "generatedAt": "2026-08-27T17:20:20.814Z"
+    }
+  },
+  {
+    "scenario": "analyst",
+    "bundle": {
+      "contextId": "context:grounding:selection:mtbsgefv:1:r247:cost,summary",
+      "groundingId": "grounding:selection:mtbsgefv:1:r247",
+      "referentContexts": [
+        {
+          "nodeId": "metric:revenue",
+          "entityRef": {
+            "namespace": "metrics",
+            "id": "revenue"
+          },
+          "contexts": {
+            "cost": {
+              "entityRef": {
+                "namespace": "metrics",
+                "id": "revenue"
+              },
+              "label": "Revenue",
+              "queryRevision": "q-001",
+              "unit": "currency",
+              "formula": "SUM(order.revenue)"
+            },
+            "summary": {
+              "entityRef": {
+                "namespace": "metrics",
+                "id": "revenue"
+              },
+              "label": "Revenue",
+              "queryRevision": "q-001",
+              "unit": "currency",
+              "formula": "SUM(order.revenue)"
+            }
+          },
+          "freshness": {
+            "generatedAt": "2026-08-27T17:20:31.641Z"
+          }
+        }
+      ],
+      "budget": {
+        "requestedBytes": 4096,
+        "emittedBytes": 307,
+        "truncated": false
+      },
+      "authorization": {
+        "principalRef": "role:analyst",
+        "purpose": "explain",
+        "filtered": false
+      },
+      "generatedAt": "2026-08-27T17:20:31.641Z"
+    }
+  }
+]

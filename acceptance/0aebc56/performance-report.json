@@ -1,0 +1,53 @@
+{
+  "environment": {
+    "os": "win32 10.0.19044",
+    "cpu": "12th Gen Intel(R) Core(TM) i5-12490F",
+    "logicalCpuCount": 12,
+    "memoryBytes": {
+      "free": 6035550208,
+      "total": 17032929280
+    },
+    "node": "v24.11.1",
+    "commit": "0aebc56452ddade4d302e89b637d20620a9b041f",
+    "buildMode": "production",
+    "viewport": "browser gate: 1440x900 / 1024x768",
+    "dpr": "browser gate: 1 / 2",
+    "inspector": false
+  },
+  "registry": {
+    "registration1kAverageMs": 3.6583800000000024,
+    "additionalMemory1kBytes": 903504,
+    "registration10kMs": 30.305499999999995
+  },
+  "resolution": {
+    "point": {
+      "p50Ms": 0.21649999999999636,
+      "p95Ms": 0.25919999999999277,
+      "p99Ms": 0.37980000000004566
+    },
+    "region": {
+      "p50Ms": 0.33089999999998554,
+      "p95Ms": 0.38800000000003365,
+      "p99Ms": 0.49130000000002383
+    }
+  },
+  "context": {
+    "bytes": 4350,
+    "referents": 20
+  },
+  "packageSizes": {
+    "core": {
+      "minifiedBytes": 16394,
+      "brotliBytes": 5020
+    },
+    "dom": {
+      "minifiedBytes": 4280,
+      "brotliBytes": 1617
+    },
+    "react": {
+      "minifiedBytes": 2541,
+      "brotliBytes": 961
+    }
+  },
+  "leakCycles": 100
+}

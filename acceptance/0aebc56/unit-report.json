@@ -1,0 +1,22 @@
+{
+  "status": "PASS",
+  "core": {
+    "tests": 39,
+    "passed": 39,
+    "branchCoveragePercent": 95.22,
+    "lineCoveragePercent": 100
+  },
+  "browserComponents": {
+    "tests": 24,
+    "passed": 24,
+    "browserCount": 3,
+    "aggregateBranchCoveragePercent": 89.2,
+    "packageBranchCoveragePercent": {
+      "dom": 90.32,
+      "overlay": 88.88,
+      "react": 86.2
+    }
+  },
+  "geometryPropertyRunsPerInvariant": 10000,
+  "determinismRunsPerFixture": 1000
+}

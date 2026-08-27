@@ -1,0 +1,16 @@
+layer,requirement,evidence,status
+L0,All protocol objects have Draft 2020-12 schemas,conformance-report.json 55/55,PASS
+L0,Generated TypeScript has zero drift,pnpm generate:types:check,PASS
+L0,Normative requirements are traced by fixtures,conformance-report.json normativeRequirements,PASS
+L1,TypeScript strict lint and formatting,pnpm check,PASS
+L1,Core branch coverage at least 95 percent,unit-report.json 95.22 percent,PASS
+L1,Published package branch coverage at least 85 percent,unit-report.json,PASS
+L1,Real browser component behavior,24 tests across Chromium Firefox WebKit,PASS
+L2,BI-01 through BI-20,five Playwright projects,PASS
+L2,Real Canvas drag SVG brush text drag and recycled row,M5-11 M5-16 M5-17 M5-18,PASS
+L2,Production bundle boots without disclosure,M5-10 against 127.0.0.1 production preview,PASS
+L3,Codex in-app Browser visible blackbox,manual-browser/report.md and screenshots,PASS
+L4,Performance budgets,performance-report.json,PASS
+L4,Security and privacy,security-report.md,PASS
+L4,Clean consumer tarball install,package-report.json,PASS
+L4,High-severity dependency audit,pnpm audit --audit-level high,PASS

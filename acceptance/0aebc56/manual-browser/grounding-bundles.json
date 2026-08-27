@@ -1,0 +1,627 @@
+[
+  {
+    "scenario": "kpi-point",
+    "bundle": {
+      "groundingId": "grounding:selection:mtbseei3:1:r273",
+      "selection": {
+        "selectionId": "selection:mtbseei3:1",
+        "surfaceId": "surface:bi-dashboard",
+        "mode": "point",
+        "selectors": [
+          {
+            "type": "UGPGeometrySelector",
+            "geometry": {
+              "kind": "point",
+              "coordinateSpace": "viewport",
+              "x": 134.875,
+              "y": 322
+            }
+          }
+        ],
+        "geometry": {
+          "kind": "point",
+          "coordinateSpace": "viewport",
+          "x": 134.875,
+          "y": 322
+        },
+        "surfaceRevision": "q-001",
+        "createdAt": "2026-08-27T17:18:47.019Z",
+        "source": "human"
+      },
+      "generatedAt": "2026-08-27T17:18:47.019Z",
+      "referents": [
+        {
+          "nodeId": "metric:revenue",
+          "type": "org.ugp.demo.bi.metric",
+          "entityRef": {
+            "namespace": "metrics",
+            "id": "revenue"
+          },
+          "label": "Revenue",
+          "authority": "authoritative",
+          "confidence": 1,
+          "relation": "contains-selection",
+          "evidence": [
+            {
+              "kind": "anchor-hit",
+              "authority": "authoritative",
+              "anchorId": "dom:metric:revenue",
+              "score": 1,
+              "visibleRatio": 1
+            }
+          ],
+          "surfaceRevision": "q-001",
+          "nodeRevision": "q-001"
+        }
+      ],
+      "relationships": [
+        {
+          "sourceNodeId": "dashboard:operating-review",
+          "targetNodeId": "metric:revenue",
+          "relation": "parent"
+        }
+      ],
+      "omitted": [
+        {
+          "nodeId": "region:international:record:order-007581",
+          "reason": "invisible"
+        },
+        {
+          "nodeId": "record:order-003218",
+          "reason": "invisible"
+        },
+        {
+          "nodeId": "region:international:record:order-003218",
+          "reason": "invisible"
+        },
+        {
+          "nodeId": "record:order-006586",
+          "reason": "invisible"
+        },
+        {
+          "nodeId": "region:north:record:order-006586",
+          "reason": "invisible"
+        },
+        {
+          "nodeId": "record:order-002336",
+          "reason": "invisible"
+        },
+        {
+          "nodeId": "region:south:record:order-002336",
+          "reason": "invisible"
+        },
+        {
+          "nodeId": "dashboard:operating-review",
+          "reason": "parent-collapsed"
+        }
+      ],
+      "ambiguity": {
+        "requiresDisambiguation": false
+      }
+    }
+  },
+  {
+    "scenario": "canvas-visible-click",
+    "bundle": {
+      "groundingId": "grounding:selection:mtbselyl:1:r271",
+      "selection": {
+        "selectionId": "selection:mtbselyl:1",
+        "surfaceId": "surface:bi-dashboard",
+        "mode": "point",
+        "selectors": [
+          {
+            "type": "UGPGeometrySelector",
+            "geometry": {
+              "kind": "point",
+              "coordinateSpace": "viewport",
+              "x": 295.140625,
+              "y": 529
+            }
+          }
+        ],
+        "geometry": {
+          "kind": "point",
+          "coordinateSpace": "viewport",
+          "x": 295.140625,
+          "y": 529
+        },
+        "surfaceRevision": "q-001",
+        "createdAt": "2026-08-27T17:18:56.685Z",
+        "source": "human"
+      },
+      "generatedAt": "2026-08-27T17:18:56.685Z",
+      "referents": [
+        {
+          "nodeId": "series:revenue:all",
+          "type": "org.ugp.demo.bi.series",
+          "entityRef": {
+            "namespace": "series",
+            "id": "revenue:all"
+          },
+          "label": "Revenue series",
+          "authority": "authoritative",
+          "confidence": 1,
+          "relation": "contains-selection",
+          "evidence": [
+            {
+              "kind": "adapter-hit",
+              "authority": "authoritative",
+              "anchorId": "canvas:revenue-series",
+              "score": 1,
+              "visibleRatio": 1
+            }
+          ],
+          "surfaceRevision": "q-001",
+          "nodeRevision": "1"
+        }
+      ],
+      "relationships": [
+        {
+          "sourceNodeId": "chart:revenue-trend",
+          "targetNodeId": "series:revenue:all",
+          "relation": "parent"
+        }
+      ],
+      "omitted": [
+        {
+          "nodeId": "record:order-003218",
+          "reason": "invisible"
+        },
+        {
+          "nodeId": "region:international:record:order-003218",
+          "reason": "invisible"
+        },
+        {
+          "nodeId": "record:order-006586",
+          "reason": "invisible"
+        },
+        {
+          "nodeId": "region:north:record:order-006586",
+          "reason": "invisible"
+        },
+        {
+          "nodeId": "record:order-002336",
+          "reason": "invisible"
+        },
+        {
+          "nodeId": "region:south:record:order-002336",
+          "reason": "invisible"
+        },
+        {
+          "nodeId": "dashboard:operating-review",
+          "reason": "parent-collapsed"
+        },
+        {
+          "nodeId": "chart:revenue-trend",
+          "reason": "parent-collapsed"
+        }
+      ],
+      "ambiguity": {
+        "requiresDisambiguation": false
+      }
+    }
+  },
+  {
+    "scenario": "svg-visible-click",
+    "bundle": {
+      "groundingId": "grounding:selection:mtbseu0c:1:r271",
+      "selection": {
+        "selectionId": "selection:mtbseu0c:1",
+        "surfaceId": "surface:bi-dashboard",
+        "mode": "point",
+        "selectors": [
+          {
+            "type": "UGPGeometrySelector",
+            "geometry": {
+              "kind": "point",
+              "coordinateSpace": "viewport",
+              "x": 742.1933898925781,
+              "y": 458.67332458496094
+            }
+          }
+        ],
+        "geometry": {
+          "kind": "point",
+          "coordinateSpace": "viewport",
+          "x": 742.1933898925781,
+          "y": 458.67332458496094
+        },
+        "surfaceRevision": "q-001",
+        "createdAt": "2026-08-27T17:19:07.116Z",
+        "source": "human"
+      },
+      "generatedAt": "2026-08-27T17:19:07.116Z",
+      "referents": [
+        {
+          "nodeId": "region:east:chart",
+          "type": "org.ugp.demo.bi.dimension-member",
+          "entityRef": {
+            "namespace": "regions",
+            "id": "east"
+          },
+          "label": "East",
+          "authority": "authoritative",
+          "confidence": 1,
+          "relation": "contains-selection",
+          "evidence": [
+            {
+              "kind": "adapter-hit",
+              "authority": "authoritative",
+              "anchorId": "svg:region:east",
+              "score": 1,
+              "visibleRatio": 1
+            }
+          ],
+          "surfaceRevision": "q-001",
+          "nodeRevision": "1"
+        }
+      ],
+      "relationships": [
+        {
+          "sourceNodeId": "chart:region-breakdown",
+          "targetNodeId": "region:east:chart",
+          "relation": "parent"
+        }
+      ],
+      "omitted": [
+        {
+          "nodeId": "record:order-003218",
+          "reason": "invisible"
+        },
+        {
+          "nodeId": "region:international:record:order-003218",
+          "reason": "invisible"
+        },
+        {
+          "nodeId": "record:order-006586",
+          "reason": "invisible"
+        },
+        {
+          "nodeId": "region:north:record:order-006586",
+          "reason": "invisible"
+        },
+        {
+          "nodeId": "record:order-002336",
+          "reason": "invisible"
+        },
+        {
+          "nodeId": "region:south:record:order-002336",
+          "reason": "invisible"
+        },
+        {
+          "nodeId": "dashboard:operating-review",
+          "reason": "parent-collapsed"
+        },
+        {
+          "nodeId": "chart:region-breakdown",
+          "reason": "parent-collapsed"
+        }
+      ],
+      "ambiguity": {
+        "requiresDisambiguation": false
+      }
+    }
+  },
+  {
+    "scenario": "virtual-record",
+    "visibleOrder": "order-001724",
+    "bundle": {
+      "groundingId": "grounding:selection:mtbsf4vp:3:r536",
+      "selection": {
+        "selectionId": "selection:mtbsf4vp:3",
+        "surfaceId": "surface:bi-dashboard",
+        "mode": "point",
+        "selectors": [
+          {
+            "type": "UGPGeometrySelector",
+            "geometry": {
+              "kind": "point",
+              "coordinateSpace": "viewport",
+              "x": 287.640625,
+              "y": 760
+            }
+          }
+        ],
+        "geometry": {
+          "kind": "point",
+          "coordinateSpace": "viewport",
+          "x": 287.640625,
+          "y": 760
+        },
+        "surfaceRevision": "q-002",
+        "createdAt": "2026-08-27T17:19:21.205Z",
+        "source": "human"
+      },
+      "generatedAt": "2026-08-27T17:19:21.205Z",
+      "referents": [
+        {
+          "nodeId": "record:order-001724",
+          "type": "org.ugp.demo.bi.record",
+          "entityRef": {
+            "namespace": "orders",
+            "id": "order-001724"
+          },
+          "label": "ORDER-001724",
+          "authority": "authoritative",
+          "confidence": 1,
+          "relation": "contains-selection",
+          "evidence": [
+            {
+              "kind": "anchor-hit",
+              "authority": "authoritative",
+              "anchorId": "dom:record:order-001724",
+              "score": 1,
+              "visibleRatio": 1
+            }
+          ],
+          "surfaceRevision": "q-002",
+          "nodeRevision": "data-001"
+        },
+        {
+          "nodeId": "widget:records",
+          "type": "org.ugp.demo.bi.widget",
+          "entityRef": {
+            "namespace": "widgets",
+            "id": "records"
+          },
+          "label": "Order records",
+          "authority": "authoritative",
+          "confidence": 1,
+          "relation": "contains-selection",
+          "evidence": [
+            {
+              "kind": "anchor-hit",
+              "authority": "authoritative",
+              "anchorId": "dom:widget:records",
+              "score": 1,
+              "visibleRatio": 1
+            }
+          ],
+          "surfaceRevision": "q-002"
+        }
+      ],
+      "relationships": [
+        {
+          "sourceNodeId": "dashboard:operating-review",
+          "targetNodeId": "widget:records",
+          "relation": "parent"
+        }
+      ],
+      "omitted": [
+        {
+          "nodeId": "insight:revenue-drop",
+          "reason": "stale"
+        },
+        {
+          "nodeId": "record:order-004675",
+          "reason": "invisible"
+        },
+        {
+          "nodeId": "region:east:record:order-004675",
+          "reason": "invisible"
+        },
+        {
+          "nodeId": "record:order-002505",
+          "reason": "invisible"
+        },
+        {
+          "nodeId": "region:west:record:order-002505",
+          "reason": "invisible"
+        },
+        {
+          "nodeId": "record:order-008509",
+          "reason": "invisible"
+        },
+        {
+          "nodeId": "region:south:record:order-008509",
+          "reason": "invisible"
+        },
+        {
+          "nodeId": "dashboard:operating-review",
+          "reason": "parent-collapsed"
+        }
+      ],
+      "ambiguity": {
+        "requiresDisambiguation": true,
+        "candidates": [
+          {
+            "nodeId": "record:order-001724",
+            "type": "org.ugp.demo.bi.record",
+            "entityRef": {
+              "namespace": "orders",
+              "id": "order-001724"
+            },
+            "label": "ORDER-001724",
+            "authority": "authoritative",
+            "confidence": 1,
+            "relation": "contains-selection",
+            "evidence": [
+              {
+                "kind": "anchor-hit",
+                "authority": "authoritative",
+                "anchorId": "dom:record:order-001724",
+                "score": 1,
+                "visibleRatio": 1
+              }
+            ],
+            "surfaceRevision": "q-002",
+            "nodeRevision": "data-001"
+          },
+          {
+            "nodeId": "widget:records",
+            "type": "org.ugp.demo.bi.widget",
+            "entityRef": {
+              "namespace": "widgets",
+              "id": "records"
+            },
+            "label": "Order records",
+            "authority": "authoritative",
+            "confidence": 1,
+            "relation": "contains-selection",
+            "evidence": [
+              {
+                "kind": "anchor-hit",
+                "authority": "authoritative",
+                "anchorId": "dom:widget:records",
+                "score": 1,
+                "visibleRatio": 1
+              }
+            ],
+            "surfaceRevision": "q-002"
+          }
+        ],
+        "reason": "Equally ranked referents require explicit disambiguation."
+      },
+      "problem": {
+        "type": "https://ui-grounding.org/problems/ambiguous-referent",
+        "title": "Referent is ambiguous",
+        "status": 422,
+        "detail": "Multiple equally ranked application referents match the Selection.",
+        "code": "AMBIGUOUS_REFERENT",
+        "retryable": false
+      }
+    }
+  },
+  {
+    "scenario": "stale-after-filter",
+    "bundle": {
+      "groundingId": "grounding:selection:mtbsg4uz:2:r450",
+      "selection": {
+        "selectionId": "selection:mtbsg4uz:2",
+        "surfaceId": "surface:bi-dashboard",
+        "mode": "point",
+        "selectors": [
+          {
+            "type": "UGPGeometrySelector",
+            "geometry": {
+              "kind": "point",
+              "coordinateSpace": "viewport",
+              "x": 133.015625,
+              "y": 209.5
+            }
+          }
+        ],
+        "geometry": {
+          "kind": "point",
+          "coordinateSpace": "viewport",
+          "x": 133.015625,
+          "y": 209.5
+        },
+        "surfaceRevision": "q-001",
+        "createdAt": "2026-08-27T17:20:07.835Z",
+        "source": "human"
+      },
+      "generatedAt": "2026-08-27T17:20:07.835Z",
+      "referents": [],
+      "problem": {
+        "type": "https://ui-grounding.org/problems/surface-stale",
+        "title": "Surface state is stale",
+        "status": 409,
+        "detail": "Selection selection:mtbsg4uz:2 does not match the current Surface revision.",
+        "code": "SURFACE_STALE",
+        "retryable": true
+      }
+    }
+  },
+  {
+    "scenario": "viewer-context-source",
+    "bundle": {
+      "groundingId": "grounding:selection:mtbsgefv:1:r247",
+      "selection": {
+        "selectionId": "selection:mtbsgefv:1",
+        "surfaceId": "surface:bi-dashboard",
+        "mode": "point",
+        "selectors": [
+          {
+            "type": "UGPGeometrySelector",
+            "geometry": {
+              "kind": "point",
+              "coordinateSpace": "viewport",
+              "x": 134.875,
+              "y": 322
+            }
+          }
+        ],
+        "geometry": {
+          "kind": "point",
+          "coordinateSpace": "viewport",
+          "x": 134.875,
+          "y": 322
+        },
+        "surfaceRevision": "q-001",
+        "createdAt": "2026-08-27T17:20:20.251Z",
+        "source": "human"
+      },
+      "generatedAt": "2026-08-27T17:20:20.251Z",
+      "referents": [
+        {
+          "nodeId": "metric:revenue",
+          "type": "org.ugp.demo.bi.metric",
+          "entityRef": {
+            "namespace": "metrics",
+            "id": "revenue"
+          },
+          "label": "Revenue",
+          "authority": "authoritative",
+          "confidence": 1,
+          "relation": "contains-selection",
+          "evidence": [
+            {
+              "kind": "anchor-hit",
+              "authority": "authoritative",
+              "anchorId": "dom:metric:revenue",
+              "score": 1,
+              "visibleRatio": 1
+            }
+          ],
+          "surfaceRevision": "q-001",
+          "nodeRevision": "q-001"
+        }
+      ],
+      "relationships": [
+        {
+          "sourceNodeId": "dashboard:operating-review",
+          "targetNodeId": "metric:revenue",
+          "relation": "parent"
+        }
+      ],
+      "omitted": [
+        {
+          "nodeId": "region:international:record:order-007581",
+          "reason": "invisible"
+        },
+        {
+          "nodeId": "record:order-003218",
+          "reason": "invisible"
+        },
+        {
+          "nodeId": "region:international:record:order-003218",
+          "reason": "invisible"
+        },
+        {
+          "nodeId": "record:order-006586",
+          "reason": "invisible"
+        },
+        {
+          "nodeId": "region:north:record:order-006586",
+          "reason": "invisible"
+        },
+        {
+          "nodeId": "record:order-002336",
+          "reason": "invisible"
+        },
+        {
+          "nodeId": "region:south:record:order-002336",
+          "reason": "invisible"
+        },
+        {
+          "nodeId": "dashboard:operating-review",
+          "reason": "parent-collapsed"
+        }
+      ],
+      "ambiguity": {
+        "requiresDisambiguation": false
+      }
+    }
+  }
+]

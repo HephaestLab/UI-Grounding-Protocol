@@ -1,0 +1,13 @@
+{
+  "status": "PASS",
+  "dialect": "https://json-schema.org/draft/2020-12/schema",
+  "schemas": 13,
+  "conformanceCases": 55,
+  "positiveCases": 24,
+  "negativeCases": 31,
+  "passed": 55,
+  "failed": 0,
+  "generatedTypesCurrent": true,
+  "command": "pnpm check",
+  "evidence": "conformance-report.json"
+}

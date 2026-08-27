@@ -1,0 +1,23 @@
+{
+  "status": "PASS",
+  "packages": 6,
+  "tarballs": [
+    "ui-grounding-core-0.0.0.tgz",
+    "ui-grounding-dom-0.0.0.tgz",
+    "ui-grounding-overlay-0.0.0.tgz",
+    "ui-grounding-protocol-0.0.0.tgz",
+    "ui-grounding-react-0.0.0.tgz",
+    "ui-grounding-testing-0.0.0.tgz"
+  ],
+  "checks": {
+    "cleanTemporaryInstall": true,
+    "esmImport": true,
+    "typescriptResolution": true,
+    "reactPeerDependency": true,
+    "viteTreeShaking": true,
+    "explicitCssImport": true,
+    "declaredRuntimeDependencies": true,
+    "noAbsolutePathsOrSecrets": true
+  },
+  "dependencyAudit": "No known vulnerabilities found"
+}

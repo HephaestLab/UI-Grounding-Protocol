@@ -1,0 +1,26 @@
+{
+  "commit": "0aebc56452ddade4d302e89b637d20620a9b041f",
+  "version": "0.1.0-alpha candidate",
+  "date": "2026-08-28",
+  "timezone": "Asia/Shanghai",
+  "os": "Windows 10.0.19044",
+  "cpu": "12th Gen Intel(R) Core(TM) i5-12490F",
+  "logicalCpuCount": 12,
+  "memoryBytes": 17032929280,
+  "node": "v24.11.1",
+  "packageManager": "pnpm 10.32.1",
+  "playwright": "1.62.1",
+  "browserProjects": [
+    "Chromium 1440x900 DPR 1",
+    "Firefox 1440x900 DPR 1",
+    "WebKit 1440x900 DPR 1",
+    "Chromium 1024x768 DPR 1",
+    "Chromium 1440x900 DPR 2"
+  ],
+  "manualBrowser": "Codex in-app Browser",
+  "productionUrl": "http://127.0.0.1:4174/",
+  "productionBinding": "127.0.0.1 only",
+  "buildMode": "production",
+  "debugBuildUsedForBundleEvidence": true,
+  "shippingBuildDebugEnabled": false
+}

@@ -1,0 +1,6 @@
+<testsuites id="" name="" tests="1" failures="0" skipped="0" errors="0" time="1.9936260000000001">
+<testsuite name="production-smoke.spec.ts" timestamp="2026-08-27T17:23:16.422Z" hostname="chromium" tests="1" failures="0" skipped="0" time="0.802" errors="0">
+<testcase name="M5-10 production bundle boots without runtime disclosure or errors" classname="production-smoke.spec.ts" time="0.802">
+</testcase>
+</testsuite>
+</testsuites>

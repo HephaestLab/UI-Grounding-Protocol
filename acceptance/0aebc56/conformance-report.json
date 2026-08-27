@@ -1,0 +1,1444 @@
+{
+  "generatedAt": "2026-08-27T17:21:39.002Z",
+  "schemaDialect": "https://json-schema.org/draft/2020-12/schema",
+  "summary": {
+    "total": 55,
+    "passed": 55,
+    "failed": 0,
+    "positive": 24,
+    "negative": 31
+  },
+  "cases": [
+    {
+      "id": "schema-positive-surface-minimal",
+      "passed": true,
+      "expectedValid": true,
+      "actualValid": true,
+      "schema": "surface.schema.json",
+      "profiles": ["UGP-Core"],
+      "normativeRequirements": ["UGP-REQ-SURFACE-001"],
+      "errors": []
+    },
+    {
+      "id": "schema-positive-surface-extension",
+      "passed": true,
+      "expectedValid": true,
+      "actualValid": true,
+      "schema": "surface.schema.json",
+      "profiles": ["UGP-Core"],
+      "normativeRequirements": ["UGP-REQ-EXT-001"],
+      "errors": []
+    },
+    {
+      "id": "schema-positive-semantic-type",
+      "passed": true,
+      "expectedValid": true,
+      "actualValid": true,
+      "schema": "semantic-type.schema.json",
+      "profiles": ["UGP-Core"],
+      "normativeRequirements": ["UGP-REQ-TYPE-001"],
+      "errors": []
+    },
+    {
+      "id": "schema-positive-semantic-node",
+      "passed": true,
+      "expectedValid": true,
+      "actualValid": true,
+      "schema": "semantic-node.schema.json",
+      "profiles": ["UGP-Core"],
+      "normativeRequirements": ["UGP-REQ-NODE-001"],
+      "errors": []
+    },
+    {
+      "id": "schema-positive-node-validity-window",
+      "passed": true,
+      "expectedValid": true,
+      "actualValid": true,
+      "schema": "semantic-node.schema.json",
+      "profiles": ["UGP-Core"],
+      "normativeRequirements": ["UGP-REQ-REV-003"],
+      "errors": []
+    },
+    {
+      "id": "schema-positive-css-selector",
+      "passed": true,
+      "expectedValid": true,
+      "actualValid": true,
+      "schema": "selector.schema.json",
+      "profiles": ["UGP-Core"],
+      "normativeRequirements": ["UGP-REQ-SELECTOR-001"],
+      "errors": []
+    },
+    {
+      "id": "schema-positive-text-quote-selector",
+      "passed": true,
+      "expectedValid": true,
+      "actualValid": true,
+      "schema": "selector.schema.json",
+      "profiles": ["UGP-Text"],
+      "normativeRequirements": ["UGP-REQ-TEXT-001"],
+      "errors": []
+    },
+    {
+      "id": "schema-positive-text-position-selector",
+      "passed": true,
+      "expectedValid": true,
+      "actualValid": true,
+      "schema": "selector.schema.json",
+      "profiles": ["UGP-Text"],
+      "normativeRequirements": ["UGP-REQ-TEXT-002"],
+      "errors": []
+    },
+    {
+      "id": "schema-positive-semantic-selector",
+      "passed": true,
+      "expectedValid": true,
+      "actualValid": true,
+      "schema": "selector.schema.json",
+      "profiles": ["UGP-Core"],
+      "normativeRequirements": ["UGP-REQ-SELECTOR-002"],
+      "errors": []
+    },
+    {
+      "id": "schema-positive-geometry-selector",
+      "passed": true,
+      "expectedValid": true,
+      "actualValid": true,
+      "schema": "selector.schema.json",
+      "profiles": ["UGP-Region"],
+      "normativeRequirements": ["UGP-REQ-GEOMETRY-001"],
+      "errors": []
+    },
+    {
+      "id": "schema-positive-dom-anchor",
+      "passed": true,
+      "expectedValid": true,
+      "actualValid": true,
+      "schema": "anchor.schema.json",
+      "profiles": ["UGP-Core", "UGP-Point"],
+      "normativeRequirements": ["UGP-REQ-ANCHOR-001"],
+      "errors": []
+    },
+    {
+      "id": "schema-positive-text-anchor",
+      "passed": true,
+      "expectedValid": true,
+      "actualValid": true,
+      "schema": "anchor.schema.json",
+      "profiles": ["UGP-Text"],
+      "normativeRequirements": ["UGP-REQ-ANCHOR-002"],
+      "errors": []
+    },
+    {
+      "id": "schema-positive-svg-anchor",
+      "passed": true,
+      "expectedValid": true,
+      "actualValid": true,
+      "schema": "anchor.schema.json",
+      "profiles": ["UGP-ComplexSurface"],
+      "normativeRequirements": ["UGP-REQ-ANCHOR-003"],
+      "errors": []
+    },
+    {
+      "id": "schema-positive-canvas-anchor",
+      "passed": true,
+      "expectedValid": true,
+      "actualValid": true,
+      "schema": "anchor.schema.json",
+      "profiles": ["UGP-ComplexSurface"],
+      "normativeRequirements": ["UGP-REQ-ANCHOR-004"],
+      "errors": []
+    },
+    {
+      "id": "schema-positive-virtual-anchor",
+      "passed": true,
+      "expectedValid": true,
+      "actualValid": true,
+      "schema": "anchor.schema.json",
+      "profiles": ["UGP-ComplexSurface"],
+      "normativeRequirements": ["UGP-REQ-ANCHOR-005"],
+      "errors": []
+    },
+    {
+      "id": "schema-positive-accessibility-anchor",
+      "passed": true,
+      "expectedValid": true,
+      "actualValid": true,
+      "schema": "anchor.schema.json",
+      "profiles": ["UGP-Inference"],
+      "normativeRequirements": ["UGP-REQ-ANCHOR-006"],
+      "errors": []
+    },
+    {
+      "id": "schema-positive-point-selection",
+      "passed": true,
+      "expectedValid": true,
+      "actualValid": true,
+      "schema": "selection.schema.json",
+      "profiles": ["UGP-Point"],
+      "normativeRequirements": ["UGP-REQ-SELECTION-001"],
+      "errors": []
+    },
+    {
+      "id": "schema-positive-region-selection",
+      "passed": true,
+      "expectedValid": true,
+      "actualValid": true,
+      "schema": "selection.schema.json",
+      "profiles": ["UGP-Region"],
+      "normativeRequirements": ["UGP-REQ-SELECTION-002"],
+      "errors": []
+    },
+    {
+      "id": "schema-positive-text-selection",
+      "passed": true,
+      "expectedValid": true,
+      "actualValid": true,
+      "schema": "selection.schema.json",
+      "profiles": ["UGP-Text"],
+      "normativeRequirements": ["UGP-REQ-SELECTION-003"],
+      "errors": []
+    },
+    {
+      "id": "schema-positive-resolved-referent",
+      "passed": true,
+      "expectedValid": true,
+      "actualValid": true,
+      "schema": "resolved-referent.schema.json",
+      "profiles": ["UGP-Core"],
+      "normativeRequirements": ["UGP-REQ-REFERENT-001"],
+      "errors": []
+    },
+    {
+      "id": "schema-positive-grounding-bundle",
+      "passed": true,
+      "expectedValid": true,
+      "actualValid": true,
+      "schema": "grounding-bundle.schema.json",
+      "profiles": ["UGP-Core"],
+      "normativeRequirements": ["UGP-REQ-BUNDLE-001"],
+      "errors": []
+    },
+    {
+      "id": "schema-positive-context-bundle",
+      "passed": true,
+      "expectedValid": true,
+      "actualValid": true,
+      "schema": "context-bundle.schema.json",
+      "profiles": ["UGP-Context"],
+      "normativeRequirements": ["UGP-REQ-CONTEXT-001"],
+      "errors": []
+    },
+    {
+      "id": "schema-positive-grounding-problem",
+      "passed": true,
+      "expectedValid": true,
+      "actualValid": true,
+      "schema": "grounding-problem.schema.json",
+      "profiles": ["UGP-Core"],
+      "normativeRequirements": ["UGP-REQ-PROBLEM-001"],
+      "errors": []
+    },
+    {
+      "id": "schema-positive-envelope",
+      "passed": true,
+      "expectedValid": true,
+      "actualValid": true,
+      "schema": "envelope.schema.json",
+      "profiles": ["UGP-Core"],
+      "normativeRequirements": ["UGP-REQ-ENVELOPE-001"],
+      "errors": []
+    },
+    {
+      "id": "schema-negative-surface-required",
+      "passed": true,
+      "expectedValid": false,
+      "actualValid": false,
+      "schema": "surface.schema.json",
+      "profiles": ["UGP-Core"],
+      "normativeRequirements": ["UGP-REQ-SURFACE-001"],
+      "errors": [
+        {
+          "instancePath": "",
+          "keyword": "required",
+          "message": "must have required property 'surfaceId'"
+        }
+      ]
+    },
+    {
+      "id": "schema-negative-surface-trust-enum",
+      "passed": true,
+      "expectedValid": false,
+      "actualValid": false,
+      "schema": "surface.schema.json",
+      "profiles": ["UGP-Core"],
+      "normativeRequirements": ["UGP-REQ-SURFACE-002"],
+      "errors": [
+        {
+          "instancePath": "/trustBoundary",
+          "keyword": "enum",
+          "message": "must be equal to one of the allowed values"
+        }
+      ]
+    },
+    {
+      "id": "schema-negative-unknown-field",
+      "passed": true,
+      "expectedValid": false,
+      "actualValid": false,
+      "schema": "surface.schema.json",
+      "profiles": ["UGP-Core"],
+      "normativeRequirements": ["UGP-REQ-EXT-001"],
+      "errors": [
+        {
+          "instancePath": "",
+          "keyword": "additionalProperties",
+          "message": "must NOT have additional properties"
+        }
+      ]
+    },
+    {
+      "id": "schema-negative-extension-name",
+      "passed": true,
+      "expectedValid": false,
+      "actualValid": false,
+      "schema": "surface.schema.json",
+      "profiles": ["UGP-Core"],
+      "normativeRequirements": ["UGP-REQ-EXT-002"],
+      "errors": [
+        {
+          "instancePath": "/extensions",
+          "keyword": "pattern",
+          "message": "must match pattern \"^[a-z0-9]+(?:[.-][a-z0-9]+)+$\""
+        },
+        {
+          "instancePath": "/extensions",
+          "keyword": "propertyNames",
+          "message": "property name must be valid"
+        }
+      ]
+    },
+    {
+      "id": "schema-negative-semantic-type-pattern",
+      "passed": true,
+      "expectedValid": false,
+      "actualValid": false,
+      "schema": "semantic-type.schema.json",
+      "profiles": ["UGP-Core"],
+      "normativeRequirements": ["UGP-REQ-TYPE-002"],
+      "errors": [
+        {
+          "instancePath": "/type",
+          "keyword": "pattern",
+          "message": "must match pattern \"^[a-z][a-z0-9]*(?:[.-][a-z0-9]+)+$\""
+        }
+      ]
+    },
+    {
+      "id": "schema-negative-semantic-type-required",
+      "passed": true,
+      "expectedValid": false,
+      "actualValid": false,
+      "schema": "semantic-type.schema.json",
+      "profiles": ["UGP-Core"],
+      "normativeRequirements": ["UGP-REQ-TYPE-001"],
+      "errors": [
+        {
+          "instancePath": "",
+          "keyword": "required",
+          "message": "must have required property 'description'"
+        }
+      ]
+    },
+    {
+      "id": "schema-negative-node-required-authority",
+      "passed": true,
+      "expectedValid": false,
+      "actualValid": false,
+      "schema": "semantic-node.schema.json",
+      "profiles": ["UGP-Core"],
+      "normativeRequirements": ["UGP-REQ-AUTHORITY-001"],
+      "errors": [
+        {
+          "instancePath": "",
+          "keyword": "required",
+          "message": "must have required property 'authority'"
+        }
+      ]
+    },
+    {
+      "id": "schema-negative-node-authority-enum",
+      "passed": true,
+      "expectedValid": false,
+      "actualValid": false,
+      "schema": "semantic-node.schema.json",
+      "profiles": ["UGP-Core"],
+      "normativeRequirements": ["UGP-REQ-AUTHORITY-001"],
+      "errors": [
+        {
+          "instancePath": "/authority",
+          "keyword": "enum",
+          "message": "must be equal to one of the allowed values"
+        }
+      ]
+    },
+    {
+      "id": "schema-negative-node-self-parent",
+      "passed": true,
+      "expectedValid": false,
+      "actualValid": false,
+      "schema": "semantic-node.schema.json",
+      "profiles": ["UGP-Core"],
+      "normativeRequirements": ["UGP-REQ-NODE-REL-001"],
+      "errors": [
+        {
+          "instancePath": "/parentNodeId",
+          "keyword": "ugpInvariant",
+          "message": "must not equal nodeId"
+        }
+      ]
+    },
+    {
+      "id": "schema-negative-node-expiry-order",
+      "passed": true,
+      "expectedValid": false,
+      "actualValid": false,
+      "schema": "semantic-node.schema.json",
+      "profiles": ["UGP-Core"],
+      "normativeRequirements": ["UGP-REQ-REV-003"],
+      "errors": [
+        {
+          "instancePath": "/expiresAt",
+          "keyword": "ugpInvariant",
+          "message": "must be later than validAt"
+        }
+      ]
+    },
+    {
+      "id": "schema-negative-semantic-selector-empty",
+      "passed": true,
+      "expectedValid": false,
+      "actualValid": false,
+      "schema": "selector.schema.json",
+      "profiles": ["UGP-Core"],
+      "normativeRequirements": ["UGP-REQ-SELECTOR-002"],
+      "errors": [
+        {
+          "instancePath": "",
+          "keyword": "required",
+          "message": "must have required property 'value'"
+        },
+        {
+          "instancePath": "/type",
+          "keyword": "const",
+          "message": "must be equal to constant"
+        },
+        {
+          "instancePath": "",
+          "keyword": "required",
+          "message": "must have required property 'value'"
+        },
+        {
+          "instancePath": "/type",
+          "keyword": "const",
+          "message": "must be equal to constant"
+        },
+        {
+          "instancePath": "",
+          "keyword": "required",
+          "message": "must have required property 'exact'"
+        },
+        {
+          "instancePath": "/type",
+          "keyword": "const",
+          "message": "must be equal to constant"
+        },
+        {
+          "instancePath": "",
+          "keyword": "required",
+          "message": "must have required property 'start'"
+        },
+        {
+          "instancePath": "",
+          "keyword": "required",
+          "message": "must have required property 'end'"
+        },
+        {
+          "instancePath": "/type",
+          "keyword": "const",
+          "message": "must be equal to constant"
+        },
+        {
+          "instancePath": "",
+          "keyword": "required",
+          "message": "must have required property 'startPath'"
+        },
+        {
+          "instancePath": "",
+          "keyword": "required",
+          "message": "must have required property 'startOffset'"
+        },
+        {
+          "instancePath": "",
+          "keyword": "required",
+          "message": "must have required property 'endPath'"
+        },
+        {
+          "instancePath": "",
+          "keyword": "required",
+          "message": "must have required property 'endOffset'"
+        },
+        {
+          "instancePath": "/type",
+          "keyword": "const",
+          "message": "must be equal to constant"
+        },
+        {
+          "instancePath": "",
+          "keyword": "required",
+          "message": "must have required property 'value'"
+        },
+        {
+          "instancePath": "/type",
+          "keyword": "const",
+          "message": "must be equal to constant"
+        },
+        {
+          "instancePath": "",
+          "keyword": "required",
+          "message": "must have required property 'value'"
+        },
+        {
+          "instancePath": "/type",
+          "keyword": "const",
+          "message": "must be equal to constant"
+        },
+        {
+          "instancePath": "",
+          "keyword": "required",
+          "message": "must have required property 'geometry'"
+        },
+        {
+          "instancePath": "/type",
+          "keyword": "const",
+          "message": "must be equal to constant"
+        },
+        {
+          "instancePath": "",
+          "keyword": "required",
+          "message": "must have required property 'entityRef'"
+        },
+        {
+          "instancePath": "",
+          "keyword": "required",
+          "message": "must have required property 'semanticType'"
+        },
+        {
+          "instancePath": "",
+          "keyword": "required",
+          "message": "must have required property 'nodeId'"
+        },
+        {
+          "instancePath": "",
+          "keyword": "anyOf",
+          "message": "must match a schema in anyOf"
+        },
+        {
+          "instancePath": "",
+          "keyword": "oneOf",
+          "message": "must match exactly one schema in oneOf"
+        }
+      ]
+    },
+    {
+      "id": "schema-negative-text-position-order",
+      "passed": true,
+      "expectedValid": false,
+      "actualValid": false,
+      "schema": "selector.schema.json",
+      "profiles": ["UGP-Text"],
+      "normativeRequirements": ["UGP-REQ-TEXT-002"],
+      "errors": [
+        {
+          "instancePath": "/end",
+          "keyword": "ugpInvariant",
+          "message": "must be greater than or equal to start"
+        }
+      ]
+    },
+    {
+      "id": "schema-negative-selector-type",
+      "passed": true,
+      "expectedValid": false,
+      "actualValid": false,
+      "schema": "selector.schema.json",
+      "profiles": ["UGP-Core"],
+      "normativeRequirements": ["UGP-REQ-SELECTOR-001"],
+      "errors": [
+        {
+          "instancePath": "/type",
+          "keyword": "const",
+          "message": "must be equal to constant"
+        },
+        {
+          "instancePath": "/type",
+          "keyword": "const",
+          "message": "must be equal to constant"
+        },
+        {
+          "instancePath": "",
+          "keyword": "required",
+          "message": "must have required property 'exact'"
+        },
+        {
+          "instancePath": "",
+          "keyword": "additionalProperties",
+          "message": "must NOT have additional properties"
+        },
+        {
+          "instancePath": "/type",
+          "keyword": "const",
+          "message": "must be equal to constant"
+        },
+        {
+          "instancePath": "",
+          "keyword": "required",
+          "message": "must have required property 'start'"
+        },
+        {
+          "instancePath": "",
+          "keyword": "required",
+          "message": "must have required property 'end'"
+        },
+        {
+          "instancePath": "",
+          "keyword": "additionalProperties",
+          "message": "must NOT have additional properties"
+        },
+        {
+          "instancePath": "/type",
+          "keyword": "const",
+          "message": "must be equal to constant"
+        },
+        {
+          "instancePath": "",
+          "keyword": "required",
+          "message": "must have required property 'startPath'"
+        },
+        {
+          "instancePath": "",
+          "keyword": "required",
+          "message": "must have required property 'startOffset'"
+        },
+        {
+          "instancePath": "",
+          "keyword": "required",
+          "message": "must have required property 'endPath'"
+        },
+        {
+          "instancePath": "",
+          "keyword": "required",
+          "message": "must have required property 'endOffset'"
+        },
+        {
+          "instancePath": "",
+          "keyword": "additionalProperties",
+          "message": "must NOT have additional properties"
+        },
+        {
+          "instancePath": "/type",
+          "keyword": "const",
+          "message": "must be equal to constant"
+        },
+        {
+          "instancePath": "/type",
+          "keyword": "const",
+          "message": "must be equal to constant"
+        },
+        {
+          "instancePath": "/type",
+          "keyword": "const",
+          "message": "must be equal to constant"
+        },
+        {
+          "instancePath": "",
+          "keyword": "required",
+          "message": "must have required property 'geometry'"
+        },
+        {
+          "instancePath": "",
+          "keyword": "additionalProperties",
+          "message": "must NOT have additional properties"
+        },
+        {
+          "instancePath": "/type",
+          "keyword": "const",
+          "message": "must be equal to constant"
+        },
+        {
+          "instancePath": "",
+          "keyword": "required",
+          "message": "must have required property 'entityRef'"
+        },
+        {
+          "instancePath": "",
+          "keyword": "required",
+          "message": "must have required property 'semanticType'"
+        },
+        {
+          "instancePath": "",
+          "keyword": "required",
+          "message": "must have required property 'nodeId'"
+        },
+        {
+          "instancePath": "",
+          "keyword": "anyOf",
+          "message": "must match a schema in anyOf"
+        },
+        {
+          "instancePath": "",
+          "keyword": "additionalProperties",
+          "message": "must NOT have additional properties"
+        },
+        {
+          "instancePath": "/type",
+          "keyword": "const",
+          "message": "must be equal to constant"
+        },
+        {
+          "instancePath": "",
+          "keyword": "oneOf",
+          "message": "must match exactly one schema in oneOf"
+        }
+      ]
+    },
+    {
+      "id": "schema-negative-geometry-width",
+      "passed": true,
+      "expectedValid": false,
+      "actualValid": false,
+      "schema": "selector.schema.json",
+      "profiles": ["UGP-Region"],
+      "normativeRequirements": ["UGP-REQ-GEOMETRY-002"],
+      "errors": [
+        {
+          "instancePath": "",
+          "keyword": "required",
+          "message": "must have required property 'value'"
+        },
+        {
+          "instancePath": "",
+          "keyword": "additionalProperties",
+          "message": "must NOT have additional properties"
+        },
+        {
+          "instancePath": "/type",
+          "keyword": "const",
+          "message": "must be equal to constant"
+        },
+        {
+          "instancePath": "",
+          "keyword": "required",
+          "message": "must have required property 'value'"
+        },
+        {
+          "instancePath": "",
+          "keyword": "additionalProperties",
+          "message": "must NOT have additional properties"
+        },
+        {
+          "instancePath": "/type",
+          "keyword": "const",
+          "message": "must be equal to constant"
+        },
+        {
+          "instancePath": "",
+          "keyword": "required",
+          "message": "must have required property 'exact'"
+        },
+        {
+          "instancePath": "",
+          "keyword": "additionalProperties",
+          "message": "must NOT have additional properties"
+        },
+        {
+          "instancePath": "/type",
+          "keyword": "const",
+          "message": "must be equal to constant"
+        },
+        {
+          "instancePath": "",
+          "keyword": "required",
+          "message": "must have required property 'start'"
+        },
+        {
+          "instancePath": "",
+          "keyword": "required",
+          "message": "must have required property 'end'"
+        },
+        {
+          "instancePath": "",
+          "keyword": "additionalProperties",
+          "message": "must NOT have additional properties"
+        },
+        {
+          "instancePath": "/type",
+          "keyword": "const",
+          "message": "must be equal to constant"
+        },
+        {
+          "instancePath": "",
+          "keyword": "required",
+          "message": "must have required property 'startPath'"
+        },
+        {
+          "instancePath": "",
+          "keyword": "required",
+          "message": "must have required property 'startOffset'"
+        },
+        {
+          "instancePath": "",
+          "keyword": "required",
+          "message": "must have required property 'endPath'"
+        },
+        {
+          "instancePath": "",
+          "keyword": "required",
+          "message": "must have required property 'endOffset'"
+        },
+        {
+          "instancePath": "",
+          "keyword": "additionalProperties",
+          "message": "must NOT have additional properties"
+        },
+        {
+          "instancePath": "/type",
+          "keyword": "const",
+          "message": "must be equal to constant"
+        },
+        {
+          "instancePath": "",
+          "keyword": "required",
+          "message": "must have required property 'value'"
+        },
+        {
+          "instancePath": "",
+          "keyword": "additionalProperties",
+          "message": "must NOT have additional properties"
+        },
+        {
+          "instancePath": "/type",
+          "keyword": "const",
+          "message": "must be equal to constant"
+        },
+        {
+          "instancePath": "",
+          "keyword": "required",
+          "message": "must have required property 'value'"
+        },
+        {
+          "instancePath": "",
+          "keyword": "additionalProperties",
+          "message": "must NOT have additional properties"
+        },
+        {
+          "instancePath": "/type",
+          "keyword": "const",
+          "message": "must be equal to constant"
+        },
+        {
+          "instancePath": "/geometry",
+          "keyword": "additionalProperties",
+          "message": "must NOT have additional properties"
+        },
+        {
+          "instancePath": "/geometry",
+          "keyword": "additionalProperties",
+          "message": "must NOT have additional properties"
+        },
+        {
+          "instancePath": "/geometry/kind",
+          "keyword": "const",
+          "message": "must be equal to constant"
+        },
+        {
+          "instancePath": "/geometry/width",
+          "keyword": "minimum",
+          "message": "must be >= 0"
+        },
+        {
+          "instancePath": "/geometry",
+          "keyword": "required",
+          "message": "must have required property 'points'"
+        },
+        {
+          "instancePath": "/geometry",
+          "keyword": "additionalProperties",
+          "message": "must NOT have additional properties"
+        },
+        {
+          "instancePath": "/geometry",
+          "keyword": "additionalProperties",
+          "message": "must NOT have additional properties"
+        },
+        {
+          "instancePath": "/geometry",
+          "keyword": "additionalProperties",
+          "message": "must NOT have additional properties"
+        },
+        {
+          "instancePath": "/geometry",
+          "keyword": "additionalProperties",
+          "message": "must NOT have additional properties"
+        },
+        {
+          "instancePath": "/geometry/kind",
+          "keyword": "const",
+          "message": "must be equal to constant"
+        },
+        {
+          "instancePath": "/geometry",
+          "keyword": "oneOf",
+          "message": "must match exactly one schema in oneOf"
+        },
+        {
+          "instancePath": "",
+          "keyword": "required",
+          "message": "must have required property 'entityRef'"
+        },
+        {
+          "instancePath": "",
+          "keyword": "required",
+          "message": "must have required property 'semanticType'"
+        },
+        {
+          "instancePath": "",
+          "keyword": "required",
+          "message": "must have required property 'nodeId'"
+        },
+        {
+          "instancePath": "",
+          "keyword": "anyOf",
+          "message": "must match a schema in anyOf"
+        },
+        {
+          "instancePath": "",
+          "keyword": "additionalProperties",
+          "message": "must NOT have additional properties"
+        },
+        {
+          "instancePath": "/type",
+          "keyword": "const",
+          "message": "must be equal to constant"
+        },
+        {
+          "instancePath": "",
+          "keyword": "oneOf",
+          "message": "must match exactly one schema in oneOf"
+        }
+      ]
+    },
+    {
+      "id": "schema-negative-anchor-kind",
+      "passed": true,
+      "expectedValid": false,
+      "actualValid": false,
+      "schema": "anchor.schema.json",
+      "profiles": ["UGP-Point"],
+      "normativeRequirements": ["UGP-REQ-ANCHOR-001"],
+      "errors": [
+        {
+          "instancePath": "/kind",
+          "keyword": "const",
+          "message": "must be equal to constant"
+        },
+        {
+          "instancePath": "",
+          "keyword": "required",
+          "message": "must have required property 'selectors'"
+        },
+        {
+          "instancePath": "",
+          "keyword": "additionalProperties",
+          "message": "must NOT have additional properties"
+        },
+        {
+          "instancePath": "/kind",
+          "keyword": "const",
+          "message": "must be equal to constant"
+        },
+        {
+          "instancePath": "",
+          "keyword": "required",
+          "message": "must have required property 'elementId'"
+        },
+        {
+          "instancePath": "",
+          "keyword": "additionalProperties",
+          "message": "must NOT have additional properties"
+        },
+        {
+          "instancePath": "/kind",
+          "keyword": "const",
+          "message": "must be equal to constant"
+        },
+        {
+          "instancePath": "",
+          "keyword": "required",
+          "message": "must have required property 'adapterId'"
+        },
+        {
+          "instancePath": "",
+          "keyword": "required",
+          "message": "must have required property 'geometry'"
+        },
+        {
+          "instancePath": "",
+          "keyword": "additionalProperties",
+          "message": "must NOT have additional properties"
+        },
+        {
+          "instancePath": "/kind",
+          "keyword": "const",
+          "message": "must be equal to constant"
+        },
+        {
+          "instancePath": "",
+          "keyword": "required",
+          "message": "must have required property 'itemKey'"
+        },
+        {
+          "instancePath": "",
+          "keyword": "additionalProperties",
+          "message": "must NOT have additional properties"
+        },
+        {
+          "instancePath": "/kind",
+          "keyword": "const",
+          "message": "must be equal to constant"
+        },
+        {
+          "instancePath": "",
+          "keyword": "required",
+          "message": "must have required property 'role'"
+        },
+        {
+          "instancePath": "",
+          "keyword": "required",
+          "message": "must have required property 'name'"
+        },
+        {
+          "instancePath": "",
+          "keyword": "additionalProperties",
+          "message": "must NOT have additional properties"
+        },
+        {
+          "instancePath": "/kind",
+          "keyword": "const",
+          "message": "must be equal to constant"
+        },
+        {
+          "instancePath": "",
+          "keyword": "oneOf",
+          "message": "must match exactly one schema in oneOf"
+        }
+      ]
+    },
+    {
+      "id": "schema-negative-anchor-required",
+      "passed": true,
+      "expectedValid": false,
+      "actualValid": false,
+      "schema": "anchor.schema.json",
+      "profiles": ["UGP-ComplexSurface"],
+      "normativeRequirements": ["UGP-REQ-ANCHOR-004"],
+      "errors": [
+        {
+          "instancePath": "",
+          "keyword": "required",
+          "message": "must have required property 'selector'"
+        },
+        {
+          "instancePath": "",
+          "keyword": "additionalProperties",
+          "message": "must NOT have additional properties"
+        },
+        {
+          "instancePath": "/kind",
+          "keyword": "const",
+          "message": "must be equal to constant"
+        },
+        {
+          "instancePath": "",
+          "keyword": "required",
+          "message": "must have required property 'selectors'"
+        },
+        {
+          "instancePath": "",
+          "keyword": "additionalProperties",
+          "message": "must NOT have additional properties"
+        },
+        {
+          "instancePath": "/kind",
+          "keyword": "const",
+          "message": "must be equal to constant"
+        },
+        {
+          "instancePath": "",
+          "keyword": "required",
+          "message": "must have required property 'elementId'"
+        },
+        {
+          "instancePath": "",
+          "keyword": "additionalProperties",
+          "message": "must NOT have additional properties"
+        },
+        {
+          "instancePath": "/kind",
+          "keyword": "const",
+          "message": "must be equal to constant"
+        },
+        {
+          "instancePath": "",
+          "keyword": "required",
+          "message": "must have required property 'adapterId'"
+        },
+        {
+          "instancePath": "",
+          "keyword": "required",
+          "message": "must have required property 'itemKey'"
+        },
+        {
+          "instancePath": "",
+          "keyword": "additionalProperties",
+          "message": "must NOT have additional properties"
+        },
+        {
+          "instancePath": "/kind",
+          "keyword": "const",
+          "message": "must be equal to constant"
+        },
+        {
+          "instancePath": "",
+          "keyword": "required",
+          "message": "must have required property 'role'"
+        },
+        {
+          "instancePath": "",
+          "keyword": "required",
+          "message": "must have required property 'name'"
+        },
+        {
+          "instancePath": "",
+          "keyword": "additionalProperties",
+          "message": "must NOT have additional properties"
+        },
+        {
+          "instancePath": "/kind",
+          "keyword": "const",
+          "message": "must be equal to constant"
+        },
+        {
+          "instancePath": "",
+          "keyword": "oneOf",
+          "message": "must match exactly one schema in oneOf"
+        }
+      ]
+    },
+    {
+      "id": "schema-negative-selection-point-geometry",
+      "passed": true,
+      "expectedValid": false,
+      "actualValid": false,
+      "schema": "selection.schema.json",
+      "profiles": ["UGP-Point"],
+      "normativeRequirements": ["UGP-REQ-SELECTION-001"],
+      "errors": [
+        {
+          "instancePath": "",
+          "keyword": "required",
+          "message": "must have required property 'geometry'"
+        },
+        {
+          "instancePath": "",
+          "keyword": "if",
+          "message": "must match \"then\" schema"
+        }
+      ]
+    },
+    {
+      "id": "schema-negative-selection-region-geometry-kind",
+      "passed": true,
+      "expectedValid": false,
+      "actualValid": false,
+      "schema": "selection.schema.json",
+      "profiles": ["UGP-Region"],
+      "normativeRequirements": ["UGP-REQ-SELECTION-002"],
+      "errors": [
+        {
+          "instancePath": "/geometry",
+          "keyword": "required",
+          "message": "must have required property 'width'"
+        },
+        {
+          "instancePath": "/geometry",
+          "keyword": "required",
+          "message": "must have required property 'height'"
+        },
+        {
+          "instancePath": "/geometry/kind",
+          "keyword": "const",
+          "message": "must be equal to constant"
+        },
+        {
+          "instancePath": "/geometry",
+          "keyword": "required",
+          "message": "must have required property 'points'"
+        },
+        {
+          "instancePath": "/geometry",
+          "keyword": "additionalProperties",
+          "message": "must NOT have additional properties"
+        },
+        {
+          "instancePath": "/geometry",
+          "keyword": "additionalProperties",
+          "message": "must NOT have additional properties"
+        },
+        {
+          "instancePath": "/geometry/kind",
+          "keyword": "const",
+          "message": "must be equal to constant"
+        },
+        {
+          "instancePath": "/geometry",
+          "keyword": "oneOf",
+          "message": "must match exactly one schema in oneOf"
+        },
+        {
+          "instancePath": "",
+          "keyword": "if",
+          "message": "must match \"then\" schema"
+        }
+      ]
+    },
+    {
+      "id": "schema-negative-selection-source",
+      "passed": true,
+      "expectedValid": false,
+      "actualValid": false,
+      "schema": "selection.schema.json",
+      "profiles": ["UGP-Core"],
+      "normativeRequirements": ["UGP-REQ-SELECTION-004"],
+      "errors": [
+        {
+          "instancePath": "/source",
+          "keyword": "enum",
+          "message": "must be equal to one of the allowed values"
+        }
+      ]
+    },
+    {
+      "id": "schema-negative-selection-empty-selectors",
+      "passed": true,
+      "expectedValid": false,
+      "actualValid": false,
+      "schema": "selection.schema.json",
+      "profiles": ["UGP-Core"],
+      "normativeRequirements": ["UGP-REQ-SELECTION-005"],
+      "errors": [
+        {
+          "instancePath": "/selectors",
+          "keyword": "minItems",
+          "message": "must NOT have fewer than 1 items"
+        }
+      ]
+    },
+    {
+      "id": "schema-negative-referent-evidence",
+      "passed": true,
+      "expectedValid": false,
+      "actualValid": false,
+      "schema": "resolved-referent.schema.json",
+      "profiles": ["UGP-Core"],
+      "normativeRequirements": ["UGP-REQ-EVIDENCE-001"],
+      "errors": [
+        {
+          "instancePath": "/evidence",
+          "keyword": "minItems",
+          "message": "must NOT have fewer than 1 items"
+        }
+      ]
+    },
+    {
+      "id": "schema-negative-referent-confidence",
+      "passed": true,
+      "expectedValid": false,
+      "actualValid": false,
+      "schema": "resolved-referent.schema.json",
+      "profiles": ["UGP-Core"],
+      "normativeRequirements": ["UGP-REQ-REFERENT-002"],
+      "errors": [
+        {
+          "instancePath": "/confidence",
+          "keyword": "maximum",
+          "message": "must be <= 1"
+        }
+      ]
+    },
+    {
+      "id": "schema-negative-referent-authority",
+      "passed": true,
+      "expectedValid": false,
+      "actualValid": false,
+      "schema": "resolved-referent.schema.json",
+      "profiles": ["UGP-Core"],
+      "normativeRequirements": ["UGP-REQ-AUTHORITY-001"],
+      "errors": [
+        {
+          "instancePath": "/authority",
+          "keyword": "enum",
+          "message": "must be equal to one of the allowed values"
+        }
+      ]
+    },
+    {
+      "id": "schema-negative-bundle-revision",
+      "passed": true,
+      "expectedValid": false,
+      "actualValid": false,
+      "schema": "grounding-bundle.schema.json",
+      "profiles": ["UGP-Core"],
+      "normativeRequirements": ["UGP-REQ-REV-002"],
+      "errors": [
+        {
+          "instancePath": "/referents/0/surfaceRevision",
+          "keyword": "ugpInvariant",
+          "message": "must equal selection.surfaceRevision"
+        }
+      ]
+    },
+    {
+      "id": "schema-negative-bundle-ambiguity",
+      "passed": true,
+      "expectedValid": false,
+      "actualValid": false,
+      "schema": "grounding-bundle.schema.json",
+      "profiles": ["UGP-Core"],
+      "normativeRequirements": ["UGP-REQ-AMBIGUITY-001"],
+      "errors": [
+        {
+          "instancePath": "/ambiguity",
+          "keyword": "required",
+          "message": "must have required property 'candidates'"
+        },
+        {
+          "instancePath": "/ambiguity",
+          "keyword": "required",
+          "message": "must have required property 'reason'"
+        },
+        {
+          "instancePath": "/ambiguity",
+          "keyword": "if",
+          "message": "must match \"then\" schema"
+        }
+      ]
+    },
+    {
+      "id": "schema-negative-context-budget",
+      "passed": true,
+      "expectedValid": false,
+      "actualValid": false,
+      "schema": "context-bundle.schema.json",
+      "profiles": ["UGP-Context"],
+      "normativeRequirements": ["UGP-REQ-CONTEXT-BUDGET-001"],
+      "errors": [
+        {
+          "instancePath": "/budget/emittedBytes",
+          "keyword": "ugpInvariant",
+          "message": "must not exceed requestedBytes"
+        }
+      ]
+    },
+    {
+      "id": "schema-negative-context-authorization",
+      "passed": true,
+      "expectedValid": false,
+      "actualValid": false,
+      "schema": "context-bundle.schema.json",
+      "profiles": ["UGP-Context"],
+      "normativeRequirements": ["UGP-REQ-CONTEXT-AUTH-001"],
+      "errors": [
+        {
+          "instancePath": "",
+          "keyword": "required",
+          "message": "must have required property 'authorization'"
+        }
+      ]
+    },
+    {
+      "id": "schema-negative-problem-code",
+      "passed": true,
+      "expectedValid": false,
+      "actualValid": false,
+      "schema": "grounding-problem.schema.json",
+      "profiles": ["UGP-Core"],
+      "normativeRequirements": ["UGP-REQ-PROBLEM-001"],
+      "errors": [
+        {
+          "instancePath": "/code",
+          "keyword": "enum",
+          "message": "must be equal to one of the allowed values"
+        }
+      ]
+    },
+    {
+      "id": "schema-negative-problem-status",
+      "passed": true,
+      "expectedValid": false,
+      "actualValid": false,
+      "schema": "grounding-problem.schema.json",
+      "profiles": ["UGP-Core"],
+      "normativeRequirements": ["UGP-REQ-PROBLEM-002"],
+      "errors": [
+        {
+          "instancePath": "/status",
+          "keyword": "minimum",
+          "message": "must be >= 100"
+        }
+      ]
+    },
+    {
+      "id": "schema-negative-envelope-version",
+      "passed": true,
+      "expectedValid": false,
+      "actualValid": false,
+      "schema": "envelope.schema.json",
+      "profiles": ["UGP-Core"],
+      "normativeRequirements": ["UGP-REQ-VERSION-001"],
+      "errors": [
+        {
+          "instancePath": "/ugpVersion",
+          "keyword": "const",
+          "message": "must be equal to constant"
+        }
+      ]
+    },
+    {
+      "id": "schema-negative-envelope-traceparent",
+      "passed": true,
+      "expectedValid": false,
+      "actualValid": false,
+      "schema": "envelope.schema.json",
+      "profiles": ["UGP-Core"],
+      "normativeRequirements": ["UGP-REQ-ENVELOPE-002"],
+      "errors": [
+        {
+          "instancePath": "/traceparent",
+          "keyword": "pattern",
+          "message": "must match pattern \"^[0-9a-f]{2}-[0-9a-f]{32}-[0-9a-f]{16}-[0-9a-f]{2}$\""
+        }
+      ]
+    }
+  ]
+}
