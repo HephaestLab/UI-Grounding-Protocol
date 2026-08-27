@@ -15,18 +15,33 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
-    }
+    },
+    "./anchor.schema.json": "./dist/schemas/anchor.schema.json",
+    "./context-bundle.schema.json": "./dist/schemas/context-bundle.schema.json",
+    "./envelope.schema.json": "./dist/schemas/envelope.schema.json",
+    "./grounding-bundle.schema.json": "./dist/schemas/grounding-bundle.schema.json",
+    "./grounding-problem.schema.json": "./dist/schemas/grounding-problem.schema.json",
+    "./resolved-referent.schema.json": "./dist/schemas/resolved-referent.schema.json",
+    "./selection.schema.json": "./dist/schemas/selection.schema.json",
+    "./selector.schema.json": "./dist/schemas/selector.schema.json",
+    "./semantic-node.schema.json": "./dist/schemas/semantic-node.schema.json",
+    "./semantic-type.schema.json": "./dist/schemas/semantic-type.schema.json",
+    "./surface.schema.json": "./dist/schemas/surface.schema.json"
   },
   "scripts": {
-    "build": "vite build --config ../../tooling/vite.library.ts && tsc -p tsconfig.build.json",
+    "build": "vite build --config ../../tooling/vite.library.ts && tsc -p tsconfig.build.json && node ../../scripts/copy-schemas.mjs",
     "test": "vitest run --root . --passWithNoTests",
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "engines": {
-    "node": ">=22.12.0"
+    "node": ">=22.13.0"
   },
   "publishConfig": {
     "access": "public",
     "provenance": true
+  },
+  "dependencies": {
+    "ajv": "8.20.0",
+    "ajv-formats": "3.0.1"
   }
 }

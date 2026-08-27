@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ui-grounding.org/schema/v0.1/resolved-referent.schema.json",
+  "title": "ResolvedReferent",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "nodeId",
+    "type",
+    "label",
+    "authority",
+    "confidence",
+    "relation",
+    "evidence",
+    "surfaceRevision"
+  ],
+  "properties": {
+    "nodeId": { "$ref": "common.schema.json#/$defs/identifier" },
+    "type": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 256,
+      "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z0-9]+)+$"
+    },
+    "entityRef": { "$ref": "common.schema.json#/$defs/entityReference" },
+    "label": { "type": "string", "minLength": 1, "maxLength": 1024 },
+    "authority": { "$ref": "common.schema.json#/$defs/authority" },
+    "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+    "relation": {
+      "enum": [
+        "exact",
+        "contains-selection",
+        "contained-by-selection",
+        "intersects",
+        "nearest",
+        "text-overlap"
+      ]
+    },
+    "evidence": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "common.schema.json#/$defs/resolutionEvidence" }
+    },
+    "surfaceRevision": { "$ref": "common.schema.json#/$defs/revision" },
+    "nodeRevision": { "$ref": "common.schema.json#/$defs/revision" },
+    "ambiguousWith": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "$ref": "common.schema.json#/$defs/identifier" }
+    },
+    "extensions": { "$ref": "common.schema.json#/$defs/extensions" }
+  }
+}

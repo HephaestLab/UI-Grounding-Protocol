@@ -1,0 +1,239 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ui-grounding.org/schema/v0.1/common.schema.json",
+  "title": "UGP common definitions",
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._~:/-]*$"
+    },
+    "revision": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "authority": { "enum": ["authoritative", "derived", "inferred"] },
+    "extensions": {
+      "type": "object",
+      "propertyNames": { "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)+$" },
+      "additionalProperties": true
+    },
+    "entityReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["namespace", "id"],
+      "properties": {
+        "namespace": { "$ref": "#/$defs/identifier" },
+        "id": { "$ref": "#/$defs/identifier" },
+        "type": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 256,
+          "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z0-9]+)+$"
+        },
+        "revision": { "$ref": "#/$defs/revision" },
+        "extensions": { "$ref": "#/$defs/extensions" }
+      }
+    },
+    "point": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "coordinateSpace", "x", "y"],
+      "properties": {
+        "kind": { "const": "point" },
+        "coordinateSpace": { "enum": ["viewport", "surface", "anchor"] },
+        "x": { "type": "number" },
+        "y": { "type": "number" }
+      }
+    },
+    "rect": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "coordinateSpace", "x", "y", "width", "height"],
+      "properties": {
+        "kind": { "const": "rect" },
+        "coordinateSpace": { "enum": ["viewport", "surface", "anchor"] },
+        "x": { "type": "number" },
+        "y": { "type": "number" },
+        "width": { "type": "number", "minimum": 0 },
+        "height": { "type": "number", "minimum": 0 }
+      }
+    },
+    "polygon": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "coordinateSpace", "points"],
+      "properties": {
+        "kind": { "const": "polygon" },
+        "coordinateSpace": { "enum": ["viewport", "surface", "anchor"] },
+        "points": {
+          "type": "array",
+          "minItems": 3,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["x", "y"],
+            "properties": {
+              "x": { "type": "number" },
+              "y": { "type": "number" }
+            }
+          }
+        }
+      }
+    },
+    "geometry": {
+      "oneOf": [
+        { "$ref": "#/$defs/point" },
+        { "$ref": "#/$defs/rect" },
+        { "$ref": "#/$defs/polygon" }
+      ]
+    },
+    "resolutionEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "authority"],
+      "properties": {
+        "kind": {
+          "enum": [
+            "semantic-selector",
+            "anchor-hit",
+            "geometry-overlap",
+            "text-match",
+            "adapter-hit",
+            "accessibility-inference"
+          ]
+        },
+        "authority": { "$ref": "#/$defs/authority" },
+        "anchorId": { "$ref": "#/$defs/identifier" },
+        "score": { "type": "number", "minimum": 0, "maximum": 1 },
+        "visibleRatio": { "type": "number", "minimum": 0, "maximum": 1 },
+        "details": { "type": "object", "additionalProperties": true }
+      }
+    },
+    "resourceReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["resourceId", "uri"],
+      "properties": {
+        "resourceId": { "$ref": "#/$defs/identifier" },
+        "uri": { "type": "string", "format": "uri-reference" },
+        "mediaType": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "title": { "type": "string", "minLength": 1, "maxLength": 512 },
+        "expiresAt": { "$ref": "#/$defs/timestamp" },
+        "extensions": { "$ref": "#/$defs/extensions" }
+      }
+    },
+    "capabilityReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["provider", "capabilityId"],
+      "properties": {
+        "provider": { "$ref": "#/$defs/identifier" },
+        "capabilityId": { "$ref": "#/$defs/identifier" },
+        "uri": { "type": "string", "format": "uri-reference" },
+        "targetBindings": {
+          "type": "object",
+          "propertyNames": { "pattern": "^[A-Za-z_][A-Za-z0-9_]*$" },
+          "additionalProperties": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024
+          }
+        },
+        "discoveryHint": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        },
+        "extensions": { "$ref": "#/$defs/extensions" }
+      }
+    },
+    "contextDescriptor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "description", "schema", "sensitivity", "freshness"],
+      "properties": {
+        "name": { "$ref": "#/$defs/identifier" },
+        "description": { "type": "string", "minLength": 1, "maxLength": 2048 },
+        "schema": { "type": "object" },
+        "sensitivity": {
+          "enum": ["public", "internal", "confidential", "restricted"]
+        },
+        "freshness": { "enum": ["snapshot", "live", "on-demand"] },
+        "maxAgeMs": { "type": "integer", "minimum": 0 },
+        "estimatedBytes": { "type": "integer", "minimum": 0 },
+        "extensions": { "$ref": "#/$defs/extensions" }
+      }
+    },
+    "referentContext": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["nodeId", "contexts", "freshness"],
+      "properties": {
+        "nodeId": { "$ref": "#/$defs/identifier" },
+        "entityRef": { "$ref": "#/$defs/entityReference" },
+        "contexts": { "type": "object", "additionalProperties": true },
+        "freshness": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["generatedAt"],
+          "properties": {
+            "generatedAt": { "$ref": "#/$defs/timestamp" },
+            "validUntil": { "$ref": "#/$defs/timestamp" }
+          }
+        },
+        "omitted": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["name", "reason"],
+            "properties": {
+              "name": { "$ref": "#/$defs/identifier" },
+              "reason": {
+                "enum": [
+                  "unauthorized",
+                  "budget",
+                  "unavailable",
+                  "stale",
+                  "cancelled"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "semanticRelationship": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourceNodeId", "targetNodeId", "relation"],
+      "properties": {
+        "sourceNodeId": { "$ref": "#/$defs/identifier" },
+        "targetNodeId": { "$ref": "#/$defs/identifier" },
+        "relation": { "enum": ["parent", "child", "same-entity", "related"] }
+      }
+    },
+    "omittedResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["nodeId", "reason"],
+      "properties": {
+        "nodeId": { "$ref": "#/$defs/identifier" },
+        "reason": {
+          "enum": [
+            "stale",
+            "invisible",
+            "occluded",
+            "duplicate",
+            "parent-collapsed",
+            "limit"
+          ]
+        }
+      }
+    }
+  }
+}

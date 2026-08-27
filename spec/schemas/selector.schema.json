@@ -1,0 +1,128 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ui-grounding.org/schema/v0.1/selector.schema.json",
+  "title": "Selector",
+  "oneOf": [
+    { "$ref": "#/$defs/css" },
+    { "$ref": "#/$defs/xpath" },
+    { "$ref": "#/$defs/textQuote" },
+    { "$ref": "#/$defs/textPosition" },
+    { "$ref": "#/$defs/range" },
+    { "$ref": "#/$defs/svg" },
+    { "$ref": "#/$defs/fragment" },
+    { "$ref": "#/$defs/geometry" },
+    { "$ref": "#/$defs/semantic" }
+  ],
+  "$defs": {
+    "css": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "value"],
+      "properties": {
+        "type": { "const": "CssSelector" },
+        "value": { "type": "string", "minLength": 1, "maxLength": 4096 },
+        "extensions": { "$ref": "common.schema.json#/$defs/extensions" }
+      }
+    },
+    "xpath": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "value"],
+      "properties": {
+        "type": { "const": "XPathSelector" },
+        "value": { "type": "string", "minLength": 1, "maxLength": 4096 },
+        "extensions": { "$ref": "common.schema.json#/$defs/extensions" }
+      }
+    },
+    "textQuote": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "exact"],
+      "properties": {
+        "type": { "const": "TextQuoteSelector" },
+        "exact": { "type": "string", "minLength": 1, "maxLength": 32768 },
+        "prefix": { "type": "string", "maxLength": 1024 },
+        "suffix": { "type": "string", "maxLength": 1024 },
+        "extensions": { "$ref": "common.schema.json#/$defs/extensions" }
+      }
+    },
+    "textPosition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "start", "end"],
+      "properties": {
+        "type": { "const": "TextPositionSelector" },
+        "start": { "type": "integer", "minimum": 0 },
+        "end": { "type": "integer", "minimum": 0 },
+        "extensions": { "$ref": "common.schema.json#/$defs/extensions" }
+      }
+    },
+    "range": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "startPath", "startOffset", "endPath", "endOffset"],
+      "properties": {
+        "type": { "const": "RangeSelector" },
+        "startPath": { "type": "string", "minLength": 1, "maxLength": 4096 },
+        "startOffset": { "type": "integer", "minimum": 0 },
+        "endPath": { "type": "string", "minLength": 1, "maxLength": 4096 },
+        "endOffset": { "type": "integer", "minimum": 0 },
+        "extensions": { "$ref": "common.schema.json#/$defs/extensions" }
+      }
+    },
+    "svg": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "value"],
+      "properties": {
+        "type": { "const": "SvgSelector" },
+        "value": { "type": "string", "minLength": 1, "maxLength": 32768 },
+        "extensions": { "$ref": "common.schema.json#/$defs/extensions" }
+      }
+    },
+    "fragment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "value"],
+      "properties": {
+        "type": { "const": "FragmentSelector" },
+        "value": { "type": "string", "minLength": 1, "maxLength": 4096 },
+        "conformsTo": { "type": "string", "format": "uri" },
+        "extensions": { "$ref": "common.schema.json#/$defs/extensions" }
+      }
+    },
+    "geometry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "geometry"],
+      "properties": {
+        "type": { "const": "UGPGeometrySelector" },
+        "geometry": { "$ref": "common.schema.json#/$defs/geometry" },
+        "extensions": { "$ref": "common.schema.json#/$defs/extensions" }
+      }
+    },
+    "semantic": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type"],
+      "properties": {
+        "type": { "const": "UGPSemanticSelector" },
+        "entityRef": { "$ref": "common.schema.json#/$defs/entityReference" },
+        "semanticType": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z0-9]+)+$"
+        },
+        "nodeId": { "$ref": "common.schema.json#/$defs/identifier" },
+        "extensions": { "$ref": "common.schema.json#/$defs/extensions" }
+      },
+      "anyOf": [
+        { "required": ["entityRef"], "properties": { "entityRef": {} } },
+        {
+          "required": ["semanticType"],
+          "properties": { "semanticType": {} }
+        },
+        { "required": ["nodeId"], "properties": { "nodeId": {} } }
+      ]
+    }
+  }
+}

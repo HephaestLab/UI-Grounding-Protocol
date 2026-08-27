@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ui-grounding.org/schema/v0.1/selection.schema.json",
+  "title": "Selection",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "selectionId",
+    "surfaceId",
+    "mode",
+    "selectors",
+    "surfaceRevision",
+    "createdAt",
+    "source"
+  ],
+  "properties": {
+    "selectionId": { "$ref": "common.schema.json#/$defs/identifier" },
+    "surfaceId": { "$ref": "common.schema.json#/$defs/identifier" },
+    "mode": {
+      "enum": ["point", "region", "lasso", "text", "semantic", "programmatic"]
+    },
+    "selectors": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "selector.schema.json" }
+    },
+    "geometry": { "$ref": "common.schema.json#/$defs/geometry" },
+    "surfaceRevision": { "$ref": "common.schema.json#/$defs/revision" },
+    "createdAt": { "$ref": "common.schema.json#/$defs/timestamp" },
+    "intentHint": {
+      "enum": ["inspect", "explain", "compare", "reference", "act"]
+    },
+    "source": { "enum": ["human", "application", "agent"] },
+    "extensions": { "$ref": "common.schema.json#/$defs/extensions" }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "mode": { "const": "point" } },
+        "required": ["mode"]
+      },
+      "then": {
+        "required": ["geometry"],
+        "properties": {
+          "geometry": { "$ref": "common.schema.json#/$defs/point" }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "mode": { "enum": ["region", "lasso"] } },
+        "required": ["mode"]
+      },
+      "then": {
+        "required": ["geometry"],
+        "properties": {
+          "geometry": {
+            "oneOf": [
+              { "$ref": "common.schema.json#/$defs/rect" },
+              { "$ref": "common.schema.json#/$defs/polygon" }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,817 @@
+{
+  "suiteVersion": "0.1",
+  "bases": {
+    "surface": {
+      "schema": "surface.schema.json",
+      "data": {
+        "surfaceId": "surface:bi",
+        "uri": "/examples/bi-dashboard",
+        "title": "UGP BI Lab",
+        "locale": "en-US",
+        "revision": "1",
+        "trustBoundary": "same-origin",
+        "selectionModes": ["point", "region", "text"],
+        "profiles": ["UGP-Core", "UGP-Point", "UGP-Region"]
+      }
+    },
+    "semanticType": {
+      "schema": "semantic-type.schema.json",
+      "data": {
+        "type": "org.example.analytics.metric",
+        "title": "Metric",
+        "description": "A measured business value.",
+        "version": "1"
+      }
+    },
+    "node": {
+      "schema": "semantic-node.schema.json",
+      "data": {
+        "nodeId": "node:revenue",
+        "type": "org.example.analytics.metric",
+        "label": "Net revenue",
+        "authority": "authoritative",
+        "entityRef": {
+          "namespace": "analytics",
+          "id": "metric:net-revenue",
+          "revision": "1"
+        },
+        "anchorIds": ["anchor:revenue"],
+        "revision": "1"
+      }
+    },
+    "selectorCss": {
+      "schema": "selector.schema.json",
+      "data": { "type": "CssSelector", "value": "#net-revenue" }
+    },
+    "selectorTextQuote": {
+      "schema": "selector.schema.json",
+      "data": {
+        "type": "TextQuoteSelector",
+        "exact": "Net revenue increased",
+        "prefix": "Insight: ",
+        "suffix": " by 12%."
+      }
+    },
+    "selectorTextPosition": {
+      "schema": "selector.schema.json",
+      "data": { "type": "TextPositionSelector", "start": 9, "end": 30 }
+    },
+    "selectorSemantic": {
+      "schema": "selector.schema.json",
+      "data": {
+        "type": "UGPSemanticSelector",
+        "entityRef": { "namespace": "analytics", "id": "metric:net-revenue" }
+      }
+    },
+    "selectorGeometry": {
+      "schema": "selector.schema.json",
+      "data": {
+        "type": "UGPGeometrySelector",
+        "geometry": {
+          "kind": "rect",
+          "coordinateSpace": "viewport",
+          "x": 10,
+          "y": 20,
+          "width": 200,
+          "height": 80
+        }
+      }
+    },
+    "anchorDom": {
+      "schema": "anchor.schema.json",
+      "data": {
+        "anchorId": "anchor:dom-revenue",
+        "nodeId": "node:revenue",
+        "kind": "dom",
+        "surfaceRevision": "1",
+        "priority": 10,
+        "visibility": "visible",
+        "selector": { "type": "CssSelector", "value": "#net-revenue" }
+      }
+    },
+    "anchorText": {
+      "schema": "anchor.schema.json",
+      "data": {
+        "anchorId": "anchor:text-insight",
+        "nodeId": "node:insight",
+        "kind": "text",
+        "surfaceRevision": "1",
+        "selectors": [
+          { "type": "TextQuoteSelector", "exact": "Revenue increased" },
+          { "type": "TextPositionSelector", "start": 0, "end": 17 }
+        ]
+      }
+    },
+    "anchorSvg": {
+      "schema": "anchor.schema.json",
+      "data": {
+        "anchorId": "anchor:svg-bar",
+        "nodeId": "node:enterprise",
+        "kind": "svg",
+        "surfaceRevision": "1",
+        "elementId": "bar-enterprise"
+      }
+    },
+    "anchorCanvas": {
+      "schema": "anchor.schema.json",
+      "data": {
+        "anchorId": "anchor:canvas-point",
+        "nodeId": "node:point-2026-08",
+        "kind": "canvas",
+        "surfaceRevision": "1",
+        "adapterId": "adapter:revenue-chart",
+        "adapterRevision": "7",
+        "geometry": {
+          "kind": "rect",
+          "coordinateSpace": "surface",
+          "x": 300,
+          "y": 120,
+          "width": 8,
+          "height": 8
+        }
+      }
+    },
+    "anchorVirtual": {
+      "schema": "anchor.schema.json",
+      "data": {
+        "anchorId": "anchor:record-42",
+        "nodeId": "node:record-42",
+        "kind": "virtual",
+        "surfaceRevision": "1",
+        "itemKey": "record:42",
+        "visibility": "offscreen"
+      }
+    },
+    "anchorAccessibility": {
+      "schema": "anchor.schema.json",
+      "data": {
+        "anchorId": "anchor:a11y-filter",
+        "nodeId": "node:filter-region",
+        "kind": "accessibility",
+        "surfaceRevision": "1",
+        "role": "combobox",
+        "name": "Region"
+      }
+    },
+    "selectionPoint": {
+      "schema": "selection.schema.json",
+      "data": {
+        "selectionId": "selection:point-1",
+        "surfaceId": "surface:bi",
+        "mode": "point",
+        "selectors": [
+          {
+            "type": "UGPGeometrySelector",
+            "geometry": {
+              "kind": "point",
+              "coordinateSpace": "viewport",
+              "x": 120,
+              "y": 80
+            }
+          }
+        ],
+        "geometry": {
+          "kind": "point",
+          "coordinateSpace": "viewport",
+          "x": 120,
+          "y": 80
+        },
+        "surfaceRevision": "1",
+        "createdAt": "2026-08-27T12:00:00Z",
+        "intentHint": "inspect",
+        "source": "human"
+      }
+    },
+    "selectionRegion": {
+      "schema": "selection.schema.json",
+      "data": {
+        "selectionId": "selection:region-1",
+        "surfaceId": "surface:bi",
+        "mode": "region",
+        "selectors": [
+          {
+            "type": "UGPGeometrySelector",
+            "geometry": {
+              "kind": "rect",
+              "coordinateSpace": "viewport",
+              "x": 20,
+              "y": 100,
+              "width": 600,
+              "height": 240
+            }
+          }
+        ],
+        "geometry": {
+          "kind": "rect",
+          "coordinateSpace": "viewport",
+          "x": 20,
+          "y": 100,
+          "width": 600,
+          "height": 240
+        },
+        "surfaceRevision": "1",
+        "createdAt": "2026-08-27T12:00:01Z",
+        "source": "human"
+      }
+    },
+    "selectionText": {
+      "schema": "selection.schema.json",
+      "data": {
+        "selectionId": "selection:text-1",
+        "surfaceId": "surface:document",
+        "mode": "text",
+        "selectors": [
+          { "type": "TextQuoteSelector", "exact": "Revenue increased" },
+          { "type": "TextPositionSelector", "start": 0, "end": 17 }
+        ],
+        "surfaceRevision": "4",
+        "createdAt": "2026-08-27T12:00:02Z",
+        "source": "human"
+      }
+    },
+    "referent": {
+      "schema": "resolved-referent.schema.json",
+      "data": {
+        "nodeId": "node:revenue",
+        "type": "org.example.analytics.metric",
+        "entityRef": { "namespace": "analytics", "id": "metric:net-revenue" },
+        "label": "Net revenue",
+        "authority": "authoritative",
+        "confidence": 1,
+        "relation": "exact",
+        "evidence": [
+          {
+            "kind": "anchor-hit",
+            "authority": "authoritative",
+            "anchorId": "anchor:revenue",
+            "score": 1
+          }
+        ],
+        "surfaceRevision": "1",
+        "nodeRevision": "1"
+      }
+    },
+    "bundle": {
+      "schema": "grounding-bundle.schema.json",
+      "data": {
+        "groundingId": "grounding:1",
+        "selection": {
+          "selectionId": "selection:point-1",
+          "surfaceId": "surface:bi",
+          "mode": "point",
+          "selectors": [
+            {
+              "type": "UGPGeometrySelector",
+              "geometry": {
+                "kind": "point",
+                "coordinateSpace": "viewport",
+                "x": 120,
+                "y": 80
+              }
+            }
+          ],
+          "geometry": {
+            "kind": "point",
+            "coordinateSpace": "viewport",
+            "x": 120,
+            "y": 80
+          },
+          "surfaceRevision": "1",
+          "createdAt": "2026-08-27T12:00:00Z",
+          "source": "human"
+        },
+        "referents": [
+          {
+            "nodeId": "node:revenue",
+            "type": "org.example.analytics.metric",
+            "label": "Net revenue",
+            "authority": "authoritative",
+            "confidence": 1,
+            "relation": "exact",
+            "evidence": [
+              {
+                "kind": "anchor-hit",
+                "authority": "authoritative",
+                "anchorId": "anchor:revenue"
+              }
+            ],
+            "surfaceRevision": "1"
+          }
+        ],
+        "ambiguity": { "requiresDisambiguation": false },
+        "generatedAt": "2026-08-27T12:00:00Z"
+      }
+    },
+    "context": {
+      "schema": "context-bundle.schema.json",
+      "data": {
+        "contextId": "context:1",
+        "groundingId": "grounding:1",
+        "referentContexts": [
+          {
+            "nodeId": "node:revenue",
+            "contexts": { "summary": { "value": 1250000, "currency": "USD" } },
+            "freshness": { "generatedAt": "2026-08-27T12:00:00Z" }
+          }
+        ],
+        "budget": {
+          "requestedBytes": 32768,
+          "emittedBytes": 96,
+          "truncated": false
+        },
+        "authorization": {
+          "principalRef": "user:analyst",
+          "purpose": "explain",
+          "filtered": true
+        },
+        "generatedAt": "2026-08-27T12:00:00Z"
+      }
+    },
+    "problem": {
+      "schema": "grounding-problem.schema.json",
+      "data": {
+        "type": "https://ui-grounding.org/problems/surface-stale",
+        "title": "Surface state is stale",
+        "status": 409,
+        "detail": "The selection observed revision 1 but the surface is at revision 2.",
+        "code": "SURFACE_STALE",
+        "retryable": true,
+        "recovery": "Create a new selection."
+      }
+    },
+    "envelope": {
+      "schema": "envelope.schema.json",
+      "data": {
+        "ugpVersion": "0.1",
+        "messageId": "message:1",
+        "type": "ugp.selection.created",
+        "surfaceId": "surface:bi",
+        "timestamp": "2026-08-27T12:00:00Z",
+        "traceparent": "00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01",
+        "payload": { "selectionId": "selection:point-1" }
+      }
+    }
+  },
+  "fixtures": [
+    {
+      "id": "schema-positive-surface-minimal",
+      "profiles": ["UGP-Core"],
+      "base": "surface",
+      "expected": { "valid": true },
+      "normativeRequirements": ["UGP-REQ-SURFACE-001"]
+    },
+    {
+      "id": "schema-positive-surface-extension",
+      "profiles": ["UGP-Core"],
+      "base": "surface",
+      "patch": [
+        {
+          "op": "add",
+          "path": "/extensions",
+          "value": { "com.example.telemetry": { "sampled": true } }
+        }
+      ],
+      "expected": { "valid": true },
+      "normativeRequirements": ["UGP-REQ-EXT-001"]
+    },
+    {
+      "id": "schema-positive-semantic-type",
+      "profiles": ["UGP-Core"],
+      "base": "semanticType",
+      "expected": { "valid": true },
+      "normativeRequirements": ["UGP-REQ-TYPE-001"]
+    },
+    {
+      "id": "schema-positive-semantic-node",
+      "profiles": ["UGP-Core"],
+      "base": "node",
+      "expected": { "valid": true },
+      "normativeRequirements": ["UGP-REQ-NODE-001"]
+    },
+    {
+      "id": "schema-positive-node-validity-window",
+      "profiles": ["UGP-Core"],
+      "base": "node",
+      "patch": [
+        { "op": "add", "path": "/validAt", "value": "2026-08-27T12:00:00Z" },
+        { "op": "add", "path": "/expiresAt", "value": "2026-08-27T13:00:00Z" }
+      ],
+      "expected": { "valid": true },
+      "normativeRequirements": ["UGP-REQ-REV-003"]
+    },
+    {
+      "id": "schema-positive-css-selector",
+      "profiles": ["UGP-Core"],
+      "base": "selectorCss",
+      "expected": { "valid": true },
+      "normativeRequirements": ["UGP-REQ-SELECTOR-001"]
+    },
+    {
+      "id": "schema-positive-text-quote-selector",
+      "profiles": ["UGP-Text"],
+      "base": "selectorTextQuote",
+      "expected": { "valid": true },
+      "normativeRequirements": ["UGP-REQ-TEXT-001"]
+    },
+    {
+      "id": "schema-positive-text-position-selector",
+      "profiles": ["UGP-Text"],
+      "base": "selectorTextPosition",
+      "expected": { "valid": true },
+      "normativeRequirements": ["UGP-REQ-TEXT-002"]
+    },
+    {
+      "id": "schema-positive-semantic-selector",
+      "profiles": ["UGP-Core"],
+      "base": "selectorSemantic",
+      "expected": { "valid": true },
+      "normativeRequirements": ["UGP-REQ-SELECTOR-002"]
+    },
+    {
+      "id": "schema-positive-geometry-selector",
+      "profiles": ["UGP-Region"],
+      "base": "selectorGeometry",
+      "expected": { "valid": true },
+      "normativeRequirements": ["UGP-REQ-GEOMETRY-001"]
+    },
+    {
+      "id": "schema-positive-dom-anchor",
+      "profiles": ["UGP-Core", "UGP-Point"],
+      "base": "anchorDom",
+      "expected": { "valid": true },
+      "normativeRequirements": ["UGP-REQ-ANCHOR-001"]
+    },
+    {
+      "id": "schema-positive-text-anchor",
+      "profiles": ["UGP-Text"],
+      "base": "anchorText",
+      "expected": { "valid": true },
+      "normativeRequirements": ["UGP-REQ-ANCHOR-002"]
+    },
+    {
+      "id": "schema-positive-svg-anchor",
+      "profiles": ["UGP-ComplexSurface"],
+      "base": "anchorSvg",
+      "expected": { "valid": true },
+      "normativeRequirements": ["UGP-REQ-ANCHOR-003"]
+    },
+    {
+      "id": "schema-positive-canvas-anchor",
+      "profiles": ["UGP-ComplexSurface"],
+      "base": "anchorCanvas",
+      "expected": { "valid": true },
+      "normativeRequirements": ["UGP-REQ-ANCHOR-004"]
+    },
+    {
+      "id": "schema-positive-virtual-anchor",
+      "profiles": ["UGP-ComplexSurface"],
+      "base": "anchorVirtual",
+      "expected": { "valid": true },
+      "normativeRequirements": ["UGP-REQ-ANCHOR-005"]
+    },
+    {
+      "id": "schema-positive-accessibility-anchor",
+      "profiles": ["UGP-Inference"],
+      "base": "anchorAccessibility",
+      "expected": { "valid": true },
+      "normativeRequirements": ["UGP-REQ-ANCHOR-006"]
+    },
+    {
+      "id": "schema-positive-point-selection",
+      "profiles": ["UGP-Point"],
+      "base": "selectionPoint",
+      "expected": { "valid": true },
+      "normativeRequirements": ["UGP-REQ-SELECTION-001"]
+    },
+    {
+      "id": "schema-positive-region-selection",
+      "profiles": ["UGP-Region"],
+      "base": "selectionRegion",
+      "expected": { "valid": true },
+      "normativeRequirements": ["UGP-REQ-SELECTION-002"]
+    },
+    {
+      "id": "schema-positive-text-selection",
+      "profiles": ["UGP-Text"],
+      "base": "selectionText",
+      "expected": { "valid": true },
+      "normativeRequirements": ["UGP-REQ-SELECTION-003"]
+    },
+    {
+      "id": "schema-positive-resolved-referent",
+      "profiles": ["UGP-Core"],
+      "base": "referent",
+      "expected": { "valid": true },
+      "normativeRequirements": ["UGP-REQ-REFERENT-001"]
+    },
+    {
+      "id": "schema-positive-grounding-bundle",
+      "profiles": ["UGP-Core"],
+      "base": "bundle",
+      "expected": { "valid": true },
+      "normativeRequirements": ["UGP-REQ-BUNDLE-001"]
+    },
+    {
+      "id": "schema-positive-context-bundle",
+      "profiles": ["UGP-Context"],
+      "base": "context",
+      "expected": { "valid": true },
+      "normativeRequirements": ["UGP-REQ-CONTEXT-001"]
+    },
+    {
+      "id": "schema-positive-grounding-problem",
+      "profiles": ["UGP-Core"],
+      "base": "problem",
+      "expected": { "valid": true },
+      "normativeRequirements": ["UGP-REQ-PROBLEM-001"]
+    },
+    {
+      "id": "schema-positive-envelope",
+      "profiles": ["UGP-Core"],
+      "base": "envelope",
+      "expected": { "valid": true },
+      "normativeRequirements": ["UGP-REQ-ENVELOPE-001"]
+    },
+
+    {
+      "id": "schema-negative-surface-required",
+      "profiles": ["UGP-Core"],
+      "base": "surface",
+      "patch": [{ "op": "remove", "path": "/surfaceId" }],
+      "expected": { "valid": false, "keywords": ["required"] },
+      "normativeRequirements": ["UGP-REQ-SURFACE-001"]
+    },
+    {
+      "id": "schema-negative-surface-trust-enum",
+      "profiles": ["UGP-Core"],
+      "base": "surface",
+      "patch": [
+        { "op": "replace", "path": "/trustBoundary", "value": "trusted" }
+      ],
+      "expected": { "valid": false, "keywords": ["enum"] },
+      "normativeRequirements": ["UGP-REQ-SURFACE-002"]
+    },
+    {
+      "id": "schema-negative-unknown-field",
+      "profiles": ["UGP-Core"],
+      "base": "surface",
+      "patch": [{ "op": "add", "path": "/secret", "value": true }],
+      "expected": { "valid": false, "keywords": ["additionalProperties"] },
+      "normativeRequirements": ["UGP-REQ-EXT-001"]
+    },
+    {
+      "id": "schema-negative-extension-name",
+      "profiles": ["UGP-Core"],
+      "base": "surface",
+      "patch": [
+        { "op": "add", "path": "/extensions", "value": { "private": true } }
+      ],
+      "expected": { "valid": false, "keywords": ["pattern"] },
+      "normativeRequirements": ["UGP-REQ-EXT-002"]
+    },
+    {
+      "id": "schema-negative-semantic-type-pattern",
+      "profiles": ["UGP-Core"],
+      "base": "semanticType",
+      "patch": [{ "op": "replace", "path": "/type", "value": "Metric" }],
+      "expected": { "valid": false, "keywords": ["pattern"] },
+      "normativeRequirements": ["UGP-REQ-TYPE-002"]
+    },
+    {
+      "id": "schema-negative-semantic-type-required",
+      "profiles": ["UGP-Core"],
+      "base": "semanticType",
+      "patch": [{ "op": "remove", "path": "/description" }],
+      "expected": { "valid": false, "keywords": ["required"] },
+      "normativeRequirements": ["UGP-REQ-TYPE-001"]
+    },
+    {
+      "id": "schema-negative-node-required-authority",
+      "profiles": ["UGP-Core"],
+      "base": "node",
+      "patch": [{ "op": "remove", "path": "/authority" }],
+      "expected": { "valid": false, "keywords": ["required"] },
+      "normativeRequirements": ["UGP-REQ-AUTHORITY-001"]
+    },
+    {
+      "id": "schema-negative-node-authority-enum",
+      "profiles": ["UGP-Core"],
+      "base": "node",
+      "patch": [
+        { "op": "replace", "path": "/authority", "value": "model-certified" }
+      ],
+      "expected": { "valid": false, "keywords": ["enum"] },
+      "normativeRequirements": ["UGP-REQ-AUTHORITY-001"]
+    },
+    {
+      "id": "schema-negative-node-self-parent",
+      "profiles": ["UGP-Core"],
+      "base": "node",
+      "patch": [
+        { "op": "add", "path": "/parentNodeId", "value": "node:revenue" }
+      ],
+      "expected": { "valid": false, "keywords": ["ugpInvariant"] },
+      "normativeRequirements": ["UGP-REQ-NODE-REL-001"]
+    },
+    {
+      "id": "schema-negative-node-expiry-order",
+      "profiles": ["UGP-Core"],
+      "base": "node",
+      "patch": [
+        { "op": "add", "path": "/validAt", "value": "2026-08-27T13:00:00Z" },
+        { "op": "add", "path": "/expiresAt", "value": "2026-08-27T12:00:00Z" }
+      ],
+      "expected": { "valid": false, "keywords": ["ugpInvariant"] },
+      "normativeRequirements": ["UGP-REQ-REV-003"]
+    },
+    {
+      "id": "schema-negative-semantic-selector-empty",
+      "profiles": ["UGP-Core"],
+      "base": "selectorSemantic",
+      "patch": [{ "op": "remove", "path": "/entityRef" }],
+      "expected": { "valid": false, "keywords": ["anyOf"] },
+      "normativeRequirements": ["UGP-REQ-SELECTOR-002"]
+    },
+    {
+      "id": "schema-negative-text-position-order",
+      "profiles": ["UGP-Text"],
+      "base": "selectorTextPosition",
+      "patch": [{ "op": "replace", "path": "/start", "value": 40 }],
+      "expected": { "valid": false, "keywords": ["ugpInvariant"] },
+      "normativeRequirements": ["UGP-REQ-TEXT-002"]
+    },
+    {
+      "id": "schema-negative-selector-type",
+      "profiles": ["UGP-Core"],
+      "base": "selectorCss",
+      "patch": [{ "op": "replace", "path": "/type", "value": "QuerySelector" }],
+      "expected": { "valid": false, "keywords": ["oneOf"] },
+      "normativeRequirements": ["UGP-REQ-SELECTOR-001"]
+    },
+    {
+      "id": "schema-negative-geometry-width",
+      "profiles": ["UGP-Region"],
+      "base": "selectorGeometry",
+      "patch": [{ "op": "replace", "path": "/geometry/width", "value": -1 }],
+      "expected": { "valid": false, "keywords": ["minimum"] },
+      "normativeRequirements": ["UGP-REQ-GEOMETRY-002"]
+    },
+    {
+      "id": "schema-negative-anchor-kind",
+      "profiles": ["UGP-Point"],
+      "base": "anchorDom",
+      "patch": [{ "op": "replace", "path": "/kind", "value": "screen" }],
+      "expected": { "valid": false, "keywords": ["oneOf"] },
+      "normativeRequirements": ["UGP-REQ-ANCHOR-001"]
+    },
+    {
+      "id": "schema-negative-anchor-required",
+      "profiles": ["UGP-ComplexSurface"],
+      "base": "anchorCanvas",
+      "patch": [{ "op": "remove", "path": "/adapterId" }],
+      "expected": { "valid": false, "keywords": ["required"] },
+      "normativeRequirements": ["UGP-REQ-ANCHOR-004"]
+    },
+    {
+      "id": "schema-negative-selection-point-geometry",
+      "profiles": ["UGP-Point"],
+      "base": "selectionPoint",
+      "patch": [{ "op": "remove", "path": "/geometry" }],
+      "expected": { "valid": false, "keywords": ["required"] },
+      "normativeRequirements": ["UGP-REQ-SELECTION-001"]
+    },
+    {
+      "id": "schema-negative-selection-region-geometry-kind",
+      "profiles": ["UGP-Region"],
+      "base": "selectionRegion",
+      "patch": [
+        { "op": "replace", "path": "/geometry/kind", "value": "point" },
+        { "op": "remove", "path": "/geometry/width" },
+        { "op": "remove", "path": "/geometry/height" }
+      ],
+      "expected": { "valid": false, "keywords": ["oneOf"] },
+      "normativeRequirements": ["UGP-REQ-SELECTION-002"]
+    },
+    {
+      "id": "schema-negative-selection-source",
+      "profiles": ["UGP-Core"],
+      "base": "selectionText",
+      "patch": [{ "op": "replace", "path": "/source", "value": "automation" }],
+      "expected": { "valid": false, "keywords": ["enum"] },
+      "normativeRequirements": ["UGP-REQ-SELECTION-004"]
+    },
+    {
+      "id": "schema-negative-selection-empty-selectors",
+      "profiles": ["UGP-Core"],
+      "base": "selectionText",
+      "patch": [{ "op": "replace", "path": "/selectors", "value": [] }],
+      "expected": { "valid": false, "keywords": ["minItems"] },
+      "normativeRequirements": ["UGP-REQ-SELECTION-005"]
+    },
+    {
+      "id": "schema-negative-referent-evidence",
+      "profiles": ["UGP-Core"],
+      "base": "referent",
+      "patch": [{ "op": "replace", "path": "/evidence", "value": [] }],
+      "expected": { "valid": false, "keywords": ["minItems"] },
+      "normativeRequirements": ["UGP-REQ-EVIDENCE-001"]
+    },
+    {
+      "id": "schema-negative-referent-confidence",
+      "profiles": ["UGP-Core"],
+      "base": "referent",
+      "patch": [{ "op": "replace", "path": "/confidence", "value": 1.1 }],
+      "expected": { "valid": false, "keywords": ["maximum"] },
+      "normativeRequirements": ["UGP-REQ-REFERENT-002"]
+    },
+    {
+      "id": "schema-negative-referent-authority",
+      "profiles": ["UGP-Core"],
+      "base": "referent",
+      "patch": [{ "op": "replace", "path": "/authority", "value": "trusted" }],
+      "expected": { "valid": false, "keywords": ["enum"] },
+      "normativeRequirements": ["UGP-REQ-AUTHORITY-001"]
+    },
+    {
+      "id": "schema-negative-bundle-revision",
+      "profiles": ["UGP-Core"],
+      "base": "bundle",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/referents/0/surfaceRevision",
+          "value": "2"
+        }
+      ],
+      "expected": { "valid": false, "keywords": ["ugpInvariant"] },
+      "normativeRequirements": ["UGP-REQ-REV-002"]
+    },
+    {
+      "id": "schema-negative-bundle-ambiguity",
+      "profiles": ["UGP-Core"],
+      "base": "bundle",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/ambiguity/requiresDisambiguation",
+          "value": true
+        }
+      ],
+      "expected": { "valid": false, "keywords": ["required"] },
+      "normativeRequirements": ["UGP-REQ-AMBIGUITY-001"]
+    },
+    {
+      "id": "schema-negative-context-budget",
+      "profiles": ["UGP-Context"],
+      "base": "context",
+      "patch": [
+        { "op": "replace", "path": "/budget/requestedBytes", "value": 32 },
+        { "op": "replace", "path": "/budget/emittedBytes", "value": 96 }
+      ],
+      "expected": { "valid": false, "keywords": ["ugpInvariant"] },
+      "normativeRequirements": ["UGP-REQ-CONTEXT-BUDGET-001"]
+    },
+    {
+      "id": "schema-negative-context-authorization",
+      "profiles": ["UGP-Context"],
+      "base": "context",
+      "patch": [{ "op": "remove", "path": "/authorization" }],
+      "expected": { "valid": false, "keywords": ["required"] },
+      "normativeRequirements": ["UGP-REQ-CONTEXT-AUTH-001"]
+    },
+    {
+      "id": "schema-negative-problem-code",
+      "profiles": ["UGP-Core"],
+      "base": "problem",
+      "patch": [{ "op": "replace", "path": "/code", "value": "ACTION_FAILED" }],
+      "expected": { "valid": false, "keywords": ["enum"] },
+      "normativeRequirements": ["UGP-REQ-PROBLEM-001"]
+    },
+    {
+      "id": "schema-negative-problem-status",
+      "profiles": ["UGP-Core"],
+      "base": "problem",
+      "patch": [{ "op": "replace", "path": "/status", "value": 42 }],
+      "expected": { "valid": false, "keywords": ["minimum"] },
+      "normativeRequirements": ["UGP-REQ-PROBLEM-002"]
+    },
+    {
+      "id": "schema-negative-envelope-version",
+      "profiles": ["UGP-Core"],
+      "base": "envelope",
+      "patch": [{ "op": "replace", "path": "/ugpVersion", "value": "1.0" }],
+      "expected": { "valid": false, "keywords": ["const"] },
+      "normativeRequirements": ["UGP-REQ-VERSION-001"]
+    },
+    {
+      "id": "schema-negative-envelope-traceparent",
+      "profiles": ["UGP-Core"],
+      "base": "envelope",
+      "patch": [
+        { "op": "replace", "path": "/traceparent", "value": "not-a-trace" }
+      ],
+      "expected": { "valid": false, "keywords": ["pattern"] },
+      "normativeRequirements": ["UGP-REQ-ENVELOPE-002"]
+    }
+  ]
+}

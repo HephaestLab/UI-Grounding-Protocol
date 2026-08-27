@@ -5,6 +5,8 @@ playwright-report/
 test-results/
 *.tsbuildinfo
 *.tgz
+conformance/reports/*.json
+conformance/reports/*.md
 .DS_Store
 Thumbs.db
 .env

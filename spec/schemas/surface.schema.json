@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ui-grounding.org/schema/v0.1/surface.schema.json",
+  "title": "Surface",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "surfaceId",
+    "uri",
+    "revision",
+    "trustBoundary",
+    "selectionModes",
+    "profiles"
+  ],
+  "properties": {
+    "surfaceId": { "$ref": "common.schema.json#/$defs/identifier" },
+    "uri": { "type": "string", "format": "uri-reference" },
+    "title": { "type": "string", "minLength": 1, "maxLength": 512 },
+    "locale": {
+      "type": "string",
+      "pattern": "^[A-Za-z]{2,8}(?:-[A-Za-z0-9]{1,8})*$"
+    },
+    "revision": { "$ref": "common.schema.json#/$defs/revision" },
+    "parentSurfaceId": { "$ref": "common.schema.json#/$defs/identifier" },
+    "trustBoundary": { "enum": ["same-origin", "cross-origin", "sandboxed"] },
+    "selectionModes": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "enum": ["point", "region", "lasso", "text", "semantic", "programmatic"]
+      }
+    },
+    "profiles": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "$ref": "common.schema.json#/$defs/identifier" }
+    },
+    "extensions": { "$ref": "common.schema.json#/$defs/extensions" }
+  }
+}

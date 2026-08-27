@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ui-grounding.org/schema/v0.1/envelope.schema.json",
+  "title": "UgpEnvelope",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "ugpVersion",
+    "messageId",
+    "type",
+    "surfaceId",
+    "timestamp",
+    "payload"
+  ],
+  "properties": {
+    "ugpVersion": { "const": "0.1" },
+    "messageId": { "$ref": "common.schema.json#/$defs/identifier" },
+    "type": { "$ref": "common.schema.json#/$defs/identifier" },
+    "surfaceId": { "$ref": "common.schema.json#/$defs/identifier" },
+    "timestamp": { "$ref": "common.schema.json#/$defs/timestamp" },
+    "traceparent": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{2}-[0-9a-f]{32}-[0-9a-f]{16}-[0-9a-f]{2}$"
+    },
+    "payload": true,
+    "extensions": { "$ref": "common.schema.json#/$defs/extensions" }
+  }
+}

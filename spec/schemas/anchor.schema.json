@@ -1,0 +1,156 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ui-grounding.org/schema/v0.1/anchor.schema.json",
+  "title": "Anchor",
+  "oneOf": [
+    { "$ref": "#/$defs/dom" },
+    { "$ref": "#/$defs/text" },
+    { "$ref": "#/$defs/svg" },
+    { "$ref": "#/$defs/canvas" },
+    { "$ref": "#/$defs/virtual" },
+    { "$ref": "#/$defs/accessibility" }
+  ],
+  "$defs": {
+    "dom": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["anchorId", "nodeId", "kind", "surfaceRevision", "selector"],
+      "properties": {
+        "anchorId": { "$ref": "common.schema.json#/$defs/identifier" },
+        "nodeId": { "$ref": "common.schema.json#/$defs/identifier" },
+        "kind": { "const": "dom" },
+        "surfaceRevision": { "$ref": "common.schema.json#/$defs/revision" },
+        "priority": { "type": "integer", "minimum": -1000, "maximum": 1000 },
+        "visibility": {
+          "enum": ["visible", "occluded", "offscreen", "unknown"]
+        },
+        "selector": { "$ref": "selector.schema.json" },
+        "geometry": { "$ref": "common.schema.json#/$defs/geometry" },
+        "extensions": { "$ref": "common.schema.json#/$defs/extensions" }
+      }
+    },
+    "text": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "anchorId",
+        "nodeId",
+        "kind",
+        "surfaceRevision",
+        "selectors"
+      ],
+      "properties": {
+        "anchorId": { "$ref": "common.schema.json#/$defs/identifier" },
+        "nodeId": { "$ref": "common.schema.json#/$defs/identifier" },
+        "kind": { "const": "text" },
+        "surfaceRevision": { "$ref": "common.schema.json#/$defs/revision" },
+        "priority": { "type": "integer", "minimum": -1000, "maximum": 1000 },
+        "visibility": {
+          "enum": ["visible", "occluded", "offscreen", "unknown"]
+        },
+        "selectors": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "selector.schema.json" }
+        },
+        "geometry": { "$ref": "common.schema.json#/$defs/geometry" },
+        "extensions": { "$ref": "common.schema.json#/$defs/extensions" }
+      }
+    },
+    "svg": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "anchorId",
+        "nodeId",
+        "kind",
+        "surfaceRevision",
+        "elementId"
+      ],
+      "properties": {
+        "anchorId": { "$ref": "common.schema.json#/$defs/identifier" },
+        "nodeId": { "$ref": "common.schema.json#/$defs/identifier" },
+        "kind": { "const": "svg" },
+        "surfaceRevision": { "$ref": "common.schema.json#/$defs/revision" },
+        "priority": { "type": "integer", "minimum": -1000, "maximum": 1000 },
+        "visibility": {
+          "enum": ["visible", "occluded", "offscreen", "unknown"]
+        },
+        "elementId": { "$ref": "common.schema.json#/$defs/identifier" },
+        "geometry": { "$ref": "common.schema.json#/$defs/geometry" },
+        "extensions": { "$ref": "common.schema.json#/$defs/extensions" }
+      }
+    },
+    "canvas": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "anchorId",
+        "nodeId",
+        "kind",
+        "surfaceRevision",
+        "adapterId",
+        "geometry"
+      ],
+      "properties": {
+        "anchorId": { "$ref": "common.schema.json#/$defs/identifier" },
+        "nodeId": { "$ref": "common.schema.json#/$defs/identifier" },
+        "kind": { "const": "canvas" },
+        "surfaceRevision": { "$ref": "common.schema.json#/$defs/revision" },
+        "priority": { "type": "integer", "minimum": -1000, "maximum": 1000 },
+        "visibility": {
+          "enum": ["visible", "occluded", "offscreen", "unknown"]
+        },
+        "adapterId": { "$ref": "common.schema.json#/$defs/identifier" },
+        "adapterRevision": { "$ref": "common.schema.json#/$defs/revision" },
+        "geometry": { "$ref": "common.schema.json#/$defs/geometry" },
+        "expiresAt": { "$ref": "common.schema.json#/$defs/timestamp" },
+        "extensions": { "$ref": "common.schema.json#/$defs/extensions" }
+      }
+    },
+    "virtual": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["anchorId", "nodeId", "kind", "surfaceRevision", "itemKey"],
+      "properties": {
+        "anchorId": { "$ref": "common.schema.json#/$defs/identifier" },
+        "nodeId": { "$ref": "common.schema.json#/$defs/identifier" },
+        "kind": { "const": "virtual" },
+        "surfaceRevision": { "$ref": "common.schema.json#/$defs/revision" },
+        "priority": { "type": "integer", "minimum": -1000, "maximum": 1000 },
+        "visibility": {
+          "enum": ["visible", "occluded", "offscreen", "unknown"]
+        },
+        "itemKey": { "$ref": "common.schema.json#/$defs/identifier" },
+        "geometry": { "$ref": "common.schema.json#/$defs/geometry" },
+        "extensions": { "$ref": "common.schema.json#/$defs/extensions" }
+      }
+    },
+    "accessibility": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "anchorId",
+        "nodeId",
+        "kind",
+        "surfaceRevision",
+        "role",
+        "name"
+      ],
+      "properties": {
+        "anchorId": { "$ref": "common.schema.json#/$defs/identifier" },
+        "nodeId": { "$ref": "common.schema.json#/$defs/identifier" },
+        "kind": { "const": "accessibility" },
+        "surfaceRevision": { "$ref": "common.schema.json#/$defs/revision" },
+        "priority": { "type": "integer", "minimum": -1000, "maximum": 1000 },
+        "visibility": {
+          "enum": ["visible", "occluded", "offscreen", "unknown"]
+        },
+        "role": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "name": { "type": "string", "minLength": 1, "maxLength": 1024 },
+        "geometry": { "$ref": "common.schema.json#/$defs/geometry" },
+        "extensions": { "$ref": "common.schema.json#/$defs/extensions" }
+      }
+    }
+  }
+}

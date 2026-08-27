@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ui-grounding.org/schema/v0.1/grounding-problem.schema.json",
+  "title": "GroundingProblem",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["type", "title", "detail", "code", "retryable"],
+  "properties": {
+    "type": { "type": "string", "format": "uri-reference" },
+    "title": { "type": "string", "minLength": 1, "maxLength": 512 },
+    "status": { "type": "integer", "minimum": 100, "maximum": 599 },
+    "detail": { "type": "string", "minLength": 1, "maxLength": 8192 },
+    "code": {
+      "enum": [
+        "SURFACE_STALE",
+        "SELECTION_INVALID",
+        "NO_REFERENT",
+        "AMBIGUOUS_REFERENT",
+        "ANCHOR_STALE",
+        "CONTEXT_UNAUTHORIZED",
+        "CONTEXT_BUDGET_EXCEEDED",
+        "ADAPTER_UNAVAILABLE"
+      ]
+    },
+    "retryable": { "type": "boolean" },
+    "invalidParams": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "reason"],
+        "properties": {
+          "path": { "type": "string", "pattern": "^/" },
+          "reason": { "type": "string", "minLength": 1, "maxLength": 2048 }
+        }
+      }
+    },
+    "recovery": { "type": "string", "minLength": 1, "maxLength": 2048 },
+    "extensions": { "$ref": "common.schema.json#/$defs/extensions" }
+  }
+}

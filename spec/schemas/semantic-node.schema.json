@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ui-grounding.org/schema/v0.1/semantic-node.schema.json",
+  "title": "SemanticNode",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["nodeId", "type", "label", "authority", "anchorIds"],
+  "properties": {
+    "nodeId": { "$ref": "common.schema.json#/$defs/identifier" },
+    "type": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 256,
+      "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z0-9]+)+$"
+    },
+    "label": { "type": "string", "minLength": 1, "maxLength": 1024 },
+    "description": { "type": "string", "minLength": 1, "maxLength": 4096 },
+    "authority": { "$ref": "common.schema.json#/$defs/authority" },
+    "entityRef": { "$ref": "common.schema.json#/$defs/entityReference" },
+    "parentNodeId": { "$ref": "common.schema.json#/$defs/identifier" },
+    "childNodeIds": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "$ref": "common.schema.json#/$defs/identifier" }
+    },
+    "anchorIds": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "$ref": "common.schema.json#/$defs/identifier" }
+    },
+    "contextDescriptors": {
+      "type": "array",
+      "items": { "$ref": "common.schema.json#/$defs/contextDescriptor" }
+    },
+    "capabilityRefs": {
+      "type": "array",
+      "items": { "$ref": "common.schema.json#/$defs/capabilityReference" }
+    },
+    "resourceRefs": {
+      "type": "array",
+      "items": { "$ref": "common.schema.json#/$defs/resourceReference" }
+    },
+    "tags": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1, "maxLength": 128 }
+    },
+    "revision": { "$ref": "common.schema.json#/$defs/revision" },
+    "validAt": { "$ref": "common.schema.json#/$defs/timestamp" },
+    "expiresAt": { "$ref": "common.schema.json#/$defs/timestamp" },
+    "extensions": { "$ref": "common.schema.json#/$defs/extensions" }
+  }
+}

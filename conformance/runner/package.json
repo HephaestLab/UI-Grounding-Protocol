@@ -1,0 +1,21 @@
+{
+  "name": "@ui-grounding/conformance-runner",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "conformance": "tsx src/cli.ts",
+    "test": "vitest run --root .",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "ajv": "8.20.0",
+    "ajv-formats": "3.0.1"
+  },
+  "devDependencies": {
+    "tsx": "4.23.12",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  }
+}

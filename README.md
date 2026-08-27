@@ -44,7 +44,7 @@ wire format and public runtime APIs are not stable yet.
 
 ## Development
 
-Requirements: Node.js 22.12 or newer and pnpm 11.19.
+Requirements: Node.js 22.13 or newer and pnpm 11.19.
 
 ```sh
 pnpm install --frozen-lockfile

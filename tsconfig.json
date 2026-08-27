@@ -6,6 +6,7 @@
   },
   "include": [
     "*.config.ts",
+    "conformance/**/*.ts",
     "packages/**/*.ts",
     "examples/**/*.ts",
     "tooling/**/*.ts"

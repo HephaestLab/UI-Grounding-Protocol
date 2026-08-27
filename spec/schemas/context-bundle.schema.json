@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ui-grounding.org/schema/v0.1/context-bundle.schema.json",
+  "title": "ContextBundle",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contextId",
+    "groundingId",
+    "referentContexts",
+    "budget",
+    "authorization",
+    "generatedAt"
+  ],
+  "properties": {
+    "contextId": { "$ref": "common.schema.json#/$defs/identifier" },
+    "groundingId": { "$ref": "common.schema.json#/$defs/identifier" },
+    "referentContexts": {
+      "type": "array",
+      "maxItems": 20,
+      "items": { "$ref": "common.schema.json#/$defs/referentContext" }
+    },
+    "resources": {
+      "type": "array",
+      "items": { "$ref": "common.schema.json#/$defs/resourceReference" }
+    },
+    "capabilityRefs": {
+      "type": "array",
+      "items": { "$ref": "common.schema.json#/$defs/capabilityReference" }
+    },
+    "budget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["requestedBytes", "emittedBytes", "truncated"],
+      "properties": {
+        "requestedBytes": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1048576
+        },
+        "emittedBytes": { "type": "integer", "minimum": 0, "maximum": 1048576 },
+        "truncated": { "type": "boolean" }
+      }
+    },
+    "authorization": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["purpose", "filtered"],
+      "properties": {
+        "principalRef": { "$ref": "common.schema.json#/$defs/identifier" },
+        "purpose": { "type": "string", "minLength": 1, "maxLength": 512 },
+        "filtered": { "type": "boolean" }
+      }
+    },
+    "generatedAt": { "$ref": "common.schema.json#/$defs/timestamp" },
+    "extensions": { "$ref": "common.schema.json#/$defs/extensions" }
+  }
+}
