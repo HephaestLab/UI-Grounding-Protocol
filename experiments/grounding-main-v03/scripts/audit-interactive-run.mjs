@@ -1,9 +1,8 @@
 import { readdir } from 'node:fs/promises';
-import { basename, join } from 'node:path';
+import { isAbsolute, join, relative, resolve } from 'node:path';
 
 import {
   canonicalJson,
-  episodeDirectories,
   findForbiddenKeys,
   parseArgs,
   readJson,
@@ -21,7 +20,7 @@ const runId = required(args, 'run-id');
 const runRoot = join(runsRoot, runId);
 const validators = await schemaValidators();
 
-async function taskFiles(root) {
+async function namedFiles(root, name) {
   const output = [];
   async function visit(directory) {
     let entries;
@@ -34,12 +33,7 @@ async function taskFiles(root) {
     for (const entry of entries) {
       const path = join(directory, entry.name);
       if (entry.isDirectory()) await visit(path);
-      else if (
-        basename(directory) === 'tasks' &&
-        /^step-\d+\.json$/u.test(entry.name)
-      ) {
-        output.push(path);
-      }
+      else if (entry.name === name) output.push(path);
     }
   }
   await visit(root);
@@ -47,8 +41,54 @@ async function taskFiles(root) {
 }
 
 const failures = [];
+const matrixPlan = await readJson(join(runRoot, 'matrix-plan.json'));
+const officialScorePaths = await namedFiles(
+  join(runRoot, 'tasks'),
+  'official-score.json',
+);
+if (officialScorePaths.length !== matrixPlan.episodeCount) {
+  failures.push({
+    path: join(runRoot, 'matrix-plan.json'),
+    kind: 'incomplete-matrix',
+    expected: matrixPlan.episodeCount,
+    observed: officialScorePaths.length,
+  });
+}
+const activeEpisodeIds = new Set();
+for (const path of officialScorePaths) {
+  const score = await readJson(path);
+  if (!Array.isArray(score.episodeIds) || score.episodeIds.length === 0) {
+    failures.push({ path, kind: 'missing-episode-ids' });
+    continue;
+  }
+  score.episodeIds.forEach((episodeId) => activeEpisodeIds.add(episodeId));
+}
+
+const activeEpisodes = [];
+const tasksRoot = resolve(runRoot, 'tasks');
+for (const episodeId of [...activeEpisodeIds].sort()) {
+  const directory = join(runRoot, 'episodes', episodeId);
+  const privatePath = join(directory, 'private.json');
+  try {
+    const privateRecord = await readJson(privatePath);
+    const taskPath = resolve(privateRecord.taskPath);
+    const taskRelativePath = relative(tasksRoot, taskPath);
+    if (taskRelativePath.startsWith('..') || isAbsolute(taskRelativePath)) {
+      failures.push({ path: privatePath, kind: 'task-path-outside-run' });
+      continue;
+    }
+    activeEpisodes.push({ episodeId, directory, taskPath });
+  } catch (error) {
+    failures.push({
+      path: privatePath,
+      kind: 'private-packet',
+      error: String(error.message ?? error),
+    });
+  }
+}
+
 const records = [];
-for (const path of await taskFiles(join(runRoot, 'tasks'))) {
+for (const { taskPath: path } of activeEpisodes) {
   const task = await readJson(path);
   try {
     validateOrThrow(validators['task-envelope.schema.json'], task, path);
@@ -89,7 +129,7 @@ for (const path of await taskFiles(join(runRoot, 'tasks'))) {
 }
 records.sort((left, right) => left.path.localeCompare(right.path));
 const actorRecords = [];
-for (const directory of await episodeDirectories(runId)) {
+for (const { directory } of activeEpisodes) {
   const requestPath = join(directory, 'request.json');
   try {
     const [request, runner] = await Promise.all([
@@ -137,6 +177,7 @@ const report = {
   schemaVersion: '0.3.0',
   runId,
   valid: failures.length === 0,
+  scoredJobs: officialScorePaths.length,
   taskPackets: records.length,
   methodFactParityChecks: records.reduce(
     (sum, record) => sum + record.methods.length,
