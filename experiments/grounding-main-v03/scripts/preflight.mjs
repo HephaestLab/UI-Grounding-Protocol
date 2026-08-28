@@ -256,6 +256,9 @@ const readiness = {
   schemaVersion: '0.3.0',
   generatedAt: new Date().toISOString(),
   branch: 'experiment/grounding-main-v03',
+  phase: confirmatoryPlan.phase,
+  activeBenchmarks: [...activeBenchmarkIds],
+  deferredBenchmarks: confirmatoryPlan.deferredBenchmarks,
   pilotHarnessRunnable: pilotGateNames.every((name) => gates[name]),
   mainTablePilotRunnable:
     pilotGateNames.every((name) => gates[name]) &&
@@ -266,6 +269,15 @@ const readiness = {
   ),
   gates,
   falseGates,
+  evidence: {
+    confirmatorySelectionDigest: confirmatorySelection?.selectionDigest ?? null,
+    calibrationRunIds: calibration?.runIds ?? [],
+    calibrationAudits: calibrationAudits.filter(Boolean).length,
+    calibrationComplete: calibration?.complete ?? false,
+    powerPhase: power?.phase ?? null,
+    missingActiveBenchmarks: power?.missingActiveBenchmarks ?? [],
+    staticMaterializationValid: staticAudit?.valid ?? false,
+  },
   blockers: [
     {
       id: 'external-benchmark-environments',
