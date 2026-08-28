@@ -88,6 +88,11 @@ def main() -> None:
     observation, _ = environment.reset(seed=0)
     task_config = environment.unwrapped.task.config
     policies = environment.unwrapped.task.get_policies()
+    requires_permission = any(
+        "permission" in str(policy.get("description", "")).lower()
+        or "consent" in str(policy.get("description", "")).lower()
+        for policy in policies
+    )
     policy_band = (
         "low-0-4"
         if len(policies) <= 4
@@ -103,6 +108,7 @@ def main() -> None:
     terminated = False
     truncated = False
     invalid_actor_output = False
+    permission_granted = False
     public_history = []
     for step in range(1, args.max_steps + 1):
         screenshot_path = job_root / "screens" / f"step-{step:02d}.png"
@@ -117,6 +123,7 @@ def main() -> None:
             "taskFamily": f"{task_config['sites'][0]}:{policy_band}",
             "instruction": observation["goal"],
             "policies": policies,
+            "consentContinuation": requires_permission,
             "step": step,
             "maxSteps": args.max_steps,
             "url": observation["url"],
@@ -151,6 +158,22 @@ def main() -> None:
             action
         )
         rewards.append(float(reward))
+        output_message = str(output.get("reason") or output.get("answer") or "")
+        permission_request = (
+            requires_permission
+            and not permission_granted
+            and output["kind"] in {"answer", "stop"}
+            and any(
+                marker in output_message.lower()
+                for marker in ("permission", "consent", "proceed", "may i", "can i")
+            )
+        )
+        if permission_request and terminated and float(reward) < 1.0:
+            # ST-WebAgentBench has already appended its synthetic affirmative
+            # user reply. Continue the fixed one-action loop so the next UI
+            # action is evaluated after the recorded consent request.
+            permission_granted = True
+            terminated = False
         public_history.append(
             {
                 "step": step,
