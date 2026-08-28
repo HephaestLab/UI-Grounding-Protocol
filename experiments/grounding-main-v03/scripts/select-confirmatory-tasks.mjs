@@ -13,6 +13,20 @@ import {
 const plan = await readJson(
   join(experimentRoot, 'sampling', 'confirmatory-v1.json'),
 );
+assert(
+  Array.isArray(plan.activeBenchmarks) && plan.activeBenchmarks.length > 0,
+  'Confirmatory plan must declare activeBenchmarks',
+);
+assert(
+  Array.isArray(plan.deferredBenchmarks),
+  'Confirmatory plan must declare deferredBenchmarks',
+);
+assert(
+  plan.activeBenchmarks.every(
+    (benchmarkId) => !plan.deferredBenchmarks.includes(benchmarkId),
+  ),
+  'Active and deferred benchmarks overlap',
+);
 const calibration = await readJson(
   join(runsRoot, 'calibration', 'selection.json'),
 );
@@ -65,6 +79,12 @@ const sources = new Map([
   ['webmall-action', webmallSelection.tasks.map((task) => task.sourceTaskId)],
   ['st-webagentbench-cup', stSelection.tasks.map((task) => task.sourceTaskId)],
 ]);
+assert(
+  [...sources.keys()].every((benchmarkId) =>
+    plan.activeBenchmarks.includes(benchmarkId),
+  ) && plan.activeBenchmarks.every((benchmarkId) => sources.has(benchmarkId)),
+  'Materialized sources do not match the active benchmark phase',
+);
 
 const selections = [];
 for (const [benchmarkId, sourceTaskIds] of sources) {
@@ -98,6 +118,8 @@ const output = {
   revision: plan.revision,
   frozenOn: plan.frozenOn,
   seed: plan.seed,
+  phase: plan.phase,
+  activeBenchmarks: plan.activeBenchmarks,
   selectionRule: plan.selection,
   methods: 8,
   models: 2,
@@ -113,7 +135,7 @@ const output = {
     (sum, selection) => sum + selection.robustnessTaskIds.length * 8 * 2 * 2,
     0,
   ),
-  pendingBenchmarks: ['workarena-plus-plus'],
+  pendingBenchmarks: plan.deferredBenchmarks,
   selections,
 };
 output.selectionDigest = sha256(canonicalJson(output));

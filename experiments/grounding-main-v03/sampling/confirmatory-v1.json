@@ -3,6 +3,15 @@
   "revision": "confirmatory-v1",
   "frozenOn": "2026-08-29",
   "seed": 240830,
+  "phase": "four-benchmark-preauthorization",
+  "activeBenchmarks": [
+    "screenpr-referent",
+    "screenqa-visible",
+    "webmall-action",
+    "st-webagentbench-cup"
+  ],
+  "deferredBenchmarks": ["workarena-plus-plus"],
+  "localResearchExecutionApprovedOn": "2026-08-29",
   "selection": "Use every task in each frozen public source selection after permanently excluding all calibration tasks. WorkArena remains pending access and is not included in the four-benchmark phase.",
   "benchmarks": {
     "screenpr-referent": { "expectedPrimary": 642, "robustnessTasks": 130 },
