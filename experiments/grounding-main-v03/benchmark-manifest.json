@@ -1,0 +1,191 @@
+{
+  "schemaVersion": "0.3.0",
+  "checkedOn": "2026-08-28",
+  "policy": "Official repositories and datasets are pinned. Derived strata are labeled and never presented as official benchmark tasks.",
+  "sources": [
+    {
+      "id": "screenpr",
+      "title": "Screen Point-and-Read / Tree-of-Lens",
+      "usedBy": ["screenpr-referent", "tree-of-lens"],
+      "paperVenue": "EMNLP 2024",
+      "projectUrl": "https://screen-point-and-read.github.io/",
+      "repository": "https://github.com/UCSB-AI/Screen-Point-and-Read.git",
+      "commit": "971badaf95c0eb7aa7eef8907eea2e40f68ddf25",
+      "dataset": "https://huggingface.co/datasets/yfan1997/ScreenPR",
+      "access": "public",
+      "license": "MIT on Hugging Face dataset card",
+      "nativeEntrypoint": "Repository inference code plus Hugging Face dataset",
+      "integrationStatus": "entrypoint-present-evaluation-incomplete",
+      "blockers": [
+        "Official repository lists detailed setup inputs and evaluation scripts as TODO",
+        "Legacy DINO/MMDetection stack requires a dedicated environment"
+      ]
+    },
+    {
+      "id": "screenqa",
+      "title": "ScreenQA",
+      "usedBy": ["screenqa-visible"],
+      "paperVenue": "NAACL 2025",
+      "repository": "https://github.com/google-research-datasets/screen_qa.git",
+      "commit": "1dfdbccaf56948821b5fa8ffe5d186fe4751e46d",
+      "dataset": "https://github.com/google-research-datasets/screen_qa",
+      "access": "public",
+      "license": "CC BY 4.0 dataset",
+      "nativeEntrypoint": "Repository data files and README",
+      "integrationStatus": "public-static-data",
+      "blockers": [
+        "RICO image acquisition and redistribution terms must be checked"
+      ]
+    },
+    {
+      "id": "dashboardqa",
+      "title": "DashboardQA",
+      "usedBy": ["dashboardqa-ref"],
+      "paperVenue": "EACL Findings 2026",
+      "repository": "https://github.com/vis-nlp/DashboardQA.git",
+      "commit": "f1ee56d2366f14d88547af6259c280f86994b02b",
+      "dataset": "https://huggingface.co/datasets/ahmed-masry/DashboardQA",
+      "access": "public-data-environment-dependent",
+      "license": "Apache-2.0 code; dashboard/third-party asset terms require manual review",
+      "nativeEntrypoint": "OSWorld/GCP-oriented benchmark runner",
+      "integrationStatus": "official-runner-external-environment",
+      "blockers": [
+        "Native interactive evaluation expects an OSWorld-capable VM",
+        "DashboardQA-Ref selection annotations must be generated and independently audited"
+      ]
+    },
+    {
+      "id": "browsergym",
+      "title": "BrowserGym",
+      "usedBy": [
+        "workarena-plus-plus",
+        "webmall-action",
+        "st-webagentbench-cup"
+      ],
+      "paperVenue": "ecosystem dependency",
+      "repository": "https://github.com/ServiceNow/BrowserGym.git",
+      "commit": "9e779f087de9a65668b6974d11f9ce9816026e96",
+      "access": "public",
+      "license": "Apache-2.0",
+      "nativeEntrypoint": "BrowserGym task environments",
+      "integrationStatus": "public-framework",
+      "blockers": [
+        "Individual benchmarks pin their own compatible BrowserGym forks or versions"
+      ]
+    },
+    {
+      "id": "workarena",
+      "title": "WorkArena / WorkArena++",
+      "usedBy": ["workarena-qa-ref", "workarena-plus-plus"],
+      "paperVenue": "NeurIPS 2024 Datasets and Benchmarks",
+      "repository": "https://github.com/ServiceNow/WorkArena.git",
+      "commit": "a772230a94cf1caf4166b8ead3983f3b3786455b",
+      "dataset": "https://huggingface.co/datasets/ServiceNow/WorkArena-Instances",
+      "access": "gated",
+      "license": "Apache-2.0 code; gated instance terms apply",
+      "nativeEntrypoint": "AgentLab plus BrowserGym WorkArena",
+      "integrationStatus": "official-runner-gated-instance",
+      "blockers": [
+        "User approval and authentication for WorkArena-Instances",
+        "ServiceNow instances/configuration",
+        "WorkArena-QA-Ref annotations must be created and audited"
+      ]
+    },
+    {
+      "id": "webmall",
+      "title": "WebMall",
+      "usedBy": ["webmall-qa-ref", "webmall-action"],
+      "paperVenue": "Web benchmark release",
+      "repository": "https://github.com/wbsg-uni-mannheim/WebMall.git",
+      "commit": "2697d35cdfcfedcf1ade89b7ad86722db8daa8a7",
+      "projectUrl": "https://wbsg-uni-mannheim.github.io/WebMall/",
+      "access": "public-self-hosted",
+      "license": "No root license file at the pinned commit; terms unresolved",
+      "nativeEntrypoint": "run_single_task.py and run_webmall_study.py",
+      "integrationStatus": "official-runner-needs-containers",
+      "blockers": [
+        "Python 3.11 or 3.12",
+        "Linux/WSL Docker Compose",
+        "Eight shop/database containers",
+        "Repository-specific BrowserGym/AgentLab submodules",
+        "WebMall-QA-Ref annotations must be created and audited"
+      ]
+    },
+    {
+      "id": "webmall-interfaces",
+      "title": "Comparing Web Interfaces for LLM Agents",
+      "usedBy": ["rag-context", "mcp-resource", "nlweb-context"],
+      "paperVenue": "WWW 2026",
+      "repository": "https://github.com/wbsg-uni-mannheim/WebMall-Interfaces.git",
+      "commit": "152b7c78258fffffccea9b38ef9210e7bcd2dfcd",
+      "projectUrl": "https://wbsg-uni-mannheim.github.io/WebMall-Interfaces/",
+      "access": "public-self-hosted",
+      "license": "README refers to a license file, but no root license file exists at the pinned commit; terms unresolved",
+      "nativeEntrypoint": "Interface-specific WebMall implementations",
+      "integrationStatus": "official-code-fixed-actor-adaptation-needed",
+      "blockers": [
+        "Cross-benchmark RAG/MCP/NLWeb adapters are adaptations, not native replications",
+        "Fact-parity extraction audit required"
+      ]
+    },
+    {
+      "id": "st-webagentbench",
+      "title": "ST-WebAgentBench",
+      "usedBy": ["st-webagentbench-cup"],
+      "paperVenue": "ICLR 2026",
+      "repository": "https://github.com/segev-shlomov/ST-WebAgentBench.git",
+      "commit": "67f56dd7df9eca1646c9e49407b087e950aa1e77",
+      "dataset": "https://huggingface.co/datasets/ST-WebAgentBench/st-webagentbench",
+      "access": "public-self-hosted",
+      "license": "Apache license for repository code and data",
+      "nativeEntrypoint": "BrowserGym plugin and official evaluator",
+      "integrationStatus": "official-runner-needs-services",
+      "blockers": [
+        "WebArena GitLab and ShoppingAdmin services",
+        "SuiteCRM service and credentials",
+        "Playwright-compatible environment",
+        "Leaderboard signing key only if an official submission is desired"
+      ]
+    },
+    {
+      "id": "iai",
+      "title": "Interaction-Augmented Instructions",
+      "usedBy": ["iai-p4"],
+      "paperVenue": "CHI 2026",
+      "projectUrl": "https://interaction-augmented-instruction.github.io/",
+      "access": "public-paper-and-project",
+      "license": "No standalone executable baseline identified",
+      "nativeEntrypoint": null,
+      "integrationStatus": "theory-requires-operationalization",
+      "blockers": [
+        "P4 is a pre-registered operationalization, not an official runnable system"
+      ]
+    },
+    {
+      "id": "ferret-ui",
+      "title": "Ferret-UI",
+      "usedBy": ["native-systems-table"],
+      "repository": "https://github.com/apple/ml-ferret.git",
+      "commit": "3c9e5c93c2c3048638f73848343d03f37824eb2b",
+      "access": "public-code-model-dependent",
+      "license": "Apple sample-code license; Ferret-UI data and weight differentials are CC BY-NC 4.0/research-only and upstream model terms apply",
+      "nativeEntrypoint": "Native checkpoint evaluation only",
+      "integrationStatus": "secondary-native-table",
+      "blockers": ["Not a drop-in representation for the fixed actor table"]
+    },
+    {
+      "id": "ui-hawk",
+      "title": "UI-Hawk / FunUI",
+      "usedBy": ["native-systems-table"],
+      "repository": "https://github.com/IMNearth/UIHawk.git",
+      "commit": "7cd52503f1e2df5485949968bd9f231742963d92",
+      "access": "public-code-model-dependent",
+      "license": "CC BY-NC-SA 4.0 repository; model and dataset dependencies require review",
+      "nativeEntrypoint": "Native checkpoint evaluation only",
+      "integrationStatus": "secondary-native-table",
+      "blockers": [
+        "Native mobile GUI/screen-stream scope is not a drop-in fixed-actor condition"
+      ]
+    }
+  ]
+}

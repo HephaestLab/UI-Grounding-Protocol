@@ -1,0 +1,40 @@
+{
+  "name": "@ui-grounding/authoring",
+  "version": "0.0.0",
+  "description": "Draft Semantic Frame, typed Binding, and Grounding Capsule authoring runtime for UGP.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./common.schema.json": "./dist/schemas/common.schema.json",
+    "./semantic-value.schema.json": "./dist/schemas/semantic-value.schema.json",
+    "./semantic-frame.schema.json": "./dist/schemas/semantic-frame.schema.json",
+    "./profile-definition.schema.json": "./dist/schemas/profile-definition.schema.json",
+    "./grounding-capsule.schema.json": "./dist/schemas/grounding-capsule.schema.json"
+  },
+  "scripts": {
+    "build": "vite build --config ../../tooling/vite.library.ts && tsc -p tsconfig.build.json && node ../../scripts/copy-authoring-schemas.mjs",
+    "test": "vitest run --root ../.. packages/authoring/src/authoring.test.ts",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@ui-grounding/protocol": "workspace:^"
+  },
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  }
+}

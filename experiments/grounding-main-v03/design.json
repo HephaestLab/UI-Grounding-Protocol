@@ -1,0 +1,273 @@
+{
+  "schemaVersion": "0.3.0",
+  "experimentId": "ugp-grounding-main-v03",
+  "status": "frozen-for-preflight",
+  "frozenOn": "2026-08-28",
+  "claimBoundary": "The confirmatory study estimates the effect of the current-step grounding representation under a fixed minimal actor loop; it does not estimate the value of a complete vendor agent stack.",
+  "researchQuestions": [
+    {
+      "id": "RQ1",
+      "question": "Does UGP improve correct interpretation of a user-pointed UI referent and grounded business QA relative to visual, structural, and published-interface baselines?"
+    },
+    {
+      "id": "RQ2",
+      "question": "Does the referent improvement transfer to successful long-horizon web task execution when the actor and action space are held fixed?"
+    },
+    {
+      "id": "RQ3",
+      "question": "Does UGP improve policy-compliant utility on safety-sensitive tasks without increasing unsafe action attempts?"
+    }
+  ],
+  "models": [
+    {
+      "id": "gpt-5.6-luna",
+      "role": "fast-primary-actor",
+      "reasoningEffort": "low",
+      "runner": "codex-subagent-or-isolated-runner",
+      "temperature": null,
+      "seed": null
+    },
+    {
+      "id": "gpt-5.4",
+      "role": "second-actor-family",
+      "reasoningEffort": "low",
+      "runner": "codex-subagent-or-isolated-runner",
+      "temperature": null,
+      "seed": null
+    }
+  ],
+  "groundingMethods": [
+    {
+      "id": "vision-only",
+      "label": "Vision Only",
+      "class": "control",
+      "fidelity": "exact-control",
+      "readOnly": true,
+      "citationKey": null
+    },
+    {
+      "id": "html-ax",
+      "label": "HTML/AX Subtree",
+      "class": "control",
+      "fidelity": "exact-control",
+      "readOnly": true,
+      "citationKey": null
+    },
+    {
+      "id": "tree-of-lens",
+      "label": "Tree-of-Lens -> Actor",
+      "class": "published-method",
+      "fidelity": "fixed-actor-adaptation",
+      "readOnly": true,
+      "citationKey": "fan-et-al-2024-tree-of-lens"
+    },
+    {
+      "id": "iai-p4",
+      "label": "IAI-P4 Operationalization",
+      "class": "published-theory",
+      "fidelity": "pre-registered-operationalization",
+      "readOnly": true,
+      "citationKey": "iai-chi-2026"
+    },
+    {
+      "id": "rag-context",
+      "label": "RAG Context",
+      "class": "published-interface-condition",
+      "fidelity": "fixed-actor-adaptation",
+      "readOnly": true,
+      "citationKey": "webmall-interfaces-www-2026"
+    },
+    {
+      "id": "mcp-resource",
+      "label": "MCP Resource (read-only)",
+      "class": "published-interface-condition",
+      "fidelity": "fixed-actor-adaptation",
+      "readOnly": true,
+      "citationKey": "webmall-interfaces-www-2026"
+    },
+    {
+      "id": "nlweb-context",
+      "label": "NLWeb Context",
+      "class": "published-interface-condition",
+      "fidelity": "fixed-actor-adaptation",
+      "readOnly": true,
+      "citationKey": "webmall-interfaces-www-2026"
+    },
+    {
+      "id": "ugp",
+      "label": "UGP",
+      "class": "proposed",
+      "fidelity": "native",
+      "readOnly": true,
+      "citationKey": null
+    }
+  ],
+  "benchmarks": [
+    {
+      "id": "screenpr-referent",
+      "label": "ScreenPR Referent",
+      "sourceKind": "official",
+      "capability": "pointed-referent-recognition",
+      "primaryMetric": "strictSuccess",
+      "plannedN": 650,
+      "stepBudget": 1,
+      "negativeControl": false
+    },
+    {
+      "id": "screenqa-visible",
+      "label": "ScreenQA Visible",
+      "sourceKind": "official-stratified-sample",
+      "capability": "pixels-only-visible-qa",
+      "primaryMetric": "strictSuccess",
+      "plannedN": 800,
+      "stepBudget": 1,
+      "negativeControl": true
+    },
+    {
+      "id": "dashboardqa-ref",
+      "label": "DashboardQA-Ref",
+      "sourceKind": "protocol-derived-diagnostic",
+      "capability": "pointed-dashboard-qa",
+      "primaryMetric": "strictSuccess",
+      "plannedN": 240,
+      "stepBudget": 8,
+      "negativeControl": false
+    },
+    {
+      "id": "workarena-qa-ref",
+      "label": "WorkArena-QA-Ref",
+      "sourceKind": "protocol-derived-diagnostic",
+      "capability": "pointed-enterprise-qa",
+      "primaryMetric": "strictSuccess",
+      "plannedN": 160,
+      "stepBudget": 12,
+      "negativeControl": false
+    },
+    {
+      "id": "webmall-qa-ref",
+      "label": "WebMall-QA-Ref",
+      "sourceKind": "protocol-derived-diagnostic",
+      "capability": "pointed-commerce-qa",
+      "primaryMetric": "strictSuccess",
+      "plannedN": 91,
+      "stepBudget": 12,
+      "negativeControl": false
+    },
+    {
+      "id": "workarena-plus-plus",
+      "label": "WorkArena++",
+      "sourceKind": "official-stratified-sample",
+      "capability": "long-horizon-enterprise-action",
+      "primaryMetric": "strictSuccess",
+      "plannedN": 128,
+      "stepBudget": 40,
+      "negativeControl": false
+    },
+    {
+      "id": "webmall-action",
+      "label": "WebMall Action",
+      "sourceKind": "official",
+      "capability": "long-horizon-commerce-action",
+      "primaryMetric": "strictSuccess",
+      "plannedN": 91,
+      "stepBudget": 40,
+      "negativeControl": false
+    },
+    {
+      "id": "st-webagentbench-cup",
+      "label": "ST-WebAgentBench CuP",
+      "sourceKind": "official-stratified-sample",
+      "capability": "policy-compliant-web-action",
+      "primaryMetric": "strictSuccess",
+      "secondaryMetrics": ["CR", "CuP", "pCuP", "riskRatio"],
+      "plannedN": 120,
+      "stepBudget": 40,
+      "negativeControl": false
+    }
+  ],
+  "sampling": {
+    "primaryReplicates": 1,
+    "robustnessReplicates": 3,
+    "robustnessFraction": 0.2,
+    "randomizationSeed": 240828,
+    "stratification": [
+      "benchmark",
+      "domain",
+      "taskDifficulty",
+      "interactionLength"
+    ],
+    "selectionRule": "Public deterministic script fixed before outcome collection; no task is selected or removed using model outcomes.",
+    "plannedPrimaryEpisodes": 36480,
+    "plannedAdditionalRobustnessEpisodes": 14592
+  },
+  "actorLoop": {
+    "freshContextPerStep": true,
+    "memory": false,
+    "planner": false,
+    "critic": false,
+    "reflection": false,
+    "automaticRepair": false,
+    "benchmarkSpecificReasoning": false,
+    "commonActionSet": ["answer", "click", "type", "scroll", "select", "stop"],
+    "invalidOutputPolicy": "count-as-invalid-action-without-hidden-repair"
+  },
+  "metrics": {
+    "primaryCell": "mean(strictSuccess) * 100",
+    "macroAverage": "unweighted mean of the eight pre-registered benchmark-stratum strict-success rates",
+    "interval": "task-cluster bootstrap 95% confidence interval, 10000 resamples",
+    "secondary": [
+      "nativeBenchmarkScore",
+      "steps",
+      "wallTimeMs",
+      "inputBytes",
+      "outputBytes",
+      "reportedTokens"
+    ],
+    "missingTokenRule": "null-not-estimated"
+  },
+  "analysis": {
+    "primaryModel": "strictSuccess ~ groundingMethod * model * taskFamily + (1|task) + (1|domain)",
+    "robustnessModel": "strictSuccess ~ groundingMethod * model * taskFamily + (1|task) + (1|domain) + (1|replicate)",
+    "family": "binomial-logit",
+    "pairedComparisons": "UGP versus every registered method within model and benchmark stratum",
+    "multiplicity": "Holm correction within each registered hypothesis family",
+    "effectReporting": [
+      "oddsRatio",
+      "averageMarginalEffect",
+      "95%CI",
+      "adjustedP"
+    ],
+    "exclusions": "Only predeclared infrastructure failures; invalid model output remains failure.",
+    "negativeControlExpectation": "UGP is not expected to materially improve ScreenQA items answerable from visible pixels without referent or business semantics."
+  },
+  "fidelityTables": {
+    "causalMain": "fixed actor, adapted representations, common actions",
+    "nativeSystems": [
+      "Tree-of-Lens official pipeline",
+      "Ferret-UI native checkpoint",
+      "UI-Hawk native checkpoint",
+      "WebMall-Interfaces native systems"
+    ],
+    "ablation": [
+      "UGP without description",
+      "UGP without entity",
+      "UGP without bindings",
+      "UGP without operations",
+      "equal-fact flat prose",
+      "full MCP tool channel"
+    ]
+  },
+  "publicationGates": [
+    "designFrozenBeforeOutcomes",
+    "benchmarkVersionsPinned",
+    "licenseAndTermsApproved",
+    "deterministicHiddenScorers",
+    "actorFilesystemAndToolsIsolated",
+    "exactRunnerIdentityRecorded",
+    "factParityAudited",
+    "calibrationHasNoCeilingOrFloor",
+    "sampleSizeJustified",
+    "multimodalActorTransportVerified",
+    "allInfrastructureSmokeTestsPass"
+  ]
+}

@@ -7,6 +7,8 @@ export default tseslint.config(
       '**/dist/**',
       '**/coverage/**',
       '**/node_modules/**',
+      '**/.runs/**',
+      'experiments/grounding-main-v03/vendor/**',
       'conformance/reports/**',
     ],
   },

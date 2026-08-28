@@ -1,0 +1,8 @@
+{
+  "schemaVersion": "0.3.0",
+  "taskId": "fixture:bi-kpi-qa:001",
+  "scorer": {
+    "kind": "normalized-exact-answer",
+    "accepted": ["Net Revenue"]
+  }
+}

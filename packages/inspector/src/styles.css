@@ -1,0 +1,89 @@
+.ugp-selection-region {
+  position: fixed;
+  z-index: 2147483645;
+  box-sizing: border-box;
+  border: 2px solid #2563eb;
+  border-radius: 4px;
+  background: rgb(37 99 235 / 12%);
+  pointer-events: none;
+}
+
+.ugp-inspector-shell {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 2147483646;
+  color: #0f172a;
+  font:
+    13px/1.45 system-ui,
+    sans-serif;
+}
+
+.ugp-inspector-launcher {
+  float: right;
+  min-width: 48px;
+  padding: 9px 12px;
+  border: 0;
+  border-radius: 999px;
+  color: white;
+  background: #2563eb;
+  box-shadow: 0 8px 24px rgb(15 23 42 / 25%);
+  cursor: pointer;
+}
+
+.ugp-inspector-panel {
+  width: min(380px, calc(100vw - 36px));
+  max-height: min(620px, calc(100vh - 92px));
+  margin-bottom: 10px;
+  overflow: auto;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  background: white;
+  box-shadow: 0 18px 48px rgb(15 23 42 / 25%);
+}
+
+.ugp-inspector-panel > * {
+  margin: 0;
+  padding: 12px 14px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.ugp-inspector-panel > :last-child {
+  border-bottom: 0;
+}
+
+.ugp-inspector-panel header,
+.ugp-inspector-modes {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ugp-inspector-panel button {
+  padding: 6px 9px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  background: #f8fafc;
+  cursor: pointer;
+}
+
+.ugp-inspector-panel button[aria-pressed='true'] {
+  color: white;
+  border-color: #2563eb;
+  background: #2563eb;
+}
+
+.ugp-inspector-summary {
+  font-weight: 600;
+}
+
+.ugp-inspector-panel pre {
+  max-height: 280px;
+  overflow: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font:
+    11px/1.5 ui-monospace,
+    monospace;
+}

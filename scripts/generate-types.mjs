@@ -5,35 +5,56 @@ import { compileFromFile } from 'json-schema-to-typescript';
 
 const check = process.argv.includes('--check');
 const workspaceRoot = resolve(import.meta.dirname, '..');
-const schemaRoot = resolve(workspaceRoot, 'spec/schemas');
-const outputRoot = resolve(workspaceRoot, 'packages/protocol/src/generated');
 const ignored = new Set(['common.schema.json']);
-await mkdir(outputRoot, { recursive: true });
-const schemas = (await readdir(schemaRoot))
-  .filter((file) => file.endsWith('.schema.json') && !ignored.has(file))
-  .sort();
 const changed = [];
 
-for (const schema of schemas) {
-  const output = resolve(outputRoot, basename(schema, '.schema.json') + '.ts');
-  const generated = await compileFromFile(resolve(schemaRoot, schema), {
-    bannerComment: '/* Generated from spec/schemas. Do not edit directly. */',
-    cwd: schemaRoot,
-    style: {
-      bracketSpacing: true,
-      printWidth: 80,
-      semi: true,
-      singleQuote: true,
-      tabWidth: 2,
-      trailingComma: 'all',
-      useTabs: false,
-    },
-  });
-  const existing = await readFile(output, 'utf8').catch(() => undefined);
+const targets = [
+  {
+    schemaRoot: resolve(workspaceRoot, 'spec/schemas'),
+    outputRoot: resolve(workspaceRoot, 'packages/protocol/src/generated'),
+    banner: '/* Generated from spec/schemas. Do not edit directly. */',
+  },
+  {
+    schemaRoot: resolve(workspaceRoot, 'spec/drafts/v0.2/schemas'),
+    outputRoot: resolve(workspaceRoot, 'packages/authoring/src/generated'),
+    banner:
+      '/* Generated from spec/drafts/v0.2/schemas. Do not edit directly. */',
+  },
+];
 
-  if (existing !== generated) {
-    changed.push(schema);
-    if (!check) await writeFile(output, generated);
+for (const target of targets) {
+  await mkdir(target.outputRoot, { recursive: true });
+  const schemas = (await readdir(target.schemaRoot))
+    .filter((file) => file.endsWith('.schema.json') && !ignored.has(file))
+    .sort();
+
+  for (const schema of schemas) {
+    const output = resolve(
+      target.outputRoot,
+      basename(schema, '.schema.json') + '.ts',
+    );
+    const generated = await compileFromFile(
+      resolve(target.schemaRoot, schema),
+      {
+        bannerComment: target.banner,
+        cwd: target.schemaRoot,
+        style: {
+          bracketSpacing: true,
+          printWidth: 80,
+          semi: true,
+          singleQuote: true,
+          tabWidth: 2,
+          trailingComma: 'all',
+          useTabs: false,
+        },
+      },
+    );
+    const existing = await readFile(output, 'utf8').catch(() => undefined);
+
+    if (existing !== generated) {
+      changed.push(`${target.schemaRoot}:${schema}`);
+      if (!check) await writeFile(output, generated);
+    }
   }
 }
 

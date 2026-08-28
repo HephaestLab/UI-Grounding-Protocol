@@ -1,0 +1,223 @@
+{
+  "version": "0.2.0",
+  "status": "pre-experiment",
+  "tasks": [
+    {
+      "taskId": "bi-greenfield",
+      "domain": "bi",
+      "workflow": "greenfield",
+      "title": "Regional revenue explorer",
+      "target": {
+        "id": "observation:net-revenue:east:2026-q2",
+        "label": "East net revenue, Q2 2026",
+        "testId": "target-observation"
+      },
+      "productBrief": "Build a responsive analytics view with metric summary cards, a region and quarter filter, and an accessible detail table. The selected target is East net revenue for Q2 2026.",
+      "controlledFacts": [
+        { "id": "identity", "value": "observations/net-revenue/east/2026-q2" },
+        { "id": "metric", "value": "metrics/net-revenue" },
+        { "id": "value", "value": 8.431 },
+        { "id": "unit", "value": "USD-million" },
+        { "id": "scope.region", "value": "east" },
+        { "id": "scope.period", "value": "2026-Q2" },
+        { "id": "basis", "value": "queries/revenue-recognized-v4" },
+        { "id": "capability", "value": "bi.explain-observation" }
+      ],
+      "functionalChecks": [
+        "renders target observation",
+        "filters region and quarter",
+        "keeps a keyboard-readable detail table"
+      ]
+    },
+    {
+      "taskId": "bi-retrofit",
+      "domain": "bi",
+      "workflow": "retrofit",
+      "title": "Margin dashboard retrofit",
+      "target": {
+        "id": "observation:gross-margin:west:2026-q1",
+        "label": "West gross margin, Q1 2026",
+        "testId": "target-observation"
+      },
+      "productBrief": "Preserve the existing margin dashboard exactly while adding the assigned semantic condition to the West Q1 gross-margin cell.",
+      "controlledFacts": [
+        { "id": "identity", "value": "observations/gross-margin/west/2026-q1" },
+        { "id": "metric", "value": "metrics/gross-margin" },
+        { "id": "value", "value": 0.384 },
+        { "id": "unit", "value": "ratio" },
+        { "id": "scope.region", "value": "west" },
+        { "id": "scope.period", "value": "2026-Q1" },
+        { "id": "basis", "value": "queries/margin-accrual-v2" },
+        { "id": "capability", "value": "bi.explain-observation" }
+      ],
+      "functionalChecks": [
+        "preserves target value and table ordering",
+        "preserves quarter toggle",
+        "preserves keyboard and visual behavior"
+      ]
+    },
+    {
+      "taskId": "document-greenfield",
+      "domain": "document",
+      "workflow": "greenfield",
+      "title": "Contract clause navigator",
+      "target": {
+        "id": "clause:msa-2026:termination:12",
+        "label": "Termination clause 12",
+        "testId": "target-clause"
+      },
+      "productBrief": "Build an accessible contract viewer with section navigation, clause search, and a readable clause detail pane. The selected target is termination clause 12.",
+      "controlledFacts": [
+        { "id": "identity", "value": "clauses/msa-2026/12" },
+        {
+          "id": "effect",
+          "value": "Either party may terminate for convenience with written notice."
+        },
+        { "id": "parties", "value": ["customer", "provider"] },
+        { "id": "noticePeriod", "value": 30 },
+        { "id": "noticeUnit", "value": "day" },
+        { "id": "basis", "value": "documents/msa-2026/revision-7" },
+        { "id": "capability", "value": "document.open-source-clause" }
+      ],
+      "functionalChecks": [
+        "renders target clause",
+        "searches clauses",
+        "supports section navigation and text selection"
+      ]
+    },
+    {
+      "taskId": "document-retrofit",
+      "domain": "document",
+      "workflow": "retrofit",
+      "title": "Policy reader retrofit",
+      "target": {
+        "id": "section:data-retention:4.2",
+        "label": "Data retention section 4.2",
+        "testId": "target-clause"
+      },
+      "productBrief": "Preserve the existing policy reader exactly while adding the assigned semantic condition to data-retention section 4.2.",
+      "controlledFacts": [
+        { "id": "identity", "value": "sections/data-retention/4.2" },
+        {
+          "id": "effect",
+          "value": "Delete customer event data after the retention window unless a legal hold applies."
+        },
+        { "id": "retention", "value": 400 },
+        { "id": "retentionUnit", "value": "day" },
+        { "id": "appliesTo", "value": "datasets/customer-events" },
+        { "id": "basis", "value": "policies/data-governance/revision-11" },
+        { "id": "capability", "value": "document.open-policy-source" }
+      ],
+      "functionalChecks": [
+        "preserves section text and layout",
+        "preserves search highlighting",
+        "preserves navigation and text selection"
+      ]
+    },
+    {
+      "taskId": "workflow-greenfield",
+      "domain": "workflow",
+      "workflow": "greenfield",
+      "title": "Purchase approval board",
+      "target": {
+        "id": "step:request-483:finance",
+        "label": "Finance approval for request 483",
+        "testId": "target-step"
+      },
+      "productBrief": "Build an accessible purchase-approval board with request summary, connected approval stages, and status filters. The selected target is the Finance approval stage for request 483.",
+      "controlledFacts": [
+        { "id": "identity", "value": "steps/request-483/finance" },
+        { "id": "state", "value": "waiting" },
+        { "id": "assignee", "value": "roles/finance-controller" },
+        { "id": "prerequisite", "value": "steps/request-483/budget-owner" },
+        { "id": "prerequisiteState", "value": "approved" },
+        { "id": "basis", "value": "workflows/purchase-approval/v6" },
+        { "id": "capability", "value": "workflow.open-request" }
+      ],
+      "functionalChecks": [
+        "renders connected stages",
+        "filters by status",
+        "exposes target stage by keyboard"
+      ]
+    },
+    {
+      "taskId": "workflow-retrofit",
+      "domain": "workflow",
+      "workflow": "retrofit",
+      "title": "Incident workflow retrofit",
+      "target": {
+        "id": "step:incident-91:security-review",
+        "label": "Security review for incident 91",
+        "testId": "target-step"
+      },
+      "productBrief": "Preserve the existing incident workflow exactly while adding the assigned semantic condition to the Security review node.",
+      "controlledFacts": [
+        { "id": "identity", "value": "steps/incident-91/security-review" },
+        { "id": "state", "value": "blocked" },
+        { "id": "assignee", "value": "teams/soc-l2" },
+        { "id": "blocker", "value": "artifacts/memory-image-91" },
+        { "id": "basis", "value": "playbooks/incident-response/v9" },
+        { "id": "capability", "value": "workflow.open-incident" }
+      ],
+      "functionalChecks": [
+        "preserves node positions and status",
+        "preserves zoom controls",
+        "preserves keyboard navigation"
+      ]
+    },
+    {
+      "taskId": "commerce-greenfield",
+      "domain": "commerce",
+      "workflow": "greenfield",
+      "title": "Order operations console",
+      "target": {
+        "id": "order:1042",
+        "label": "Order 1042",
+        "testId": "target-order"
+      },
+      "productBrief": "Build a responsive order operations console with search, status filters, order rows, and a detail drawer. The selected target is order 1042.",
+      "controlledFacts": [
+        { "id": "identity", "value": "orders/1042" },
+        { "id": "state", "value": "pending-payment" },
+        { "id": "amount", "value": 8431 },
+        { "id": "currency", "value": "USD" },
+        { "id": "customer", "value": "customers/acme-holdings" },
+        { "id": "riskTier", "value": "review" },
+        { "id": "basis", "value": "order-ledger/revision-284" },
+        { "id": "capability", "value": "commerce.inspect-order" }
+      ],
+      "functionalChecks": [
+        "renders and searches target order",
+        "filters status",
+        "opens an accessible detail drawer"
+      ]
+    },
+    {
+      "taskId": "commerce-retrofit",
+      "domain": "commerce",
+      "workflow": "retrofit",
+      "title": "Returns console retrofit",
+      "target": {
+        "id": "return:R-77",
+        "label": "Return R-77",
+        "testId": "target-order"
+      },
+      "productBrief": "Preserve the existing returns console exactly while adding the assigned semantic condition to return R-77.",
+      "controlledFacts": [
+        { "id": "identity", "value": "returns/R-77" },
+        { "id": "state", "value": "awaiting-inspection" },
+        { "id": "refundAmount", "value": 219 },
+        { "id": "currency", "value": "USD" },
+        { "id": "originalOrder", "value": "orders/991" },
+        { "id": "reason", "value": "damaged-in-transit" },
+        { "id": "basis", "value": "returns-ledger/revision-61" },
+        { "id": "capability", "value": "commerce.inspect-return" }
+      ],
+      "functionalChecks": [
+        "preserves row values and ordering",
+        "preserves status filter and detail panel",
+        "preserves keyboard and visual behavior"
+      ]
+    }
+  ]
+}

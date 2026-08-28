@@ -77,8 +77,19 @@ before the main experiment is described as fully blinded.
 pnpm experiment:validate
 pnpm experiment:prepare -- --task reader-bi-ambiguous-record --condition ugp --replicate 1 --model gpt-5.6-luna --reasoning medium
 pnpm experiment:score -- --run <run-id>
+pnpm experiment:session:prepare -- --session reader-transfer-three-domain --condition ugp --replicate 1 --model gpt-5.6-luna --reasoning medium
+pnpm experiment:session:reveal -- --run <run-id>
+pnpm experiment:session:score -- --run <run-id>
 ```
 
-The first task is an infrastructure calibration cell, not evidence for either
-hypothesis. Formal Pilot data collection starts only after the infrastructure
-acceptance gates in `preregistration.md` pass.
+The two-phase transfer session preserves one model context across known and
+held-out applications. Its phase-one packet contains no held-out oracle or
+adaptation guide. Phase two reveals an application-specific guide only when the
+condition requires one, then scores both the initial and final answers.
+
+All completed runs remain infrastructure calibration and are not evidence for
+either hypothesis. The first transfer calibration found that Luna inferred the
+meaningful ad-hoc schema without its held-out guide while UGP used more input
+bytes; that task was therefore rejected for inference. See
+`transfer-session-summary.json`. Formal Pilot collection starts only after the
+gates in `preregistration.md` pass.

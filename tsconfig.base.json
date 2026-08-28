@@ -19,8 +19,10 @@
     "useDefineForClassFields": true,
     "verbatimModuleSyntax": true,
     "paths": {
+      "@ui-grounding/authoring": ["./packages/authoring/src/index.ts"],
       "@ui-grounding/core": ["./packages/core/src/index.ts"],
       "@ui-grounding/dom": ["./packages/dom/src/index.ts"],
+      "@ui-grounding/inspector": ["./packages/inspector/src/index.ts"],
       "@ui-grounding/overlay": ["./packages/overlay/src/index.ts"],
       "@ui-grounding/protocol": ["./packages/protocol/src/index.ts"],
       "@ui-grounding/react": ["./packages/react/src/index.ts"],

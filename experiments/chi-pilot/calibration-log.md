@@ -88,3 +88,29 @@ once and compares its amortized cost with per-application ad-hoc adaptation.
 
 Exact hidden token counts and tool-call counts remain unavailable. Input/output
 UTF-8 bytes and wall-clock time are recorded only as observable proxies.
+
+## CAL-005 — two-phase cross-application transfer session
+
+One opaque Luna session per arm reviewed BI and document examples, then answered
+the held-out workflow task. In phase two every session received an identical
+re-evaluation instruction; only the ad-hoc arm received the 363-byte workflow
+schema guide. The same model context was preserved across both phases.
+
+| Arm                  | Initial score | Final score | Added adaptation | Total external input |
+| -------------------- | ------------: | ----------: | ---------------: | -------------------: |
+| DOM/AX               |        0.5000 |      0.5000 |          0 bytes |          3,744 bytes |
+| ad-hoc semantic JSON |        1.0000 |      1.0000 |        363 bytes |          5,540 bytes |
+| UGP                  |        1.0000 |      1.0000 |          0 bytes |          7,321 bytes |
+
+The ad-hoc arm correctly inferred the held-out application's meaningful field
+names before seeing its application-specific guide. The guide caused no score
+improvement. UGP also transferred perfectly, but its bundles produced the
+largest total input.
+
+Decision: this task cannot test H2b and is not eligible for inferential
+collection. Deliberately making ad-hoc fields opaque would create an artificial
+UGP advantage, so that manipulation is rejected. The next standardization test
+will measure reusable consumer integration: additional adapter code, repairs,
+and hidden-test success when a new application schema is introduced. The next
+model experiment in collection order is the RQ1 coding-agent non-inferiority
+calibration.

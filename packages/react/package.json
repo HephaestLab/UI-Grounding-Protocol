@@ -23,6 +23,7 @@
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
+    "@ui-grounding/authoring": "workspace:^",
     "@ui-grounding/core": "workspace:^",
     "@ui-grounding/dom": "workspace:^",
     "@ui-grounding/protocol": "workspace:^"

@@ -1,0 +1,213 @@
+{
+  "schemaVersion": "0.3.0",
+  "taskId": "fixture:bi-kpi-qa:001",
+  "benchmarkId": "fixture-only",
+  "domain": "business-intelligence",
+  "taskFamily": "pointed-dashboard-qa",
+  "instruction": "Which business metric does the highlighted tile represent? Return its business label only.",
+  "step": 1,
+  "maxSteps": 1,
+  "allowedActions": ["answer"],
+  "publicHistory": [],
+  "sourceObservation": {
+    "factBundleDigest": "b271510cebc1de35208bfe40ca5ab8cc3ce3e04035277667d72752bdbc808779",
+    "factKeys": [
+      "entity:metric.net_revenue",
+      "label:Net Revenue",
+      "period:FY2026-Q2",
+      "value:4200000 USD"
+    ],
+    "channels": {
+      "vision-only": {
+        "factKeys": [
+          "entity:metric.net_revenue",
+          "label:Net Revenue",
+          "period:FY2026-Q2",
+          "value:4200000 USD"
+        ],
+        "generatedBy": "fixture-renderer-v1",
+        "representation": {
+          "kind": "screenshot-selection",
+          "imagePath": "fixtures/assets/bi-kpi-screen.svg",
+          "viewport": { "width": 800, "height": 450 },
+          "selection": {
+            "kind": "box",
+            "x": 88,
+            "y": 118,
+            "width": 300,
+            "height": 174
+          }
+        }
+      },
+      "html-ax": {
+        "factKeys": [
+          "entity:metric.net_revenue",
+          "label:Net Revenue",
+          "period:FY2026-Q2",
+          "value:4200000 USD"
+        ],
+        "generatedBy": "fixture-dom-serializer-v1",
+        "representation": {
+          "kind": "html-ax-subtree",
+          "selectionAnchor": "node-17",
+          "subtree": "region 'Executive overview' > group [selected] > text 'Net Revenue' > text '$4.2M' > text 'FY2026 Q2'",
+          "attributes": { "role": "group", "dataMetric": "metric.net_revenue" }
+        }
+      },
+      "tree-of-lens": {
+        "factKeys": [
+          "entity:metric.net_revenue",
+          "label:Net Revenue",
+          "period:FY2026-Q2",
+          "value:4200000 USD"
+        ],
+        "generatedBy": "tol-adapter-fixture-v1",
+        "representation": {
+          "kind": "tree-of-lens-adaptation",
+          "fidelity": "fixed-actor-adaptation",
+          "lenses": [
+            { "level": "screen", "content": "Executive overview dashboard" },
+            {
+              "level": "region",
+              "content": "Selected KPI card in the top summary row"
+            },
+            {
+              "level": "local",
+              "content": "Net Revenue; $4.2M; FY2026 Q2; metric.net_revenue"
+            }
+          ]
+        }
+      },
+      "iai-p4": {
+        "factKeys": [
+          "entity:metric.net_revenue",
+          "label:Net Revenue",
+          "period:FY2026-Q2",
+          "value:4200000 USD"
+        ],
+        "generatedBy": "iai-p4-operationalization-fixture-v1",
+        "representation": {
+          "kind": "interaction-augmented-instruction-p4",
+          "fidelity": "pre-registered-operationalization",
+          "interaction": {
+            "gesture": "box-select",
+            "selectedRegion": "top summary KPI card"
+          },
+          "referent": {
+            "type": "business.metric",
+            "id": "metric.net_revenue",
+            "label": "Net Revenue"
+          },
+          "state": { "value": 4200000, "unit": "USD", "period": "FY2026-Q2" }
+        }
+      },
+      "rag-context": {
+        "factKeys": [
+          "entity:metric.net_revenue",
+          "label:Net Revenue",
+          "period:FY2026-Q2",
+          "value:4200000 USD"
+        ],
+        "generatedBy": "rag-adapter-fixture-v1",
+        "representation": {
+          "kind": "retrieved-context",
+          "retrievalQuery": "selected dashboard KPI",
+          "passages": [
+            {
+              "rank": 1,
+              "text": "metric.net_revenue is labeled Net Revenue. The selected FY2026-Q2 value is 4200000 USD."
+            }
+          ]
+        }
+      },
+      "mcp-resource": {
+        "factKeys": [
+          "entity:metric.net_revenue",
+          "label:Net Revenue",
+          "period:FY2026-Q2",
+          "value:4200000 USD"
+        ],
+        "generatedBy": "mcp-resource-adapter-fixture-v1",
+        "representation": {
+          "kind": "mcp-resource-read-only",
+          "toolsAvailable": false,
+          "resource": {
+            "uri": "ui://dashboard/executive-overview/selection",
+            "mimeType": "application/json",
+            "contents": {
+              "entity": "metric.net_revenue",
+              "label": "Net Revenue",
+              "value": 4200000,
+              "unit": "USD",
+              "period": "FY2026-Q2"
+            }
+          }
+        }
+      },
+      "nlweb-context": {
+        "factKeys": [
+          "entity:metric.net_revenue",
+          "label:Net Revenue",
+          "period:FY2026-Q2",
+          "value:4200000 USD"
+        ],
+        "generatedBy": "nlweb-adapter-fixture-v1",
+        "representation": {
+          "kind": "nlweb-read-only-response",
+          "query": "What is selected?",
+          "items": [
+            {
+              "type": "business.metric",
+              "identifier": "metric.net_revenue",
+              "name": "Net Revenue",
+              "value": { "number": 4200000, "unit": "USD" },
+              "period": "FY2026-Q2"
+            }
+          ]
+        }
+      },
+      "ugp": {
+        "factKeys": [
+          "entity:metric.net_revenue",
+          "label:Net Revenue",
+          "period:FY2026-Q2",
+          "value:4200000 USD"
+        ],
+        "generatedBy": "ugp-v0.2-fixture",
+        "representation": {
+          "kind": "ugp-capsule",
+          "capsule": {
+            "v": "0.2-draft",
+            "id": "metric.net_revenue",
+            "at": {
+              "surface": "dashboard.executive-overview",
+              "revision": "fixture-1"
+            },
+            "description": {
+              "profile": "bi.metric-observation",
+              "summary": "The selected tile is the Net Revenue business metric, showing 4.2 million USD for FY2026 Q2.",
+              "frame": {
+                "type": "bi.metric-observation",
+                "subject": {
+                  "kind": "entity",
+                  "ref": "metric.net_revenue",
+                  "type": "bi.metric",
+                  "label": "Net Revenue"
+                },
+                "roles": {
+                  "value": {
+                    "kind": "quantity",
+                    "value": 4200000,
+                    "unit": "USD"
+                  },
+                  "period": "FY2026-Q2"
+                }
+              }
+            },
+            "can": ["bi.metric.explain", "bi.metric.drill-down"]
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,188 @@
+[
+  {
+    "profileId": "profile:bi",
+    "version": "1",
+    "title": "Business intelligence",
+    "frames": [
+      {
+        "type": "bi.observation",
+        "title": "Observation",
+        "description": "An application-owned metric observation under a dimensional scope.",
+        "roles": {
+          "metric": {
+            "description": "Canonical metric",
+            "valueKinds": ["string", "entity"]
+          },
+          "value": {
+            "description": "Observed value",
+            "valueKinds": ["number", "quantity"]
+          },
+          "unit": { "description": "Value unit", "valueKinds": ["string"] },
+          "scope.region": {
+            "description": "Region scope",
+            "valueKinds": ["string", "entity"]
+          },
+          "scope.period": {
+            "description": "Period scope",
+            "valueKinds": ["string", "interval"]
+          },
+          "basis": {
+            "description": "Calculation or query basis",
+            "valueKinds": ["string", "entity"]
+          }
+        },
+        "requiredRoles": [
+          "metric",
+          "value",
+          "unit",
+          "scope.region",
+          "scope.period",
+          "basis"
+        ],
+        "summaryTemplate": "{subject}: {value} {unit} for {scope.region} in {scope.period}.",
+        "capabilities": ["bi.explain-observation"]
+      }
+    ]
+  },
+  {
+    "profileId": "profile:document",
+    "version": "1",
+    "title": "Documents",
+    "frames": [
+      {
+        "type": "document.normative-text",
+        "title": "Normative text",
+        "description": "A document clause or section with an application-owned normative effect.",
+        "roles": {
+          "effect": {
+            "description": "Normative effect",
+            "valueKinds": ["string"]
+          },
+          "parties": {
+            "description": "Affected parties",
+            "valueKinds": ["collection"]
+          },
+          "noticePeriod": {
+            "description": "Notice-period quantity",
+            "valueKinds": ["number", "quantity"]
+          },
+          "noticeUnit": {
+            "description": "Notice unit",
+            "valueKinds": ["string"]
+          },
+          "retention": {
+            "description": "Retention quantity",
+            "valueKinds": ["number", "quantity"]
+          },
+          "retentionUnit": {
+            "description": "Retention unit",
+            "valueKinds": ["string"]
+          },
+          "appliesTo": {
+            "description": "Affected entity",
+            "valueKinds": ["string", "entity"]
+          },
+          "basis": {
+            "description": "Authoritative document revision",
+            "valueKinds": ["string", "entity"]
+          }
+        },
+        "requiredRoles": ["effect", "basis"],
+        "summaryTemplate": "{subject}: {effect} Basis {basis}.",
+        "capabilities": [
+          "document.open-source-clause",
+          "document.open-policy-source"
+        ]
+      }
+    ]
+  },
+  {
+    "profileId": "profile:workflow",
+    "version": "1",
+    "title": "Workflows",
+    "frames": [
+      {
+        "type": "workflow.stateful-step",
+        "title": "Stateful step",
+        "description": "A workflow step with current state, ownership, and constraints.",
+        "roles": {
+          "state": {
+            "description": "Current workflow state",
+            "valueKinds": ["string"],
+            "vocabulary": ["waiting", "approved", "blocked"]
+          },
+          "assignee": {
+            "description": "Assigned actor",
+            "valueKinds": ["string", "entity"]
+          },
+          "prerequisite": {
+            "description": "Preceding step",
+            "valueKinds": ["string", "entity"]
+          },
+          "prerequisiteState": {
+            "description": "Preceding-step state",
+            "valueKinds": ["string"]
+          },
+          "blocker": {
+            "description": "Blocking object",
+            "valueKinds": ["string", "entity"]
+          },
+          "basis": {
+            "description": "Workflow definition",
+            "valueKinds": ["string", "entity"]
+          }
+        },
+        "requiredRoles": ["state", "assignee", "basis"],
+        "summaryTemplate": "{subject} is {state}, assigned to {assignee}.",
+        "capabilities": ["workflow.open-request", "workflow.open-incident"]
+      }
+    ]
+  },
+  {
+    "profileId": "profile:commerce",
+    "version": "1",
+    "title": "Commerce operations",
+    "frames": [
+      {
+        "type": "commerce.record",
+        "title": "Commerce record",
+        "description": "An operational commerce entity with current state and monetary context.",
+        "roles": {
+          "state": {
+            "description": "Current record state",
+            "valueKinds": ["string"]
+          },
+          "amount": {
+            "description": "Order amount",
+            "valueKinds": ["number", "quantity"]
+          },
+          "refundAmount": {
+            "description": "Refund amount",
+            "valueKinds": ["number", "quantity"]
+          },
+          "currency": { "description": "Currency", "valueKinds": ["string"] },
+          "customer": {
+            "description": "Customer entity",
+            "valueKinds": ["string", "entity"]
+          },
+          "riskTier": { "description": "Risk tier", "valueKinds": ["string"] },
+          "originalOrder": {
+            "description": "Original order",
+            "valueKinds": ["string", "entity"]
+          },
+          "reason": {
+            "description": "Operational reason",
+            "valueKinds": ["string"]
+          },
+          "basis": {
+            "description": "Ledger revision",
+            "valueKinds": ["string", "entity"]
+          }
+        },
+        "requiredRoles": ["state", "currency", "basis"],
+        "summaryTemplate": "{subject} is {state}. Basis {basis}.",
+        "capabilities": ["commerce.inspect-order", "commerce.inspect-return"]
+      }
+    ]
+  }
+]

@@ -1,4 +1,8 @@
 import {
+  SemanticDescriptionRegistry,
+  type ProfileDefinition,
+} from '@ui-grounding/authoring';
+import {
   ContextRegistry,
   SemanticRegistry,
   type RegistrySnapshot,
@@ -17,6 +21,7 @@ import {
 export interface GroundingRuntime {
   registry: SemanticRegistry;
   contextRegistry: ContextRegistry;
+  descriptionRegistry: SemanticDescriptionRegistry;
   domRegistry?: DomAnchorRegistry;
   hydrated: boolean;
 }
@@ -26,6 +31,7 @@ const RuntimeContext = createContext<GroundingRuntime | undefined>(undefined);
 export interface GroundingSurfaceProviderProps {
   surfaceId: string;
   surfaceRevision: string;
+  profiles?: readonly ProfileDefinition[];
   children?: ReactNode;
 }
 
@@ -40,6 +46,7 @@ export function GroundingSurfaceProvider(
     return {
       registry,
       contextRegistry: new ContextRegistry(),
+      descriptionRegistry: new SemanticDescriptionRegistry(props.profiles),
       ...(typeof window === 'undefined'
         ? {}
         : { domRegistry: new DomAnchorRegistry({ registry }) }),
@@ -57,6 +64,7 @@ export function GroundingSurfaceProvider(
       queueMicrotask(() => {
         if (lifecycle.current !== generation) return;
         runtime.domRegistry?.dispose();
+        runtime.descriptionRegistry.dispose();
         runtime.contextRegistry.dispose();
         runtime.registry.dispose();
       });

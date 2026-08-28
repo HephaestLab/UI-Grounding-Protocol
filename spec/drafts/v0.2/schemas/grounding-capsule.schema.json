@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ui-grounding.org/schema/v0.2-draft/grounding-capsule.schema.json",
+  "title": "GroundingCapsule",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["v", "id", "at", "description", "can"],
+  "properties": {
+    "v": { "const": "0.2-draft" },
+    "id": { "$ref": "common.schema.json#/$defs/identifier" },
+    "at": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["surface", "revision"],
+      "properties": {
+        "surface": { "$ref": "common.schema.json#/$defs/identifier" },
+        "revision": { "type": "string", "minLength": 1, "maxLength": 128 }
+      }
+    },
+    "description": {
+      "oneOf": [{ "$ref": "#/$defs/description" }, { "type": "null" }]
+    },
+    "can": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "$ref": "common.schema.json#/$defs/identifier" }
+    },
+    "problem": { "$ref": "#/$defs/problem" }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "description": { "type": "null" } },
+        "required": ["description"]
+      },
+      "then": { "required": ["problem"] }
+    }
+  ],
+  "$defs": {
+    "description": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["profile", "summary", "frame"],
+      "properties": {
+        "profile": { "$ref": "common.schema.json#/$defs/identifier" },
+        "summary": { "type": "string", "minLength": 1, "maxLength": 4096 },
+        "frame": { "$ref": "semantic-frame.schema.json" }
+      }
+    },
+    "problem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code", "message", "retryable"],
+      "properties": {
+        "code": {
+          "enum": [
+            "ambiguous",
+            "stale",
+            "no-referent",
+            "no-description",
+            "invalid-description",
+            "unauthorized"
+          ]
+        },
+        "message": { "type": "string", "minLength": 1, "maxLength": 2048 },
+        "retryable": { "type": "boolean" }
+      }
+    }
+  }
+}

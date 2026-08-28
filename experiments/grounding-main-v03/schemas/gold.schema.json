@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ui-grounding.org/experiments/v0.3/gold.schema.json",
+  "title": "External deterministic answer key",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "taskId", "scorer"],
+  "properties": {
+    "schemaVersion": { "const": "0.3.0" },
+    "taskId": { "type": "string" },
+    "scorer": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "accepted"],
+          "properties": {
+            "kind": { "const": "normalized-exact-answer" },
+            "accepted": {
+              "type": "array",
+              "minItems": 1,
+              "items": { "type": "string" }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "expected"],
+          "properties": {
+            "kind": { "const": "exact-action" },
+            "expected": { "type": "object" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "command"],
+          "properties": {
+            "kind": { "const": "external-official-scorer" },
+            "command": {
+              "type": "array",
+              "minItems": 1,
+              "items": { "type": "string" }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

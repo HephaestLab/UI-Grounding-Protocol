@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ui-grounding.org/schema/v0.2-draft/profile-definition.schema.json",
+  "title": "ProfileDefinition",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["profileId", "version", "title", "frames"],
+  "properties": {
+    "profileId": { "$ref": "common.schema.json#/$defs/identifier" },
+    "version": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "title": { "type": "string", "minLength": 1, "maxLength": 512 },
+    "description": { "type": "string", "minLength": 1, "maxLength": 4096 },
+    "frames": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/frameDefinition" }
+    }
+  },
+  "$defs": {
+    "frameDefinition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "title",
+        "description",
+        "roles",
+        "requiredRoles",
+        "summaryTemplate"
+      ],
+      "properties": {
+        "type": { "$ref": "common.schema.json#/$defs/semanticType" },
+        "title": { "type": "string", "minLength": 1, "maxLength": 512 },
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096
+        },
+        "roles": {
+          "type": "object",
+          "minProperties": 1,
+          "propertyNames": { "$ref": "common.schema.json#/$defs/identifier" },
+          "additionalProperties": { "$ref": "#/$defs/roleDefinition" }
+        },
+        "requiredRoles": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "common.schema.json#/$defs/identifier" }
+        },
+        "summaryTemplate": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "capabilities": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "common.schema.json#/$defs/identifier" }
+        }
+      }
+    },
+    "roleDefinition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["description", "valueKinds"],
+      "properties": {
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "valueKinds": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "string",
+              "number",
+              "boolean",
+              "null",
+              "entity",
+              "quantity",
+              "instant",
+              "interval",
+              "collection",
+              "frame"
+            ]
+          }
+        },
+        "vocabulary": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "maxLength": 4096 }
+        }
+      }
+    }
+  }
+}

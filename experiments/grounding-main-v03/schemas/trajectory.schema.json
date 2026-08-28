@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ui-grounding.org/experiments/v0.3/trajectory.schema.json",
+  "title": "Sealed actor trajectory",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "episodeId",
+    "condition",
+    "benchmarkId",
+    "domain",
+    "taskFamily",
+    "taskOpaqueId",
+    "requestDigest",
+    "responseDigest",
+    "response",
+    "validation",
+    "usage",
+    "sealedAt"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "0.3.0" },
+    "episodeId": { "type": "string" },
+    "condition": { "type": "object" },
+    "benchmarkId": { "type": "string" },
+    "domain": { "type": "string" },
+    "taskFamily": { "type": "string" },
+    "taskOpaqueId": { "type": "string" },
+    "requestDigest": { "type": "string" },
+    "responseDigest": { "type": "string" },
+    "response": {},
+    "validation": {
+      "type": "object",
+      "required": ["valid", "errors"],
+      "properties": {
+        "valid": { "type": "boolean" },
+        "errors": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "usage": {
+      "type": "object",
+      "required": [
+        "inputBytes",
+        "outputBytes",
+        "wallTimeMs",
+        "inputTokens",
+        "outputTokens"
+      ],
+      "properties": {
+        "inputBytes": { "type": "integer", "minimum": 0 },
+        "outputBytes": { "type": "integer", "minimum": 0 },
+        "wallTimeMs": { "type": ["integer", "null"], "minimum": 0 },
+        "inputTokens": { "type": ["integer", "null"], "minimum": 0 },
+        "outputTokens": { "type": ["integer", "null"], "minimum": 0 }
+      }
+    },
+    "sealedAt": { "type": "string", "format": "date-time" }
+  }
+}

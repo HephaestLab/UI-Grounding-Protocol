@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ui-grounding.org/experiments/v0.3/task-envelope.schema.json",
+  "title": "Grounding experiment source task",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "taskId",
+    "benchmarkId",
+    "domain",
+    "taskFamily",
+    "instruction",
+    "step",
+    "maxSteps",
+    "allowedActions",
+    "sourceObservation"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "0.3.0" },
+    "taskId": { "type": "string", "minLength": 1 },
+    "benchmarkId": { "type": "string", "minLength": 1 },
+    "domain": { "type": "string", "minLength": 1 },
+    "taskFamily": { "type": "string", "minLength": 1 },
+    "instruction": { "type": "string", "minLength": 1 },
+    "step": { "type": "integer", "minimum": 1 },
+    "maxSteps": { "type": "integer", "minimum": 1 },
+    "allowedActions": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "enum": ["answer", "click", "type", "scroll", "select", "stop"]
+      }
+    },
+    "publicHistory": {
+      "type": "array",
+      "items": { "type": "object" },
+      "default": []
+    },
+    "sourceObservation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["factBundleDigest", "factKeys", "channels"],
+      "properties": {
+        "factBundleDigest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "factKeys": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "channels": {
+          "type": "object",
+          "minProperties": 1,
+          "propertyNames": {
+            "enum": [
+              "vision-only",
+              "html-ax",
+              "tree-of-lens",
+              "iai-p4",
+              "rag-context",
+              "mcp-resource",
+              "nlweb-context",
+              "ugp"
+            ]
+          },
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["factKeys", "generatedBy", "representation"],
+            "properties": {
+              "factKeys": {
+                "type": "array",
+                "uniqueItems": true,
+                "items": { "type": "string", "minLength": 1 }
+              },
+              "generatedBy": { "type": "string", "minLength": 1 },
+              "representation": { "type": "object" }
+            }
+          }
+        }
+      }
+    }
+  }
+}

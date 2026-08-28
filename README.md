@@ -1,267 +1,242 @@
 # UI Grounding Protocol
 
-> Agent-ready frontends by construction. Shared application meaning for people
-> and AI.
+> Preserve application meaning from frontend authoring to human selection and
+> independent-agent use.
 
-![UGP architecture: embed semantics at build time and ground selections to application truth at runtime](assets/diagrams/ugp-framework-overview-en.png)
+![UGP architecture: author semantics in a sidecar, link visible components, and ground selections to application truth](assets/diagrams/ugp-framework-overview-en.png)
 
-UI Grounding Protocol (UGP) is a testable application-level semantic contract.
-It connects visible interface objects to authoritative business referents,
-evidence, scope, and permission-filtered context so that a frontend remains
-fully usable by people while becoming reliably understandable to independent AI
-agents.
+UI Grounding Protocol (UGP) is a vendor-neutral contract between visible UI and
+application-owned meaning. It lets a person point at a card, chart mark, clause,
+workflow node, or record and gives an independent agent a compact, structured
+description of the exact business referent.
 
-The research thesis behind UGP is:
-
-> Agent-era frontend development should preserve application semantics as a
-> first-class, testable contract, enabling people and AI to establish reliable
-> shared reference through the interface.
-
-## Why application semantics
-
-Pixels, DOM, and accessibility trees expose valuable presentation and control
-semantics. They can tell an agent that something is a chart, row, button, or
-selected item. They usually cannot authoritatively answer:
-
-- Which business entity does this visible object represent?
-- Which filters, time range, aggregation, and permission scope produced it?
-- Is the evidence current, ambiguous, derived, or stale?
-- When a person says “explain this” or “compare these,” what exactly did they
-  refer to?
-
-UGP complements control-level semantics with application-level meaning:
-
-| Control-level semantics | Application-level semantics                     |
-| ----------------------- | ----------------------------------------------- |
-| role, name, state       | entity type, identity, relation, scope          |
-| “This is a button”      | “This approves order 123”                       |
-| “This bar is selected”  | “This represents confirmed Q2 revenue for East” |
-| supports interaction    | supports shared human–AI reference              |
-
-We call this **application-level semantic accessibility**: exposing the minimum
-authorized business meaning that an independent AI needs to understand what a
-person is seeing and referring to. UGP does not copy backend code, SQL, or
-private records into the page. It provides a **task-sufficient semantic
-projection** that is structured, versioned, permission-filtered, and expandable
-on demand.
-
-## The semantic round trip
-
-UGP is designed to preserve application meaning across the complete lifecycle,
-not to annotate a finished interface as an afterthought:
-
-```text
-Business intent
-      ↓
-AI-assisted frontend development
-      ↓  preserves a testable semantic contract
-Visual UI  ←→  task-sufficient semantic projection
-      ↓                         ↓
-Human selection          independent AI understanding
-      └──────── reliable shared grounding ────────┘
-```
-
-The coding agent that builds an interface and the assistant that later reads it
-need not be the same model. A successful semantic round trip means domain
-identity and scope survive requirement, generation, rendering, selection, and AI
-interpretation.
+UGP is not a semantic component library and does not ask every component to
+contain prose. Profiles and mappings live in a sidecar; a view component keeps
+only a typed lifecycle link. The same Core grammar supports BI, documents,
+workflows, commerce, and new domains without adding domain-specific top-level
+fields.
 
 ## Research focus
 
-The project deliberately focuses on two scientific questions.
+UGP concentrates on two questions.
 
-### RQ1 — Semantic preservation by construction
+### RQ1: semantics-preserving frontend authoring
 
-Can AI coding agents generate and modify UGP-enabled frontends without reducing
-normal frontend quality or productivity?
+Can an AI coding agent build a new frontend or minimally retrofit an existing
+one while preserving application meaning, functional quality, visual quality,
+accessibility, and development efficiency?
 
-The study evaluates functional and visual non-inferiority, first-pass success,
-repair effort, runtime overhead, and semantic-contract correctness. The goal is
-not merely to show that agents can add annotations; it is to test whether
-application meaning can remain correct as the interface evolves.
+The repository provides two authoring Skills:
 
-### RQ2 — Semantic sufficiency and shared grounding
+- `ugp-build` for greenfield work;
+- `ugp-retrofit` for minimum-change upgrades of existing applications.
 
-Do semantics-preserving frontends improve cross-application AI understanding and
-human–AI collaboration?
+Both produce the same sidecar layout and protocol output. The retrofit Skill
+adds baseline capture, source tracing, strict diff control, and an explicit
+semantic-gap report.
 
-This question requires two complementary forms of evidence:
+### RQ2: independent-agent semantic transfer
 
-- **Independent-agent benchmark:** held-out applications, business-referent
-  identification, safe-action decisions, and application-specific adaptation
-  cost.
-- **Human–AI study:** wrong-object rate, clarification and correction count,
-  task time, and users' ability to establish confidence that the agent is acting
-  on the intended business object.
+Does a standardized UGP description improve an independent agent's ability to
+recover the selected business referent, understand its state and scope, and
+choose a compatible capability across applications and domains?
 
-The strong semantic baseline is not an information-poor DOM. UGP is compared
-with application-specific ad-hoc JSON containing the same business facts. This
-tests the value of a shared contract rather than the trivial benefit of giving
-one condition more information.
+The confirmatory design fixes a minimal actor loop and compares eight grounding
+inputs across two actor models: Vision Only, HTML/AX, a labeled Tree-of-Lens
+adaptation, an IAI-P4 operationalization, RAG, read-only MCP Resource, NLWeb
+context, and UGP. Equal-fact application-specific prose remains an ablation, not
+a claimed published baseline. Published systems that require their own
+checkpoint or agent stack are reproduced in a separate native-systems table.
 
-## Human–AI shared grounding
+Human-AI shared grounding is a later, separate participant study. Model-only
+benchmarks cannot establish human trust, workload, or collaboration quality.
 
-Consider a person pointing at a revenue card and asking, “Why did this fall?”
-The visible label alone may not reveal whether the metric is confirmed revenue,
-forecast revenue, or a permission-filtered aggregate. A UGP resolution can
-identify the metric, its current scope and revision, the evidence behind the
-selection, and authorized references for further explanation.
-
-The protocol does not perform the explanation or execute an action. It creates
-the reliable common reference that makes the subsequent collaboration safer:
+## The semantic round trip
 
 ```text
-person points at UI
-  → UGP resolves business referent and evidence
-  → host materializes authorized context
-  → assistant explains its interpretation
-  → person can confirm, correct, or continue
+application data and business rules
+              |
+              v
+Profile + typed sidecar Binding
+              |
+              v
+visible component link -----> selection resolver
+                                  |
+                                  v
+                        structured GroundingCapsule
+                                  |
+                    +-------------+-------------+
+                    |                           |
+             optional Inspector          host application
+             point/region/text        model, tools, policy, audit
 ```
 
-## What UGP standardizes
+The existing v0.1 runtime resolves UI evidence into authoritative referents and
+keeps diagnostic geometry, ranking evidence, ambiguity, and staleness. The v0.2
+research candidate combines that result with an application Binding to produce a
+smaller agent-facing `GroundingCapsule`.
 
-UGP resolves clicks, region selections, text ranges, charts, canvas objects, and
-virtualized UI into:
+## Minimal general grammar
 
-- stable application-owned referents;
-- authority and grounding evidence;
-- ambiguity and staleness signals;
-- minimal, permission-filtered context;
-- references to external capabilities without granting execution authority.
+UGP v0.2 uses four concepts:
+
+- `SemanticValue`: scalar, quantity, entity, instant, interval, collection, or
+  nested frame;
+- `SemanticFrame`: a typed statement with one canonical subject and named roles;
+- `ProfileDefinition`: domain vocabulary, role constraints, deterministic
+  summary template, and compatible capabilities;
+- `GroundingCapsule`: surface revision, structured description, capability
+  identifiers, and an optional grounding problem.
+
+Domain meaning belongs in Profile roles. BI can define `metric`, `value`, and
+`scope`; a contract Profile can define `effect` and `noticePeriod`; a workflow
+Profile can define `state`, `assignee`, and `prerequisite`. None changes Core.
+
+```json
+{
+  "v": "0.2-draft",
+  "id": "capsule:grounding:order-42",
+  "at": {
+    "surface": "surface:orders",
+    "revision": "surface-r1"
+  },
+  "description": {
+    "profile": "profile:commerce",
+    "summary": "Order 42 is pending-payment with total 8431 USD.",
+    "frame": {
+      "type": "commerce.order",
+      "subject": {
+        "kind": "entity",
+        "ref": "orders/42",
+        "label": "Order 42"
+      },
+      "roles": {
+        "state": "pending-payment",
+        "total": {
+          "kind": "quantity",
+          "value": 8431,
+          "unit": "USD"
+        }
+      }
+    }
+  },
+  "can": ["commerce.inspect-order"]
+}
+```
+
+`description.frame` is normative. `description.summary` is generated from the
+validated frame and Profile template; it is never a second independently
+maintained description. A pointer to a query, API, or resource may expand the
+meaning, but cannot replace the immediate structured description.
+
+## Authoring model
+
+Greenfield and retrofit workflows create the same responsibilities:
 
 ```text
-Human selection          UGP resolution             Application truth
-click / region / text  ----------------------->  referent + evidence + context
+src/ugp/
+  manifest.ts
+  profiles/
+  bindings/
+  capabilities/
+  surfaces/
+  tests/
 ```
 
-## What UGP is not
+A Binding maps real application data to stable node identity, a canonical entity
+subject, a validated frame, revision, and capability identifiers.
 
-UGP is not an agent runtime, capability registry, browser automation framework,
-action executor, or replacement for MCP/WebMCP. It does not replace ARIA or the
-accessibility tree; it builds on control-level evidence and adds
-application-owned business meaning.
+```tsx
+function OrderRow({ order }: { order: Order }) {
+  const ugp = useUgpLink(orderBinding, order);
+  return <button ref={ugp.ref}>Order {order.id}</button>;
+}
+```
 
-Agent Surface and capability systems describe what an agent can do. UGP
-identifies what the person referred to and what that visible object means. UGP
-never executes the action.
+The component does not contain Profile prose, duplicated business JSON, API
+routes, credentials, authorization, or model logic. If an authoritative fact
+cannot be traced from the domain model, API contract, validated state, or typed
+props, the authoring workflow records a semantic gap instead of guessing from
+rendered text.
+
+See the [v0.2 authoring contract](spec/drafts/v0.2/AUTHORING.md) and the
+repository Skills in [`skills/`](skills/).
+
+## Optional Inspector and host boundary
+
+`@ui-grounding/inspector` is a reference consumer. Its floating UI supports
+point, region, and text selection, displays the structured description and raw
+Capsule, exposes ambiguity/stale/missing feedback, and hands the result to the
+host through `onGrounding`.
+
+The Inspector deliberately has no model loop, chat state, API credentials,
+arbitrary fetch logic, business authorization, or action execution. `can`
+contains discoverable capability identifiers, not permission. The host resolves
+the current adapter and schema, validates arguments, re-authorizes the user,
+confirms when required, executes, and owns the audit trail.
 
 ## Project status
 
-UGP currently has two connected tracks:
+| Track                               | Status                                                                                                       |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| v0.1 grounding protocol and runtime | M5 acceptance passed; accepted baseline                                                                      |
+| v0.2 semantic authoring layer       | research draft implemented in schemas, generated types, authoring runtime, React link, and Inspector         |
+| authoring Skills                    | `ugp-build` and `ugp-retrofit` created and structurally validated                                            |
+| automated research                  | RQ1 preparation complete; v0.3 grounding pilot harness passes, external benchmark and isolation gates remain |
+| human-participant research          | not started                                                                                                  |
 
-| Track                                 | Status                                                                                 |
-| ------------------------------------- | -------------------------------------------------------------------------------------- |
-| Protocol and reference implementation | v0.1 M5 acceptance **PASS**; M6 Alpha release work remains                             |
-| CHI-oriented research                 | experiment infrastructure and Luna calibration complete; inferential Pilot not started |
+The v0.2 draft is additive and does not silently change the accepted v0.1 wire
+format. See the [research and readiness plan](RESEARCH_PLAN_V0.2.md),
+[draft specification](spec/drafts/v0.2/README.md), and
+[v0.2 experiment workspace](experiments/semantic-authoring-v02/README.md). The
+frozen model-only grounding matrix, benchmark pins, actor protocol, result
+tables, and live readiness gates are in the
+[v0.3 grounding experiment](experiments/grounding-main-v03/README.md).
+Historical Luna runs remain non-inferential calibration in
+[`experiments/chi-pilot/`](experiments/chi-pilot/).
 
-The v0.1 protocol, deterministic core, browser bindings, reference overlay, and
-BI acceptance application are implemented. The wire format and public runtime
-APIs remain pre-alpha until the release candidate is signed. See the
-[M5 acceptance evidence](acceptance/0aebc56/summary.md).
+## Packages
 
-The research calibration currently shows that application-owned semantics can
-recover information missing from DOM/AX evidence, while equal-fact ad-hoc JSON
-and UGP perform similarly in single applications. It does **not** yet establish
-that UGP improves human–AI collaboration or outperforms ad-hoc schemas. The next
-stage measures shared-contract reuse across held-out applications, followed by a
-separately reviewed human study. See the
-[CHI Pilot workspace](experiments/chi-pilot/README.md) and
-[calibration record](experiments/chi-pilot/calibration-log.md).
-
-## Quick Start
-
-Requires Node.js 22.13 or newer. Once the Alpha packages are published:
-
-```sh
-pnpm add @ui-grounding/core @ui-grounding/dom @ui-grounding/protocol
-```
-
-Register an application-owned semantic node and its visible DOM anchor, then
-resolve a user selection against a stable Registry snapshot:
-
-```ts
-import { resolveSelection, SemanticRegistry } from '@ui-grounding/core';
-import { DomAnchorRegistry } from '@ui-grounding/dom';
-
-const registry = new SemanticRegistry({
-  surfaceId: 'surface:orders',
-  surfaceRevision: '1',
-});
-const dom = new DomAnchorRegistry({ registry });
-const element = document.querySelector('[data-order-id="42"]')!;
-
-const semanticNode = registry.registerNode({
-  nodeId: 'order:42',
-  type: 'com.example.order',
-  label: 'Order 42',
-  authority: 'authoritative',
-  entityRef: { namespace: 'orders', id: '42' },
-  anchorIds: [],
-});
-const anchor = dom.register(element, 'order:42');
-const rect = element.getBoundingClientRect();
-const geometry = {
-  kind: 'point' as const,
-  coordinateSpace: 'viewport' as const,
-  x: rect.left + rect.width / 2,
-  y: rect.top + rect.height / 2,
-};
-
-const grounding = resolveSelection(registry.getSnapshot(), {
-  selectionId: 'selection:order-42',
-  surfaceId: registry.surfaceId,
-  mode: 'point',
-  selectors: [{ type: 'UGPGeometrySelector', geometry }],
-  geometry,
-  surfaceRevision: registry.surfaceRevision,
-  createdAt: new Date().toISOString(),
-  source: 'human',
-});
-
-console.log(grounding.referents[0]?.entityRef); // orders / 42
-
-anchor.dispose();
-semanticNode.dispose();
-dom.dispose();
-registry.dispose();
-```
-
-Before the npm Alpha exists, `pnpm build && pnpm pack:smoke` reproduces this in
-a completely clean temporary consumer using the locally packed tarballs. It also
-verifies ESM imports, TypeScript types, the React peer, tree shaking, and the
-explicit `@ui-grounding/overlay/styles.css` export.
-
-## Repository map
-
-- `spec/` — normative specification, terminology, and JSON Schemas
-- `adr/` — accepted architecture decisions
-- `packages/` — protocol, core, DOM, React, overlay, and testing packages
-- `examples/` — browser-based conformance and integration labs
-- `conformance/` — fixtures, runner, and reports
-- `tests/` — browser, end-to-end, performance, and security suites
-- `acceptance/` — release evidence and audit instructions
-- `experiments/` — CHI study design, task packets, scoring, and calibration
+- `@ui-grounding/protocol` — accepted v0.1 wire types and schemas;
+- `@ui-grounding/core` — deterministic registries and selection resolution;
+- `@ui-grounding/dom` — DOM anchors and visible geometry;
+- `@ui-grounding/react` — surface provider, node links, and `useUgpLink`;
+- `@ui-grounding/overlay` — point, region, text, and ambiguity UI primitives;
+- `@ui-grounding/authoring` — draft Profiles, Bindings, validation, and Capsule
+  compilation;
+- `@ui-grounding/inspector` — optional floating reference Inspector;
+- `@ui-grounding/testing` — test helpers;
+- conformance runner and browser acceptance applications.
 
 ## Development
 
-Requirements: Node.js 22.13 or newer and pnpm 11.19.
+Requires Node.js 22.13 or newer and pnpm 11.19.
 
 ```sh
 pnpm install --frozen-lockfile
 pnpm check
-pnpm build
 pnpm test:browser
-pnpm test:e2e
-pnpm test:performance
-pnpm test:security
+pnpm build
 pnpm pack:smoke
-pnpm experiment:validate
+pnpm experiment:v02:validate
+pnpm experiment:v02:preflight
+pnpm experiment:v03:validate
+pnpm experiment:v03:preflight
 ```
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) before opening a change. The executable
-implementation roadmap is in [DEVELOPMENT_PLAN.md](DEVELOPMENT_PLAN.md), and the
-research protocol is in
-[experiments/chi-pilot/preregistration.md](experiments/chi-pilot/preregistration.md).
+`pnpm pack:smoke` packs every public package and tests them in a clean consumer.
+The v0.2 preparation commands validate controlled-fact parity, frozen Capsule
+fields, Skills, 24 RQ1 starter-condition packets, RQ2 artifacts, 50
+deterministic prepare/reset cycles, and four retrofit browser baselines. They do
+not invoke an experimental model or convert calibration into evidence. The v0.3
+preflight additionally validates the 16-row/128-cell grounding table, official
+source pins, fresh actor packets, leakage checks, response sealing,
+deterministic scoring, and environment readiness. It allows pilot execution but
+keeps confirmatory execution closed until all external, annotation, license,
+calibration, and hard-isolation gates pass.
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) before opening a change. The accepted
+v0.1 roadmap remains in [DEVELOPMENT_PLAN.md](DEVELOPMENT_PLAN.md).
 
 ## License
 

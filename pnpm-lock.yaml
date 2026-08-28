@@ -152,6 +152,12 @@ importers:
         specifier: 'catalog:'
         version: 8.2.2(@types/node@26.4.0)(esbuild@0.28.2)(tsx@4.23.12)(yaml@2.9.0)
 
+  packages/authoring:
+    dependencies:
+      '@ui-grounding/protocol':
+        specifier: workspace:^
+        version: link:../protocol
+
   packages/core:
     dependencies:
       '@ui-grounding/protocol':
@@ -163,6 +169,21 @@ importers:
       '@ui-grounding/core':
         specifier: workspace:^
         version: link:../core
+      '@ui-grounding/protocol':
+        specifier: workspace:^
+        version: link:../protocol
+
+  packages/inspector:
+    dependencies:
+      '@ui-grounding/authoring':
+        specifier: workspace:^
+        version: link:../authoring
+      '@ui-grounding/core':
+        specifier: workspace:^
+        version: link:../core
+      '@ui-grounding/overlay':
+        specifier: workspace:^
+        version: link:../overlay
       '@ui-grounding/protocol':
         specifier: workspace:^
         version: link:../protocol
@@ -187,6 +208,9 @@ importers:
 
   packages/react:
     dependencies:
+      '@ui-grounding/authoring':
+        specifier: workspace:^
+        version: link:../authoring
       '@ui-grounding/core':
         specifier: workspace:^
         version: link:../core

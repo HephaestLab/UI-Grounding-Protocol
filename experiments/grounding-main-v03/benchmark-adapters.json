@@ -1,0 +1,105 @@
+{
+  "schemaVersion": "0.3.0",
+  "wireProtocol": "shared/BENCHMARK_ADAPTER_PROTOCOL.md",
+  "adapters": [
+    {
+      "benchmarkId": "screenpr-referent",
+      "sourceId": "screenpr",
+      "mode": "static-single-step",
+      "harnessContractReady": true,
+      "sourceIntegrationReady": false,
+      "deterministicScorer": "normalized exact referent/answer",
+      "remaining": [
+        "Materialize the public dataset",
+        "Reconstruct or independently validate the missing official evaluation path"
+      ]
+    },
+    {
+      "benchmarkId": "screenqa-visible",
+      "sourceId": "screenqa",
+      "mode": "static-single-step",
+      "harnessContractReady": true,
+      "sourceIntegrationReady": false,
+      "deterministicScorer": "official normalized QA matching",
+      "remaining": [
+        "Acquire the corresponding RICO pixels",
+        "Freeze the stratified negative-control sample"
+      ]
+    },
+    {
+      "benchmarkId": "dashboardqa-ref",
+      "sourceId": "dashboardqa",
+      "mode": "external-interactive-jsonl",
+      "harnessContractReady": true,
+      "sourceIntegrationReady": false,
+      "deterministicScorer": "official DashboardQA scorer plus strict-success projection",
+      "remaining": [
+        "Provision OSWorld/GCP environment",
+        "Create and audit referent annotations"
+      ]
+    },
+    {
+      "benchmarkId": "workarena-qa-ref",
+      "sourceId": "workarena",
+      "mode": "browsergym-jsonl",
+      "harnessContractReady": true,
+      "sourceIntegrationReady": false,
+      "deterministicScorer": "BrowserGym task validator plus strict-success projection",
+      "remaining": [
+        "Obtain gated instance access",
+        "Create and audit referent annotations"
+      ]
+    },
+    {
+      "benchmarkId": "webmall-qa-ref",
+      "sourceId": "webmall",
+      "mode": "browsergym-jsonl",
+      "harnessContractReady": true,
+      "sourceIntegrationReady": false,
+      "deterministicScorer": "WebMall task validator plus strict-success projection",
+      "remaining": [
+        "Start official shop services",
+        "Create and audit referent annotations"
+      ]
+    },
+    {
+      "benchmarkId": "workarena-plus-plus",
+      "sourceId": "workarena",
+      "mode": "browsergym-jsonl",
+      "harnessContractReady": true,
+      "sourceIntegrationReady": false,
+      "deterministicScorer": "official BrowserGym/WorkArena validator",
+      "remaining": [
+        "Obtain gated instance access",
+        "Provision ServiceNow instances",
+        "Run native smoke task"
+      ]
+    },
+    {
+      "benchmarkId": "webmall-action",
+      "sourceId": "webmall",
+      "mode": "browsergym-jsonl",
+      "harnessContractReady": true,
+      "sourceIntegrationReady": false,
+      "deterministicScorer": "official WebMall validator",
+      "remaining": [
+        "Install Python 3.11/3.12 under Linux/WSL",
+        "Start all Docker Compose services",
+        "Run native smoke task"
+      ]
+    },
+    {
+      "benchmarkId": "st-webagentbench-cup",
+      "sourceId": "st-webagentbench",
+      "mode": "browsergym-jsonl",
+      "harnessContractReady": true,
+      "sourceIntegrationReady": false,
+      "deterministicScorer": "official CR/CuP/pCuP/risk evaluator plus strict-success projection",
+      "remaining": [
+        "Deploy required WebArena and SuiteCRM services",
+        "Run native smoke task",
+        "Obtain a leaderboard signing key only for official submission"
+      ]
+    }
+  ]
+}

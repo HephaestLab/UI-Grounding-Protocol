@@ -1,0 +1,26 @@
+{
+  "sessionId": "reader-transfer-three-domain",
+  "study": "RQ2",
+  "phase": "infrastructure-calibration",
+  "examples": ["reader-bi-ambiguous-record", "reader-document-clause"],
+  "heldOutTask": "reader-workflow-stale",
+  "phaseOnePrompt": "phase-one.md",
+  "phaseTwoPrompt": "phase-two.md",
+  "conditions": {
+    "dom": {
+      "taskCondition": "dom",
+      "sharedGuide": null,
+      "revealHeldOutGuide": false
+    },
+    "adhoc": {
+      "taskCondition": "adhoc",
+      "sharedGuide": null,
+      "revealHeldOutGuide": true
+    },
+    "ugp": {
+      "taskCondition": "ugp",
+      "sharedGuide": "../../shared/ugp-reader-guide.md",
+      "revealHeldOutGuide": false
+    }
+  }
+}

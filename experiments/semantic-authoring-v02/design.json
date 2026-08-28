@@ -1,0 +1,30 @@
+{
+  "designVersion": "0.2.0-preparation",
+  "status": "pre-experiment",
+  "protocolVersion": "0.2-draft",
+  "researchQuestions": ["RQ1", "RQ2"],
+  "domains": ["bi", "document", "workflow", "commerce"],
+  "workflows": ["greenfield", "retrofit"],
+  "conditions": {
+    "RQ1": ["conventional", "generic", "ugp"],
+    "RQ2": ["dom", "adhoc", "ugp"]
+  },
+  "primaryContrasts": {
+    "RQ1Semantic": ["ugp", "generic"],
+    "RQ1Product": ["ugp", "conventional"],
+    "RQ2": ["ugp", "adhoc"]
+  },
+  "participantModelsForCalibration": [
+    "gpt-5.6-luna",
+    "gpt-5.6-terra",
+    "gpt-5.4"
+  ],
+  "defaultCalibrationModel": "gpt-5.6-luna",
+  "defaultReasoningEffort": "medium",
+  "formalSampleSize": null,
+  "sampleSizeFreezeRule": "Freeze from the precision analysis after infrastructure calibration; never estimate it from condition effects in the formal task bank.",
+  "humanStudyStatus": "not-prepared",
+  "calibrationRunsAreInferential": false,
+  "exactTokenUsageObservable": false,
+  "hardFilesystemIsolation": false
+}

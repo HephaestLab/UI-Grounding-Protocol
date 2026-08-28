@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ui-grounding.org/schema/v0.2-draft/common.schema.json",
+  "title": "UGP v0.2 draft common definitions",
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._~:/@-]*$"
+    },
+    "semanticType": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 256,
+      "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z0-9]+)+$"
+    },
+    "entity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "ref"],
+      "properties": {
+        "kind": { "const": "entity" },
+        "ref": { "$ref": "#/$defs/identifier" },
+        "type": { "$ref": "#/$defs/semanticType" },
+        "label": { "type": "string", "minLength": 1, "maxLength": 1024 }
+      }
+    },
+    "quantity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "value", "unit"],
+      "properties": {
+        "kind": { "const": "quantity" },
+        "value": { "type": "number" },
+        "unit": { "$ref": "#/$defs/identifier" }
+      }
+    },
+    "instant": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "value"],
+      "properties": {
+        "kind": { "const": "instant" },
+        "value": { "type": "string", "format": "date-time" }
+      }
+    },
+    "interval": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "start"],
+      "properties": {
+        "kind": { "const": "interval" },
+        "start": { "type": "string", "format": "date-time" },
+        "endExclusive": { "type": "string", "format": "date-time" },
+        "label": { "type": "string", "minLength": 1, "maxLength": 512 }
+      }
+    },
+    "collection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "items"],
+      "properties": {
+        "kind": { "const": "collection" },
+        "items": {
+          "type": "array",
+          "maxItems": 100,
+          "items": { "$ref": "semantic-value.schema.json" }
+        }
+      }
+    },
+    "nestedFrame": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "value"],
+      "properties": {
+        "kind": { "const": "frame" },
+        "value": { "$ref": "semantic-frame.schema.json" }
+      }
+    }
+  }
+}

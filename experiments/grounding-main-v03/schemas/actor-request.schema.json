@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ui-grounding.org/experiments/v0.3/actor-request.schema.json",
+  "title": "Fixed-loop actor request",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "episodeId", "condition", "actor", "audit"],
+  "properties": {
+    "schemaVersion": { "const": "0.3.0" },
+    "episodeId": { "type": "string", "pattern": "^[a-f0-9]{24}$" },
+    "condition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["groundingMethod", "model", "reasoningEffort", "replicate"],
+      "properties": {
+        "groundingMethod": { "type": "string" },
+        "model": { "type": "string" },
+        "reasoningEffort": { "type": "string" },
+        "replicate": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "actor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "system",
+        "task",
+        "observation",
+        "publicHistory",
+        "allowedActions",
+        "remainingSteps",
+        "responseSchema"
+      ],
+      "properties": {
+        "system": { "type": "string", "minLength": 1 },
+        "task": { "type": "string", "minLength": 1 },
+        "observation": { "type": "object" },
+        "publicHistory": { "type": "array", "items": { "type": "object" } },
+        "allowedActions": { "type": "array", "items": { "type": "string" } },
+        "remainingSteps": { "type": "integer", "minimum": 0 },
+        "responseSchema": { "type": "object" }
+      }
+    },
+    "audit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "freshContextRequired",
+        "toolsAllowed",
+        "goldIncluded",
+        "sourceDigest",
+        "representationDigest",
+        "factBundleDigest"
+      ],
+      "properties": {
+        "freshContextRequired": { "const": true },
+        "toolsAllowed": { "const": false },
+        "goldIncluded": { "const": false },
+        "sourceDigest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "representationDigest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "factBundleDigest": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+      }
+    }
+  }
+}

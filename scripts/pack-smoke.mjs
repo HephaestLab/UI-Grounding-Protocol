@@ -170,11 +170,11 @@ try {
   );
   await writeFile(
     join(consumer, 'src', 'main.ts'),
-    `import { UGP_PROTOCOL_VERSION } from '@ui-grounding/protocol';\nimport '@ui-grounding/overlay/styles.css';\ndocument.querySelector('#app')!.textContent = UGP_PROTOCOL_VERSION;\n`,
+    `import { UGP_PROTOCOL_VERSION } from '@ui-grounding/protocol';\nimport '@ui-grounding/overlay/styles.css';\nimport '@ui-grounding/inspector/styles.css';\ndocument.querySelector('#app')!.textContent = UGP_PROTOCOL_VERSION;\n`,
   );
   await writeFile(
     join(consumer, 'src', 'types.tsx'),
-    `import type { Selection } from '@ui-grounding/protocol';\nimport { SemanticRegistry } from '@ui-grounding/core';\nimport { DomAnchorRegistry } from '@ui-grounding/dom';\nimport { SelectionOverlay } from '@ui-grounding/overlay';\nimport { GroundingSurfaceProvider } from '@ui-grounding/react';\nimport '@ui-grounding/testing';\nvoid ([SemanticRegistry, DomAnchorRegistry, SelectionOverlay, GroundingSurfaceProvider] satisfies unknown[]);\nexport const selection = undefined as Selection | undefined;\n`,
+    `import type { Selection } from '@ui-grounding/protocol';\nimport { SemanticRegistry } from '@ui-grounding/core';\nimport { DomAnchorRegistry } from '@ui-grounding/dom';\nimport { SelectionOverlay } from '@ui-grounding/overlay';\nimport { GroundingSurfaceProvider } from '@ui-grounding/react';\nimport { ProfileRegistry } from '@ui-grounding/authoring';\nimport { GroundingInspector } from '@ui-grounding/inspector';\nimport '@ui-grounding/testing';\nvoid ([SemanticRegistry, DomAnchorRegistry, SelectionOverlay, GroundingSurfaceProvider, ProfileRegistry, GroundingInspector] satisfies unknown[]);\nexport const selection = undefined as Selection | undefined;\n`,
   );
   await writeFile(
     join(consumer, 'runtime.mjs'),

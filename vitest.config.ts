@@ -1,6 +1,14 @@
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
+  resolve: {
+    alias: {
+      '@ui-grounding/authoring': new URL(
+        './packages/authoring/src/index.ts',
+        import.meta.url,
+      ).pathname,
+    },
+  },
   test: {
     coverage: {
       provider: 'v8',

@@ -1,0 +1,12 @@
+{
+  "sessionId": "cross-domain-transfer-v02",
+  "study": "RQ2",
+  "examples": ["bi-greenfield", "document-greenfield", "workflow-greenfield"],
+  "heldOutTask": "commerce-greenfield",
+  "conditions": ["dom", "adhoc", "ugp"],
+  "phaseTwoGuide": {
+    "dom": false,
+    "adhoc": true,
+    "ugp": false
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ui-grounding.org/experiments/v0.3/actor-response.schema.json",
+  "title": "Fixed-loop actor response",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "episodeId", "output", "confidence"],
+  "properties": {
+    "schemaVersion": { "const": "0.3.0" },
+    "episodeId": {
+      "type": "string",
+      "pattern": "^([a-f0-9]{24}|FROM_REQUEST)$"
+    },
+    "output": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "answer"],
+          "properties": {
+            "kind": { "const": "answer" },
+            "answer": { "type": "string" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "target"],
+          "properties": {
+            "kind": { "const": "click" },
+            "target": { "type": "string" },
+            "x": { "type": "number" },
+            "y": { "type": "number" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "target", "text"],
+          "properties": {
+            "kind": { "const": "type" },
+            "target": { "type": "string" },
+            "text": { "type": "string" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "direction"],
+          "properties": {
+            "kind": { "const": "scroll" },
+            "direction": { "enum": ["up", "down", "left", "right"] },
+            "amount": { "type": "number" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "target", "value"],
+          "properties": {
+            "kind": { "const": "select" },
+            "target": { "type": "string" },
+            "value": { "type": "string" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind"],
+          "properties": {
+            "kind": { "const": "stop" },
+            "reason": { "type": "string" }
+          }
+        }
+      ]
+    },
+    "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+    "runnerAudit": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "wallTimeMs": { "type": ["integer", "null"], "minimum": 0 },
+        "inputTokens": { "type": ["integer", "null"], "minimum": 0 },
+        "outputTokens": { "type": ["integer", "null"], "minimum": 0 },
+        "toolsEnforcedOff": { "type": "boolean" },
+        "transcriptDigest": { "type": ["string", "null"] }
+      }
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ui-grounding.org/experiments/v0.3/score.schema.json",
+  "title": "Deterministic episode score",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "episodeId",
+    "strictSuccess",
+    "scorerKind",
+    "trajectoryDigest",
+    "goldDigest",
+    "scoredAt"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "0.3.0" },
+    "episodeId": { "type": "string" },
+    "strictSuccess": { "enum": [0, 1] },
+    "scorerKind": { "type": "string" },
+    "details": { "type": "object" },
+    "trajectoryDigest": { "type": "string" },
+    "goldDigest": { "type": "string" },
+    "scoredAt": { "type": "string", "format": "date-time" }
+  }
+}

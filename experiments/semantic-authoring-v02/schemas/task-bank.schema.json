@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "status", "tasks"],
+  "properties": {
+    "version": { "const": "0.2.0" },
+    "status": { "const": "pre-experiment" },
+    "tasks": {
+      "type": "array",
+      "minItems": 8,
+      "maxItems": 8,
+      "items": { "$ref": "#/$defs/task" }
+    }
+  },
+  "$defs": {
+    "task": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "taskId",
+        "domain",
+        "workflow",
+        "title",
+        "target",
+        "productBrief",
+        "controlledFacts",
+        "functionalChecks"
+      ],
+      "properties": {
+        "taskId": {
+          "type": "string",
+          "pattern": "^[a-z]+-(?:greenfield|retrofit)$"
+        },
+        "domain": { "enum": ["bi", "document", "workflow", "commerce"] },
+        "workflow": { "enum": ["greenfield", "retrofit"] },
+        "title": { "type": "string", "minLength": 1 },
+        "target": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["id", "label", "testId"],
+          "properties": {
+            "id": { "type": "string", "minLength": 1 },
+            "label": { "type": "string", "minLength": 1 },
+            "testId": { "type": "string", "pattern": "^target-[a-z]+$" }
+          }
+        },
+        "productBrief": { "type": "string", "minLength": 40 },
+        "controlledFacts": {
+          "type": "array",
+          "minItems": 6,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "value"],
+            "properties": {
+              "id": { "type": "string", "minLength": 1 },
+              "value": {}
+            }
+          }
+        },
+        "functionalChecks": {
+          "type": "array",
+          "minItems": 3,
+          "items": { "type": "string", "minLength": 1 }
+        }
+      }
+    }
+  }
+}

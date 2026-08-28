@@ -3,3 +3,5 @@ coverage
 node_modules
 pnpm-lock.yaml
 conformance/reports
+experiments/grounding-main-v03/vendor
+experiments/grounding-main-v03/.runs

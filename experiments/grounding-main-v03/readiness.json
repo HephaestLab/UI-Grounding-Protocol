@@ -1,0 +1,80 @@
+{
+  "blockers": [
+    {
+      "affects": [
+        "sourceIntegrationsReady",
+        "benchmarkRuntimeReady",
+        "nativeBaselineSmokeTestsPass"
+      ],
+      "id": "external-benchmark-environments",
+      "resolution": "Provision the pinned benchmark repositories, compatible Python/browser/container stacks, approved gated datasets, and required web services; then run one official native smoke task per source."
+    },
+    {
+      "affects": ["factParityAudited", "derivedAnnotationsAudited"],
+      "id": "derived-referent-annotations",
+      "resolution": "Generate DashboardQA-Ref, WorkArena-QA-Ref, and WebMall-QA-Ref selections from a frozen script; double-annotate a registered sample and pass the agreement threshold."
+    },
+    {
+      "affects": ["licenseAndTermsApproved"],
+      "id": "license-and-terms-review",
+      "resolution": "Record dataset/code licenses, redistribution limits, gated terms, and institutional approval before materialization or release."
+    },
+    {
+      "affects": [
+        "deterministicHiddenScorers",
+        "actorFilesystemAndToolsIsolated",
+        "multimodalActorTransportVerified",
+        "exactRunnerIdentityRecorded"
+      ],
+      "id": "hidden-scoring-and-actor-isolation",
+      "resolution": "Run the actor in a process/tool sandbox that cannot read task IDs, gold, scorers, filesystem, or network; provide native image payloads without filesystem tools; retain an independent runner transcript. Codex subagent prompts alone do not close these gates."
+    },
+    {
+      "affects": ["calibrationHasNoCeilingOrFloor", "sampleSizeJustified"],
+      "id": "calibration",
+      "resolution": "Run only the registered calibration slice, inspect per-stratum success without confirmatory outcomes, run the registered simulation/power analysis, and freeze any difficulty/sampling adjustment before the main run."
+    }
+  ],
+  "branch": "experiment/grounding-main-v03",
+  "confirmatoryExperimentRunnable": false,
+  "falseGates": [
+    "sourceIntegrationsReady",
+    "deterministicHiddenScorers",
+    "factParityAudited",
+    "derivedAnnotationsAudited",
+    "licenseAndTermsApproved",
+    "calibrationHasNoCeilingOrFloor",
+    "sampleSizeJustified",
+    "benchmarkRuntimeReady",
+    "actorFilesystemAndToolsIsolated",
+    "multimodalActorTransportVerified",
+    "exactRunnerIdentityRecorded",
+    "nativeBaselineSmokeTestsPass"
+  ],
+  "gates": {
+    "actorFilesystemAndToolsIsolated": false,
+    "baseToolchain": true,
+    "benchmarkAdapterContractsComplete": true,
+    "benchmarkRuntimeReady": false,
+    "benchmarkVersionsPinned": true,
+    "calibrationHasNoCeilingOrFloor": false,
+    "derivedAnnotationsAudited": false,
+    "designFrozenBeforeOutcomes": true,
+    "deterministicHiddenScorers": false,
+    "exactRunnerIdentityRecorded": false,
+    "factParityAudited": false,
+    "licenseAndTermsApproved": false,
+    "localLifecycleSmokePasses": true,
+    "multimodalActorTransportVerified": false,
+    "nativeBaselineSmokeTestsPass": false,
+    "officialEntrypointsManifested": true,
+    "publicRepositoriesLocallyPinned": true,
+    "sampleSizeJustified": false,
+    "schemasAndMatrixValid": true,
+    "sourceIntegrationsReady": false
+  },
+  "generatedAt": "2026-08-28T14:51:02.759Z",
+  "mainTablePilotRunnable": false,
+  "pilotHarnessRunnable": true,
+  "schemaVersion": "0.3.0"
+}

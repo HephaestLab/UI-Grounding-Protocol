@@ -1,0 +1,19 @@
+{
+  "gates": {
+    "calibrationNoCeilingOrFloor": false,
+    "crossDomainTransferPrepared": true,
+    "formalDesignFrozen": false,
+    "fourDomainGrammarValidated": true,
+    "prepareReset50Of50": true,
+    "privateFilesExcluded": true,
+    "retrofitBaselinesCaptured": true,
+    "schemaAndTypesStable": true,
+    "scorerByteStable": true,
+    "skillsIndependentForwardTests": false,
+    "skillsStructureValidated": true,
+    "taskPacketsValidated": true
+  },
+  "generatedAt": "2026-08-28T14:48:57.187Z",
+  "note": "Remaining false gates require independent model calibration and an explicit later design freeze; preparation scripts cannot assert them.",
+  "status": "pre-experiment"
+}

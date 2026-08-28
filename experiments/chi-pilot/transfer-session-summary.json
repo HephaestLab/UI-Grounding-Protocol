@@ -1,0 +1,41 @@
+{
+  "summaryVersion": "transfer-session-calibration-v1",
+  "eligibleForInference": false,
+  "model": "gpt-5.6-luna",
+  "reasoning": "medium",
+  "forkTurns": "none",
+  "session": "reader-transfer-three-domain",
+  "examples": ["reader-bi-ambiguous-record", "reader-document-clause"],
+  "heldOutTask": "reader-workflow-stale",
+  "runs": [
+    {
+      "runId": "run-r1-58f896dc84a7",
+      "condition": "dom",
+      "initialScore": 0.5,
+      "finalScore": 0.5,
+      "adaptationUtf8Bytes": 0,
+      "phaseOneInputUtf8Bytes": 3290,
+      "totalExternalInputUtf8Bytes": 3744
+    },
+    {
+      "runId": "run-r1-2a32cd4aeb42",
+      "condition": "adhoc",
+      "initialScore": 1,
+      "finalScore": 1,
+      "adaptationUtf8Bytes": 363,
+      "phaseOneInputUtf8Bytes": 4723,
+      "totalExternalInputUtf8Bytes": 5540
+    },
+    {
+      "runId": "run-r1-8f3397389ed0",
+      "condition": "ugp",
+      "initialScore": 1,
+      "finalScore": 1,
+      "adaptationUtf8Bytes": 0,
+      "phaseOneInputUtf8Bytes": 6867,
+      "totalExternalInputUtf8Bytes": 7321
+    }
+  ],
+  "decision": "reject-task-for-inference",
+  "reason": "The equal-fact ad-hoc arm transferred perfectly without its held-out schema guide; UGP had no accuracy advantage and used more external input bytes."
+}

@@ -1,0 +1,44 @@
+{
+  "name": "@ui-grounding/inspector",
+  "version": "0.0.0",
+  "description": "Optional floating selection and structured-description Inspector for UGP.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./styles.css": {
+      "types": "./dist/styles.css.d.ts",
+      "default": "./dist/styles.css"
+    }
+  },
+  "scripts": {
+    "build": "vite build --config ../../tooling/vite.library.ts && tsc -p tsconfig.build.json && node ../../scripts/copy-inspector-css.mjs",
+    "test": "pnpm -C ../.. exec vitest run --config vitest.browser.config.ts tests/browser/v02-inspector.test.ts",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@ui-grounding/authoring": "workspace:^",
+    "@ui-grounding/core": "workspace:^",
+    "@ui-grounding/overlay": "workspace:^",
+    "@ui-grounding/protocol": "workspace:^"
+  },
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  }
+}

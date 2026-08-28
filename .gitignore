@@ -10,6 +10,10 @@ tests/browser/__screenshots__/
 conformance/reports/*.json
 conformance/reports/*.md
 experiments/chi-pilot/.runs/
+experiments/semantic-authoring-v02/.runs/
+experiments/grounding-main-v03/.runs/
+experiments/grounding-main-v03/vendor/
+experiments/grounding-main-v03/.sealed/
 .DS_Store
 Thumbs.db
 .env

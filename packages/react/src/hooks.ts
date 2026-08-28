@@ -1,3 +1,8 @@
+import {
+  entityRefFromSubject,
+  materializeBinding,
+  type SemanticBinding,
+} from '@ui-grounding/authoring';
 import type {
   ContextMaterializer,
   ContextRegistrationOptions,
@@ -39,6 +44,8 @@ export interface GroundingNodeBinding<T extends Element> {
   ref: RefCallback<T>;
   nodeId: string;
 }
+
+export type UseUgpLinkOptions = UseGroundingNodeOptions;
 
 export function useGroundingSnapshot(): RegistrySnapshot {
   const { registry } = useGroundingRuntime();
@@ -144,4 +151,40 @@ export function useGroundingNode<T extends Element = HTMLElement>(
   ]);
 
   return { ref, nodeId: node.nodeId };
+}
+
+export function useUgpLink<TValue, TElement extends Element = HTMLElement>(
+  binding: SemanticBinding<TValue>,
+  value: TValue,
+  options: UseUgpLinkOptions = {},
+): GroundingNodeBinding<TElement> {
+  const runtime = useGroundingRuntime();
+  const materialized = materializeBinding(
+    runtime.descriptionRegistry.profiles,
+    binding,
+    value,
+  );
+  const latest = useRef(materialized);
+  latest.current = materialized;
+  const node = {
+    nodeId: materialized.nodeId,
+    type: materialized.frame.subject.type ?? materialized.frame.type,
+    label: materialized.frame.subject.label ?? materialized.frame.subject.ref,
+    authority: materialized.authority,
+    entityRef: entityRefFromSubject(materialized.frame.subject),
+    anchorIds: [],
+    ...(materialized.revision ? { revision: materialized.revision } : {}),
+  } satisfies SemanticNode;
+  const nodeBinding = useGroundingNode<TElement>(node, options);
+
+  useEffect(() => {
+    if (!runtime.hydrated) return;
+    const registration = runtime.descriptionRegistry.register(
+      materialized.nodeId,
+      () => latest.current,
+    );
+    return () => registration.dispose();
+  }, [materialized.nodeId, runtime.descriptionRegistry, runtime.hydrated]);
+
+  return nodeBinding;
 }

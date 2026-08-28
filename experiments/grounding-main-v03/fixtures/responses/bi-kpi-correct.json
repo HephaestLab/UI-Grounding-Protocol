@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "0.3.0",
+  "episodeId": "FROM_REQUEST",
+  "output": {
+    "kind": "answer",
+    "answer": "Net Revenue"
+  },
+  "confidence": 0.96,
+  "runnerAudit": {
+    "wallTimeMs": 120,
+    "inputTokens": null,
+    "outputTokens": null,
+    "toolsEnforcedOff": false,
+    "transcriptDigest": null
+  }
+}
