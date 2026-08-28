@@ -1,8 +1,9 @@
 import { readdir } from 'node:fs/promises';
-import { isAbsolute, join, relative, resolve } from 'node:path';
+import { basename, isAbsolute, join, relative, resolve } from 'node:path';
 
 import {
   canonicalJson,
+  episodeDirectories,
   findForbiddenKeys,
   parseArgs,
   readJson,
@@ -42,38 +43,64 @@ async function namedFiles(root, name) {
 
 const failures = [];
 const matrixPlan = await readJson(join(runRoot, 'matrix-plan.json'));
-const officialScorePaths = await namedFiles(
-  join(runRoot, 'tasks'),
-  'official-score.json',
-);
-if (officialScorePaths.length !== matrixPlan.episodeCount) {
+const activeEpisodeIds = new Set();
+let scoredJobs = 0;
+if (matrixPlan.kind === 'interactive-matrix') {
+  const officialScorePaths = await namedFiles(
+    join(runRoot, 'tasks'),
+    'official-score.json',
+  );
+  scoredJobs = officialScorePaths.length;
+  for (const path of officialScorePaths) {
+    const score = await readJson(path);
+    if (!Array.isArray(score.episodeIds) || score.episodeIds.length === 0) {
+      failures.push({ path, kind: 'missing-episode-ids' });
+      continue;
+    }
+    score.episodeIds.forEach((episodeId) => activeEpisodeIds.add(episodeId));
+  }
+} else if (matrixPlan.kind === 'static-matrix') {
+  for (const directory of await episodeDirectories(runId)) {
+    try {
+      await readJson(join(directory, 'score.json'));
+      scoredJobs += 1;
+      activeEpisodeIds.add(basename(directory));
+    } catch (error) {
+      if (error?.code !== 'ENOENT') throw error;
+    }
+  }
+} else {
+  failures.push({
+    path: join(runRoot, 'matrix-plan.json'),
+    kind: 'unsupported-matrix-kind',
+    observed: matrixPlan.kind,
+  });
+}
+if (scoredJobs !== matrixPlan.episodeCount) {
   failures.push({
     path: join(runRoot, 'matrix-plan.json'),
     kind: 'incomplete-matrix',
     expected: matrixPlan.episodeCount,
-    observed: officialScorePaths.length,
+    observed: scoredJobs,
   });
-}
-const activeEpisodeIds = new Set();
-for (const path of officialScorePaths) {
-  const score = await readJson(path);
-  if (!Array.isArray(score.episodeIds) || score.episodeIds.length === 0) {
-    failures.push({ path, kind: 'missing-episode-ids' });
-    continue;
-  }
-  score.episodeIds.forEach((episodeId) => activeEpisodeIds.add(episodeId));
 }
 
 const activeEpisodes = [];
-const tasksRoot = resolve(runRoot, 'tasks');
+const allowedTaskRoots = [
+  resolve(runRoot, 'tasks'),
+  resolve(runsRoot, 'materialized-static'),
+];
 for (const episodeId of [...activeEpisodeIds].sort()) {
   const directory = join(runRoot, 'episodes', episodeId);
   const privatePath = join(directory, 'private.json');
   try {
     const privateRecord = await readJson(privatePath);
     const taskPath = resolve(privateRecord.taskPath);
-    const taskRelativePath = relative(tasksRoot, taskPath);
-    if (taskRelativePath.startsWith('..') || isAbsolute(taskRelativePath)) {
+    const taskPathAllowed = allowedTaskRoots.some((root) => {
+      const candidate = relative(root, taskPath);
+      return !candidate.startsWith('..') && !isAbsolute(candidate);
+    });
+    if (!taskPathAllowed) {
       failures.push({ path: privatePath, kind: 'task-path-outside-run' });
       continue;
     }
@@ -177,7 +204,7 @@ const report = {
   schemaVersion: '0.3.0',
   runId,
   valid: failures.length === 0,
-  scoredJobs: officialScorePaths.length,
+  scoredJobs,
   taskPackets: records.length,
   methodFactParityChecks: records.reduce(
     (sum, record) => sum + record.methods.length,
