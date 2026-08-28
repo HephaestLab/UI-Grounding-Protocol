@@ -89,6 +89,126 @@ def accessible_nodes(observation: dict[str, Any]) -> list[dict[str, Any]]:
     return output
 
 
+def dom_semantic_nodes(
+    observation: dict[str, Any], *, max_nodes: int = 256
+) -> list[dict[str, Any]]:
+    """Project the benchmark DOM snapshot into bounded public semantic facts.
+
+    BrowserGym's accessibility tree intentionally omits some DOM-only facts.
+    ST-WebAgentBench includes modality tasks whose public evidence lives in
+    hidden/off-screen attributes, so those facts must remain available to
+    structural representations without exposing the raw multi-megabyte DOM.
+    """
+
+    snapshot = observation.get("dom_object") or {}
+    strings = snapshot.get("strings") or []
+    candidates = []
+    allowed_attributes = {
+        "alt",
+        "class",
+        "href",
+        "id",
+        "name",
+        "placeholder",
+        "role",
+        "title",
+        "type",
+        "value",
+    }
+    secret_markers = ("csrf", "password", "passwd", "session", "authenticity")
+
+    def string_at(index: Any) -> str:
+        if isinstance(index, int) and 0 <= index < len(strings):
+            return str(strings[index])
+        return ""
+
+    for document_index, document in enumerate(snapshot.get("documents") or []):
+        nodes = document.get("nodes") or {}
+        names = nodes.get("nodeName") or []
+        values = nodes.get("nodeValue") or []
+        parents = nodes.get("parentIndex") or []
+        attribute_rows = nodes.get("attributes") or []
+        backend_ids = nodes.get("backendNodeId") or []
+        direct_text: dict[int, list[str]] = {}
+        for index, name_index in enumerate(names):
+            if string_at(name_index) != "#text" or index >= len(values):
+                continue
+            value = " ".join(string_at(values[index]).split())
+            if not value or index >= len(parents):
+                continue
+            direct_text.setdefault(int(parents[index]), []).append(value)
+
+        for index, name_index in enumerate(names):
+            tag = string_at(name_index).lower()
+            if not tag or tag.startswith("#") or tag in {"script", "style"}:
+                continue
+            raw_attributes = attribute_rows[index] if index < len(attribute_rows) else []
+            attributes = {
+                string_at(raw_attributes[offset]).lower(): string_at(
+                    raw_attributes[offset + 1]
+                )
+                for offset in range(0, len(raw_attributes) - 1, 2)
+            }
+            visibility_text = attributes.get("browsergym_visibility_ratio", "0")
+            try:
+                visibility = float(visibility_text)
+            except ValueError:
+                visibility = 0.0
+            public_attributes = {
+                key: value[:1024]
+                for key, value in attributes.items()
+                if key in allowed_attributes
+                or key.startswith("aria-")
+                or key.startswith("data-")
+            }
+            identity = " ".join(
+                public_attributes.get(key, "") for key in ("id", "name", "type")
+            ).lower()
+            if public_attributes.get("type", "").lower() == "password" or any(
+                marker in identity for marker in secret_markers
+            ):
+                if "value" in public_attributes:
+                    public_attributes["value"] = "[redacted-credential]"
+            text = " ".join(direct_text.get(index, []))[:2048]
+            if not public_attributes and not text:
+                continue
+            identifier = attributes.get("bid") or (
+                str(backend_ids[index]) if index < len(backend_ids) else str(index)
+            )
+            score = (
+                5 * int("id" in public_attributes)
+                + 4 * int("value" in public_attributes)
+                + 4 * sum(key.startswith("data-") for key in public_attributes)
+                + 3 * sum(key.startswith("aria-") for key in public_attributes)
+                + 2 * int(bool(text))
+                + 2 * int(public_attributes.get("type") == "hidden")
+                + int(visibility <= 0)
+            )
+            candidates.append(
+                {
+                    "document": document_index,
+                    "order": index,
+                    "score": score,
+                    "node": {
+                        "id": identifier,
+                        "tag": tag,
+                        "text": text,
+                        "attributes": public_attributes,
+                        "visibility": visibility,
+                        "documentOrder": index,
+                    },
+                }
+            )
+
+    selected = sorted(
+        sorted(candidates, key=lambda item: (-item["score"], item["document"], item["order"]))[
+            :max_nodes
+        ],
+        key=lambda item: (item["document"], item["order"]),
+    )
+    return [item["node"] for item in selected]
+
+
 def save_screenshot(observation: dict[str, Any], path: Path) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     Image.fromarray(observation["screenshot"]).save(path, format="PNG")
@@ -153,6 +273,8 @@ def action_string(
     output: dict[str, Any], *, stop_function: str = "send_msg_to_user"
 ) -> str:
     kind = output["kind"]
+    if kind == "answer":
+        return f"{stop_function}({str(output.get('answer') or '')!r})"
     if kind == "click":
         target = str(output.get("target", ""))
         if target.startswith(("http://", "https://")):
