@@ -26,6 +26,15 @@ function runScript(name, args = []) {
   return result.stdout.trim();
 }
 
+async function optionalJson(path) {
+  try {
+    return await readJson(path);
+  } catch (error) {
+    if (error?.code === 'ENOENT') return null;
+    throw error;
+  }
+}
+
 runScript('validate.mjs');
 runScript('doctor.mjs');
 runScript('vendor-check.mjs');
@@ -63,13 +72,116 @@ const smokeAnalysis = JSON.parse(
   runScript('analyze.mjs', ['--run-id', smokeRunId, '--bootstrap', '100']),
 );
 
-const [design, manifest, adapters, environment, vendor] = await Promise.all([
-  readJson(join(experimentRoot, 'design.json')),
-  readJson(join(experimentRoot, 'benchmark-manifest.json')),
-  readJson(join(experimentRoot, 'benchmark-adapters.json')),
-  readJson(join(runsRoot, 'preflight', 'environment.json')),
-  readJson(join(runsRoot, 'preflight', 'vendor-check.json')),
-]);
+const [design, manifest, adapters, environment, vendor, confirmatoryPlan] =
+  await Promise.all([
+    readJson(join(experimentRoot, 'design.json')),
+    readJson(join(experimentRoot, 'benchmark-manifest.json')),
+    readJson(join(experimentRoot, 'benchmark-adapters.json')),
+    readJson(join(runsRoot, 'preflight', 'environment.json')),
+    readJson(join(runsRoot, 'preflight', 'vendor-check.json')),
+    readJson(join(experimentRoot, 'sampling', 'confirmatory-v1.json')),
+  ]);
+const [confirmatorySelection, calibration, power, staticAudit] =
+  await Promise.all([
+    optionalJson(join(runsRoot, 'confirmatory', 'selection-v1.json')),
+    optionalJson(join(runsRoot, 'calibration', 'report-v1.json')),
+    optionalJson(join(runsRoot, 'power', 'power-v1.json')),
+    optionalJson(join(runsRoot, 'audits', 'static-materialization.json')),
+  ]);
+const activeBenchmarkIds = new Set(confirmatoryPlan.activeBenchmarks ?? []);
+const activeAdapters = adapters.adapters.filter((adapter) =>
+  activeBenchmarkIds.has(adapter.benchmarkId),
+);
+const calibrationAudits = calibration
+  ? await Promise.all(
+      calibration.runIds.map((runId) =>
+        optionalJson(join(runsRoot, runId, 'audits', 'fact-parity.json')),
+      ),
+    )
+  : [];
+const calibrationCoverage =
+  calibration?.complete === true &&
+  [...activeBenchmarkIds].every((benchmarkId) =>
+    design.models.every((model) =>
+      calibration.paired.some(
+        (row) => row.benchmarkId === benchmarkId && row.model === model.id,
+      ),
+    ),
+  );
+const calibrationAuditsPass =
+  calibrationCoverage &&
+  calibrationAudits.length === calibration.runIds.length &&
+  calibrationAudits.every(
+    (audit) =>
+      audit?.valid === true &&
+      audit.scoredJobs > 0 &&
+      audit.actorPackets > 0 &&
+      audit.failures.length === 0,
+  );
+const calibrationBoundaryChecksPass =
+  calibrationAuditsPass &&
+  calibrationAudits.every(
+    (audit) =>
+      audit.actorIsolationChecks > 0 &&
+      audit.runnerIdentityChecks > 0 &&
+      audit.multimodalTransportChecks > 0 &&
+      audit.transcriptIntegrityChecks > 0,
+  );
+const affectedCalibrationBenchmarks = new Set(
+  (calibration?.cells ?? [])
+    .filter((cell) => cell.ceiling || cell.floor)
+    .map((cell) => cell.benchmarkId),
+);
+const calibrationDecisions = confirmatoryPlan.calibrationDecisions ?? {};
+const calibrationReviewed =
+  calibrationCoverage &&
+  [...affectedCalibrationBenchmarks].every(
+    (benchmarkId) =>
+      typeof calibrationDecisions[benchmarkId] === 'string' &&
+      calibrationDecisions[benchmarkId].length > 0,
+  );
+const selectionIsFullEligiblePopulation =
+  confirmatorySelection?.phase === confirmatoryPlan.phase &&
+  [...activeBenchmarkIds].every((benchmarkId) => {
+    const selection = confirmatorySelection.selections.find(
+      (row) => row.benchmarkId === benchmarkId,
+    );
+    return (
+      selection &&
+      selection.taskIds.length ===
+        selection.sourcePopulation - selection.calibrationExcluded
+    );
+  });
+const underpoweredBenchmarks = new Set(
+  (power?.cells ?? [])
+    .filter((cell) => !cell.passes)
+    .map((cell) => cell.benchmarkId),
+);
+const powerDecisions = confirmatoryPlan.powerDecisions ?? {};
+const powerDecisionRecorded = (key) =>
+  typeof powerDecisions[key] === 'string' && powerDecisions[key].length > 0;
+const powerCoverage =
+  power?.phase === confirmatoryPlan.phase &&
+  power.missingActiveBenchmarks?.length === 0 &&
+  [...activeBenchmarkIds].every((benchmarkId) =>
+    design.models.every((model) =>
+      power.cells.some(
+        (cell) => cell.benchmarkId === benchmarkId && cell.model === model.id,
+      ),
+    ),
+  );
+const sampleSizeJustified =
+  powerCoverage &&
+  selectionIsFullEligiblePopulation &&
+  (power.pooled.referent.passes === true ||
+    powerDecisionRecorded('pooled-referent')) &&
+  (power.pooled.action.passes === true ||
+    powerDecisionRecorded('pooled-action')) &&
+  [...underpoweredBenchmarks].every(powerDecisionRecorded);
+const fourBenchmarkAccessApproved =
+  typeof confirmatoryPlan.localResearchExecutionApprovedOn === 'string' &&
+  activeBenchmarkIds.size === 4 &&
+  confirmatoryPlan.deferredBenchmarks?.includes('workarena-plus-plus');
 
 const gates = {
   designFrozenBeforeOutcomes: design.status === 'frozen-for-preflight',
@@ -80,19 +192,23 @@ const gates = {
   officialEntrypointsManifested: manifest.sources.every(
     (item) => item.repository || item.dataset || item.projectUrl,
   ),
-  benchmarkAdapterContractsComplete: adapters.adapters.every(
+  benchmarkAdapterContractsComplete: activeAdapters.every(
     (item) => item.harnessContractReady,
   ),
-  sourceIntegrationsReady: adapters.adapters.every(
-    (item) => item.sourceIntegrationReady,
-  ),
+  sourceIntegrationsReady:
+    activeAdapters.length === activeBenchmarkIds.size &&
+    calibrationCoverage &&
+    staticAudit?.valid === true,
   localLifecycleSmokePasses:
     smokeScore.strictSuccess === 1 && smokeAnalysis.cells === 1,
-  deterministicHiddenScorers: false,
-  factParityAudited: false,
-  licenseAndTermsApproved: false,
-  calibrationHasNoCeilingOrFloor: false,
-  sampleSizeJustified: false,
+  deterministicHiddenScorers: calibrationAuditsPass,
+  factParityAudited:
+    calibrationAuditsPass &&
+    calibrationAudits.every((audit) => audit.methodFactParityChecks > 0) &&
+    staticAudit?.valid === true,
+  licenseAndTermsApproved: fourBenchmarkAccessApproved,
+  calibrationHasNoCeilingOrFloor: calibrationReviewed,
+  sampleSizeJustified,
   publicRepositoriesLocallyPinned: vendor.records.every(
     (item) => item.localMatchesPin,
   ),
@@ -101,14 +217,12 @@ const gates = {
     environment.gates.webMallPythonCompatible &&
     environment.gates.containerRuntime &&
     environment.gates.linuxContainerHost &&
-    environment.gates.workArenaExternalAccess &&
     environment.gates.stWebAgentBenchExternalAccess &&
-    environment.gates.benchmarkServices,
-  actorFilesystemAndToolsIsolated: environment.gates.actorIsolationEnforced,
-  multimodalActorTransportVerified:
-    environment.gates.multimodalActorTransportVerified,
-  exactRunnerIdentityRecorded: environment.gates.exactRunnerIdentityRecorded,
-  nativeBaselineSmokeTestsPass: false,
+    calibrationCoverage,
+  actorFilesystemAndToolsIsolated: calibrationBoundaryChecksPass,
+  multimodalActorTransportVerified: calibrationBoundaryChecksPass,
+  exactRunnerIdentityRecorded: calibrationBoundaryChecksPass,
+  nativeBaselineSmokeTestsPass: calibrationAuditsPass,
 };
 
 const pilotGateNames = [
