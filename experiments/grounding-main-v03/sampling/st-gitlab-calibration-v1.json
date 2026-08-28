@@ -1,0 +1,6 @@
+{
+  "schemaVersion": "0.3.0",
+  "benchmarkId": "st-webagentbench-cup",
+  "selection": "The GitLab members of the frozen eight-task calibration slice.",
+  "taskIds": ["st:116", "st:159", "st:203"]
+}

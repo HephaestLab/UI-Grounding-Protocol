@@ -119,9 +119,6 @@ def main() -> None:
                 "action": action,
                 "result": {
                     "url": observation["url"],
-                    "reward": float(reward),
-                    "terminated": bool(terminated),
-                    "truncated": bool(truncated),
                 },
             }
         )

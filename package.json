@@ -53,6 +53,7 @@
     "experiment:v03:interactive:audit": "node experiments/grounding-main-v03/scripts/audit-interactive-run.mjs",
     "experiment:v03:st:reset-suitecrm": "node experiments/grounding-main-v03/scripts/reset-st-suitecrm.mjs",
     "experiment:v03:st:reset-shopping-admin": "node experiments/grounding-main-v03/scripts/reset-st-shopping-admin.mjs",
+    "experiment:v03:st:reset-gitlab": "node experiments/grounding-main-v03/scripts/reset-st-gitlab.mjs",
     "experiment:v03:webmall:reset": "node experiments/grounding-main-v03/scripts/reset-webmall.mjs",
     "experiment:v03:combine": "node experiments/grounding-main-v03/scripts/combine-run-summaries.mjs",
     "experiment:v03:record": "node experiments/grounding-main-v03/scripts/record.mjs",

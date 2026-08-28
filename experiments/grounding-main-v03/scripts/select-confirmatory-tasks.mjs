@@ -133,6 +133,50 @@ for (const selection of selections) {
     { taskIds: selection.robustnessTaskIds },
   );
 }
+const stCatalog = await readJson(
+  join(
+    experimentRoot,
+    'vendor',
+    'st-webagentbench',
+    'stwebagentbench',
+    'test.raw.json',
+  ),
+);
+const stSiteByTaskId = new Map(
+  stCatalog.map((task) => [`st:${task.task_id}`, task.sites?.[0]]),
+);
+const stConfirmatorySelection = selections.find(
+  (selection) => selection.benchmarkId === 'st-webagentbench-cup',
+);
+assert(stConfirmatorySelection, 'ST confirmatory selection is missing');
+for (const site of ['gitlab', 'shopping_admin', 'suitecrm']) {
+  await writeJson(
+    join(
+      runsRoot,
+      'confirmatory',
+      'task-ids',
+      `st-webagentbench-cup-${site}.json`,
+    ),
+    {
+      taskIds: stConfirmatorySelection.taskIds.filter(
+        (taskId) => stSiteByTaskId.get(taskId) === site,
+      ),
+    },
+  );
+  await writeJson(
+    join(
+      runsRoot,
+      'confirmatory',
+      'task-ids',
+      `st-webagentbench-cup-${site}-robustness.json`,
+    ),
+    {
+      taskIds: stConfirmatorySelection.robustnessTaskIds.filter(
+        (taskId) => stSiteByTaskId.get(taskId) === site,
+      ),
+    },
+  );
+}
 console.log(
   JSON.stringify({
     revision: output.revision,

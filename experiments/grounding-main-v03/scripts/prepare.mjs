@@ -58,6 +58,20 @@ assert(
   computedFactDigest === task.sourceObservation.factBundleDigest,
   `Fact bundle digest mismatch; expected ${computedFactDigest}`,
 );
+const publicHistory = task.publicHistory ?? [];
+for (const [index, entry] of publicHistory.entries()) {
+  assert(
+    Number.isInteger(entry.step) &&
+      typeof entry.action === 'string' &&
+      entry.result &&
+      typeof entry.result.url === 'string' &&
+      Object.keys(entry).every((key) =>
+        ['step', 'action', 'result'].includes(key),
+      ) &&
+      Object.keys(entry.result).every((key) => key === 'url'),
+    `Public history item ${index} must contain only step, action, and result.url`,
+  );
+}
 
 const episodeKey = {
   runId,
@@ -85,7 +99,7 @@ const request = {
     system: fixedSystemInstruction,
     task: task.instruction,
     observation: channel.representation,
-    publicHistory: task.publicHistory ?? [],
+    publicHistory,
     allowedActions: task.allowedActions,
     remainingSteps: Math.max(0, task.maxSteps - task.step + 1),
     responseSchema: responseSchemaForActor(task.allowedActions),

@@ -82,6 +82,7 @@ def main() -> None:
         f"browsergym/STWebAgentBenchEnv.{numeric_task_id}",
         headless=True,
         action_mapping=action_set.to_python_code,
+        timeout=30_000,
     )
     observation, _ = environment.reset(seed=0)
     task_config = environment.unwrapped.task.config
@@ -154,9 +155,6 @@ def main() -> None:
                 "action": action,
                 "result": {
                     "url": observation["url"],
-                    "reward": float(reward),
-                    "terminated": bool(terminated),
-                    "truncated": bool(truncated),
                 },
             }
         )

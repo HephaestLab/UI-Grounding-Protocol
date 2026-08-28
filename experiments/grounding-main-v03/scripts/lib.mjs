@@ -202,6 +202,13 @@ export function findForbiddenKeys(value, path = '$') {
     'sourceTaskId',
     'taskId',
     'benchmarkId',
+    'CuP',
+    'eval',
+    'officialScore',
+    'officialTaskScore',
+    'pCuP',
+    'reward',
+    'strictSuccess',
   ]);
   if (Array.isArray(value)) {
     return value.flatMap((item, index) =>
