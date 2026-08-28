@@ -118,6 +118,16 @@ export function normalizeAnswer(value) {
     .toLocaleLowerCase('en-US');
 }
 
+export function normalizeScreenqaAnswer(value) {
+  const punctuation = new Set([...`!"#$%&'()*+,-./:;<=>?@[\\]^_\`{|}~`]);
+  return [...String(value).toLowerCase()]
+    .filter((character) => !punctuation.has(character))
+    .join('')
+    .replace(/\b(a|an|the)\b/gu, ' ')
+    .trim()
+    .replace(/\s+/gu, ' ');
+}
+
 export async function episodeDirectories(runId) {
   const root = join(runsRoot, runId, 'episodes');
   try {
@@ -130,25 +140,53 @@ export async function episodeDirectories(runId) {
   }
 }
 
-export const responseSchemaForActor = {
-  type: 'object',
-  additionalProperties: false,
-  required: ['schemaVersion', 'episodeId', 'output', 'confidence'],
-  properties: {
-    schemaVersion: { const: '0.3.0' },
-    episodeId: { type: 'string' },
-    output: {
-      type: 'object',
-      description:
-        'One answer, click, type, scroll, select, or stop output matching an allowed action.',
+export function responseSchemaForActor(allowedActions) {
+  return {
+    type: 'object',
+    additionalProperties: false,
+    required: ['schemaVersion', 'episodeId', 'output', 'confidence'],
+    properties: {
+      schemaVersion: { type: 'string', const: '0.3.0' },
+      episodeId: { type: 'string', const: 'FROM_REQUEST' },
+      output: {
+        type: 'object',
+        additionalProperties: false,
+        required: [
+          'kind',
+          'answer',
+          'target',
+          'x',
+          'y',
+          'text',
+          'direction',
+          'amount',
+          'value',
+          'reason',
+        ],
+        properties: {
+          kind: { type: 'string', enum: allowedActions },
+          answer: { type: ['string', 'null'] },
+          target: { type: ['string', 'null'] },
+          x: { type: ['number', 'null'] },
+          y: { type: ['number', 'null'] },
+          text: { type: ['string', 'null'] },
+          direction: {
+            type: ['string', 'null'],
+            enum: ['up', 'down', 'left', 'right', null],
+          },
+          amount: { type: ['number', 'null'] },
+          value: { type: ['string', 'null'] },
+          reason: { type: ['string', 'null'] },
+        },
+      },
+      confidence: { type: 'number', minimum: 0, maximum: 1 },
     },
-    confidence: { type: 'number', minimum: 0, maximum: 1 },
-  },
-};
+  };
+}
 
 export const fixedSystemInstruction = [
   'You are the actor in a controlled UI-grounding experiment.',
-  'Use only the task and current observation in this packet.',
+  'Use only the task, current observation, and public action history in this packet.',
   'Do not use tools, files, network access, prior conversations, hidden state, or outside knowledge about this benchmark.',
   'Return exactly one JSON object matching responseSchema; do not add prose or Markdown.',
   'Do not repair, retry, plan across hidden steps, or invent unavailable UI facts.',

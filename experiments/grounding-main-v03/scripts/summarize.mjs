@@ -74,6 +74,7 @@ const report = {
 };
 const outputRoot = join(runsRoot, runId);
 await writeJson(join(outputRoot, 'summary.json'), report);
+await writeJson(join(outputRoot, 'episodes.json'), rows);
 const csvHeader = [
   'episodeId',
   'benchmarkId',

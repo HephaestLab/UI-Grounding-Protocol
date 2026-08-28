@@ -1,0 +1,6 @@
+{
+  "schemaVersion": "0.3.0",
+  "benchmarkId": "st-webagentbench-cup",
+  "selection": "The ShoppingAdmin members of the frozen eight-task calibration slice.",
+  "taskIds": ["st:77", "st:80"]
+}

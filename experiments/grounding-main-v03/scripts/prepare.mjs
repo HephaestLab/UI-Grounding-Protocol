@@ -59,9 +59,15 @@ assert(
   `Fact bundle digest mismatch; expected ${computedFactDigest}`,
 );
 
-const episodeId = sha256(
-  canonicalJson({ runId, taskId: task.taskId, methodId, modelId, replicate }),
-).slice(0, 24);
+const episodeKey = {
+  runId,
+  taskId: task.taskId,
+  methodId,
+  modelId,
+  replicate,
+  ...(task.maxSteps > 1 ? { step: task.step } : {}),
+};
+const episodeId = sha256(canonicalJson(episodeKey)).slice(0, 24);
 const taskOpaqueId = sha256(`task:${task.taskId}`).slice(0, 24);
 const sourceDigest = sha256(canonicalJson(task));
 const representationDigest = sha256(canonicalJson(channel.representation));
@@ -82,7 +88,7 @@ const request = {
     publicHistory: task.publicHistory ?? [],
     allowedActions: task.allowedActions,
     remainingSteps: Math.max(0, task.maxSteps - task.step + 1),
-    responseSchema: responseSchemaForActor,
+    responseSchema: responseSchemaForActor(task.allowedActions),
   },
   audit: {
     freshContextRequired: true,

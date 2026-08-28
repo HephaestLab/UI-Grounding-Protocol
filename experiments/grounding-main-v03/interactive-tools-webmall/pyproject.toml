@@ -1,0 +1,17 @@
+[project]
+name = "ugp-grounding-webmall-tools"
+version = "0.0.0"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+  "browsergym-core",
+  "browsergym-webmall",
+  "playwright==1.44.0",
+  "requests==2.32.5",
+]
+
+[tool.uv]
+package = false
+
+[tool.uv.sources]
+browsergym-core = { path = "../vendor/webmall/Browsergym/browsergym/core", editable = true }
+browsergym-webmall = { path = "../vendor/webmall/Browsergym/browsergym/webmall", editable = true }

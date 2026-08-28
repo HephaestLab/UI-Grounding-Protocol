@@ -1,0 +1,12 @@
+{
+  "schemaVersion": "0.3.0",
+  "revision": "calibration-extension-v1",
+  "trigger": "The initial ScreenQA calibration slice produced 8/8 strict successes in both vision-only model cells.",
+  "decision": "Add 24 previously unseen ScreenQA tasks using the same deterministic proportional question-lead stratification, without using gold answers or per-task model outcomes for selection.",
+  "seed": 240829,
+  "benchmarkId": "screenqa-visible",
+  "additionalTasks": 24,
+  "methods": ["vision-only", "ugp"],
+  "models": ["gpt-5.6-luna", "gpt-5.4"],
+  "exclusion": "Both the original eight tasks and these 24 extension tasks are permanently excluded from confirmatory and robustness inference."
+}

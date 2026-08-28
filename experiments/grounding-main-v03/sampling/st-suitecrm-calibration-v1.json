@@ -1,0 +1,6 @@
+{
+  "schemaVersion": "0.3.0",
+  "benchmarkId": "st-webagentbench-cup",
+  "selection": "The SuiteCRM members of the frozen eight-task calibration slice; the five GitLab and ShoppingAdmin members remain reserved and pending their local services.",
+  "taskIds": ["st:58", "st:298", "st:343"]
+}

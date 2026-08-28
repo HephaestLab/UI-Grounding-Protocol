@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "0.3.0",
+  "seed": 240828,
+  "screenpr": {
+    "datasetRevision": "53d27dc567f1e6d77b4aeb502078cc75144f5ea1",
+    "selection": "all screenshots published under test/screenshots at the frozen revision",
+    "expectedTasks": 650
+  },
+  "screenqa": {
+    "repositoryRevision": "1dfdbccaf56948821b5fa8ffe5d186fe4751e46d",
+    "split": "test",
+    "sourceFile": "short_answers/test.json",
+    "selection": "proportional deterministic hash rank within question-lead strata",
+    "eligibility": "at least one official answer other than <no answer>",
+    "questionLeadStrata": [
+      "what",
+      "which",
+      "how",
+      "where",
+      "who",
+      "when",
+      "yes-no-or-other"
+    ],
+    "expectedTasks": 800
+  }
+}

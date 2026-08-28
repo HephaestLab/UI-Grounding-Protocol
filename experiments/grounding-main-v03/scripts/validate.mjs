@@ -8,6 +8,7 @@ import {
   canonicalJson,
   experimentRoot,
   findForbiddenKeys,
+  normalizeScreenqaAnswer,
   readJson,
   sameSet,
   schemaValidators,
@@ -169,6 +170,10 @@ for (const method of design.groundingMethods) {
 assert(
   findForbiddenKeys(fixture).includes('$.taskId'),
   'Leakage scanner self-check failed',
+);
+assert(
+  normalizeScreenqaAnswer(' The, Quick! Fox ') === 'quick fox',
+  'ScreenQA official SQuAD normalization self-check failed',
 );
 
 const protocolSchemaRoot = join(

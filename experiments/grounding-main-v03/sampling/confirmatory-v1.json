@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "0.3.0",
+  "revision": "confirmatory-v1",
+  "frozenOn": "2026-08-29",
+  "seed": 240830,
+  "selection": "Use every task in each frozen public source selection after permanently excluding all calibration tasks. WorkArena remains pending access and is not included in the four-benchmark phase.",
+  "benchmarks": {
+    "screenpr-referent": { "expectedPrimary": 642, "robustnessTasks": 130 },
+    "screenqa-visible": { "expectedPrimary": 768, "robustnessTasks": 160 },
+    "webmall-action": { "expectedPrimary": 83, "robustnessTasks": 18 },
+    "st-webagentbench-cup": { "expectedPrimary": 112, "robustnessTasks": 24 },
+    "workarena-plus-plus": {
+      "expectedPrimary": null,
+      "robustnessTasks": null,
+      "status": "pending-access"
+    }
+  },
+  "screenprPowerDecision": "Run the full 642-task non-calibration population and label the gpt-5.4 7-point contrast underpowered if final power remains below 80%; do not reduce the effect threshold.",
+  "screenqaDecision": "The 32-task extended calibration removed the initial ceiling; retain every one of the 768 non-calibration tasks in the frozen materialized selection."
+}

@@ -1,0 +1,9 @@
+{
+  "schemaVersion": "0.3.0",
+  "seed": 240828,
+  "tasksPerBenchmark": 8,
+  "models": ["gpt-5.6-luna", "gpt-5.4"],
+  "methods": ["vision-only", "ugp"],
+  "selection": "proportional deterministic hash rank within the available benchmark strata, covering every nonempty stratum when the slice size permits",
+  "exclusion": "calibration source tasks are permanently excluded from confirmatory and robustness inference"
+}

@@ -7,6 +7,8 @@ test-results/
 tests/browser/__screenshots__/
 *.tsbuildinfo
 *.tgz
+__pycache__/
+*.pyc
 conformance/reports/*.json
 conformance/reports/*.md
 experiments/chi-pilot/.runs/

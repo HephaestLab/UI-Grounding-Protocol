@@ -4,6 +4,7 @@ import {
   assert,
   canonicalJson,
   normalizeAnswer,
+  normalizeScreenqaAnswer,
   parseArgs,
   readJson,
   required,
@@ -42,6 +43,16 @@ if (trajectory.validation.valid) {
     const accepted = gold.scorer.accepted.map(normalizeAnswer);
     strictSuccess = actual !== null && accepted.includes(actual) ? 1 : 0;
     details = { validAction: true, acceptedCount: accepted.length };
+  } else if (gold.scorer.kind === 'screenqa-sqa-s-exact') {
+    const actual =
+      output.kind === 'answer' ? normalizeScreenqaAnswer(output.answer) : null;
+    const accepted = gold.scorer.accepted.map(normalizeScreenqaAnswer);
+    strictSuccess = actual !== null && accepted.includes(actual) ? 1 : 0;
+    details = {
+      validAction: true,
+      acceptedCount: accepted.length,
+      officialMetric: 'SQA-S Exact Match',
+    };
   } else if (gold.scorer.kind === 'exact-action') {
     strictSuccess =
       canonicalJson(output) === canonicalJson(gold.scorer.expected) ? 1 : 0;

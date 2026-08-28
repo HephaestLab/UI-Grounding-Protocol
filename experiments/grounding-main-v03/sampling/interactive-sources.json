@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "0.3.0",
+  "seed": 240828,
+  "webmall": {
+    "repositoryRevision": "2697d35cdfcfedcf1ade89b7ad86722db8daa8a7",
+    "sourceFile": "Browsergym/browsergym/webmall/src/browsergym/webmall/task_sets.json",
+    "selection": "all official tasks from all published task sets at the frozen revision",
+    "expectedTasks": 91
+  },
+  "stWebAgentBench": {
+    "repositoryRevision": "67f56dd7df9eca1646c9e49407b087e950aa1e77",
+    "sourceFile": "stwebagentbench/test.raw.json",
+    "selection": "hierarchical proportional allocation by site, then policy-count band with nonempty-stratum coverage, followed by deterministic hash rank",
+    "policyCountBands": {
+      "low-0-4": [0, 4],
+      "medium-5-8": [5, 8],
+      "high-9-plus": [9, null]
+    },
+    "expectedTasks": 120
+  }
+}

@@ -45,6 +45,10 @@ const errors = parseError
         (error) => `${error.instancePath || '$'} ${error.message}`,
       );
 
+if (valid && response.runnerAudit?.toolsEnforcedOff === false) {
+  errors.push('Actor attempted or invoked an undeclared tool');
+}
+
 if (valid && !request.actor.allowedActions.includes(response.output.kind)) {
   errors.push(
     `Output kind ${response.output.kind} is not allowed for this task`,
