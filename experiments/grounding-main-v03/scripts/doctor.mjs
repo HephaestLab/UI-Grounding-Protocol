@@ -60,7 +60,6 @@ const environment = {
       'test.raw.json',
     ),
   ),
-  dashboardQaEnvironmentDeclared: process.env.UGP_DASHBOARDQA_ENV_READY === '1',
   benchmarkServicesDeclared: process.env.UGP_BENCHMARK_SERVICES_READY === '1',
   actorIsolationEnforced: process.env.UGP_ACTOR_ISOLATED === '1',
   runnerIdentity: process.env.UGP_ACTOR_RUNNER_ID ?? null,
@@ -81,7 +80,6 @@ const gates = {
   stWebAgentBenchExternalAccess:
     environment.stWebAgentBenchTasksPresent ||
     environment.stWebAgentBenchAccessDeclared,
-  dashboardQaEnvironment: environment.dashboardQaEnvironmentDeclared,
   benchmarkServices: environment.benchmarkServicesDeclared,
   actorIsolationEnforced: environment.actorIsolationEnforced,
   exactRunnerIdentityRecorded: Boolean(environment.runnerIdentity),

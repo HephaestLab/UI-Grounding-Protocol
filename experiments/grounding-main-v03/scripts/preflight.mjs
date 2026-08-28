@@ -90,7 +90,6 @@ const gates = {
     smokeScore.strictSuccess === 1 && smokeAnalysis.cells === 1,
   deterministicHiddenScorers: false,
   factParityAudited: false,
-  derivedAnnotationsAudited: false,
   licenseAndTermsApproved: false,
   calibrationHasNoCeilingOrFloor: false,
   sampleSizeJustified: false,
@@ -104,7 +103,6 @@ const gates = {
     environment.gates.linuxContainerHost &&
     environment.gates.workArenaExternalAccess &&
     environment.gates.stWebAgentBenchExternalAccess &&
-    environment.gates.dashboardQaEnvironment &&
     environment.gates.benchmarkServices,
   actorFilesystemAndToolsIsolated: environment.gates.actorIsolationEnforced,
   multimodalActorTransportVerified:
@@ -127,7 +125,6 @@ const confirmatoryGateNames = [
   'sourceIntegrationsReady',
   'deterministicHiddenScorers',
   'factParityAudited',
-  'derivedAnnotationsAudited',
   'licenseAndTermsApproved',
   'calibrationHasNoCeilingOrFloor',
   'sampleSizeJustified',
@@ -167,10 +164,10 @@ const readiness = {
         'Provision the pinned benchmark repositories, compatible Python/browser/container stacks, approved gated datasets, and required web services; then run one official native smoke task per source.',
     },
     {
-      id: 'derived-referent-annotations',
-      affects: ['factParityAudited', 'derivedAnnotationsAudited'],
+      id: 'representation-fact-parity',
+      affects: ['factParityAudited'],
       resolution:
-        'Generate DashboardQA-Ref, WorkArena-QA-Ref, and WebMall-QA-Ref selections from a frozen script; double-annotate a registered sample and pass the agreement threshold.',
+        'Materialize every grounding representation from the same frozen source-fact inventory, run the cross-method parity audit, and record any method-specific information loss.',
     },
     {
       id: 'license-and-terms-review',

@@ -6,8 +6,8 @@ Pilot results are labeled and stored under a distinct run ID.
 
 ## Hypotheses
 
-- **H1 (referent):** UGP increases strict success on ScreenPR Referent and the
-  three pointed QA diagnostics relative to every registered grounding method.
+- **H1 (referent):** UGP increases strict success on ScreenPR Referent relative
+  to every registered grounding method.
 - **H2 (transfer):** UGP increases strict task success on WorkArena++ and
   WebMall Action under the same actor and action space.
 - **H3 (safety):** UGP increases ST-WebAgentBench CuP and does not increase risk
@@ -34,14 +34,13 @@ variance.
 ## Sample plan
 
 The exact registered counts live in `design.json`: 650 ScreenPR, 800 ScreenQA,
-240 DashboardQA-Ref, 160 WorkArena-QA-Ref, 91 WebMall-QA-Ref, 128 WorkArena++,
-91 WebMall Action, and 120 ST-WebAgentBench. Across eight methods and two actor
-models this is 36,480 primary episodes plus 14,592 additional robustness
-episodes.
+128 WorkArena++, 91 WebMall Action, and 120 ST-WebAgentBench. Across eight
+methods and two actor models this is 28,624 primary episodes. The registered
+approximately 20% robustness subsets contain 358 source tasks and produce 11,456
+additional episodes.
 
-These counts are frozen planning targets, not a claim that all source datasets
-contain protocol-derived annotations today. Derived referent strata must pass an
-independent annotation agreement audit before confirmatory execution. They
+These counts are frozen planning targets. All five strata use official published
+benchmark sources; no protocol-derived QA annotation set is required. They
 become final confirmatory counts only after calibration supplies the baseline
 success/discordance parameters and the power procedure in
 `analysis/POWER_ANALYSIS.md` passes; any adjustment is versioned before main
@@ -51,7 +50,7 @@ outcomes are collected.
 
 The common primary outcome is deterministic strict success per instance.
 Benchmark-native metrics are secondary. The table cell is success percentage;
-the macro average is the unweighted mean of the eight pre-registered stratum
+the macro average is the unweighted mean of the five pre-registered stratum
 rates. Confidence intervals use a 10,000-resample task-cluster bootstrap.
 
 The primary inferential model is a binomial mixed-effects regression:

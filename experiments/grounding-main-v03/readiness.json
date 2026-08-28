@@ -10,9 +10,9 @@
       "resolution": "Provision the pinned benchmark repositories, compatible Python/browser/container stacks, approved gated datasets, and required web services; then run one official native smoke task per source."
     },
     {
-      "affects": ["factParityAudited", "derivedAnnotationsAudited"],
-      "id": "derived-referent-annotations",
-      "resolution": "Generate DashboardQA-Ref, WorkArena-QA-Ref, and WebMall-QA-Ref selections from a frozen script; double-annotate a registered sample and pass the agreement threshold."
+      "affects": ["factParityAudited"],
+      "id": "representation-fact-parity",
+      "resolution": "Materialize every grounding representation from the same frozen source-fact inventory, run the cross-method parity audit, and record any method-specific information loss."
     },
     {
       "affects": ["licenseAndTermsApproved"],
@@ -41,7 +41,6 @@
     "sourceIntegrationsReady",
     "deterministicHiddenScorers",
     "factParityAudited",
-    "derivedAnnotationsAudited",
     "licenseAndTermsApproved",
     "calibrationHasNoCeilingOrFloor",
     "sampleSizeJustified",
@@ -58,7 +57,6 @@
     "benchmarkRuntimeReady": false,
     "benchmarkVersionsPinned": true,
     "calibrationHasNoCeilingOrFloor": false,
-    "derivedAnnotationsAudited": false,
     "designFrozenBeforeOutcomes": true,
     "deterministicHiddenScorers": false,
     "exactRunnerIdentityRecorded": false,
@@ -73,7 +71,7 @@
     "schemasAndMatrixValid": true,
     "sourceIntegrationsReady": false
   },
-  "generatedAt": "2026-08-28T14:51:02.759Z",
+  "generatedAt": "2026-08-28T15:14:48.826Z",
   "mainTablePilotRunnable": false,
   "pilotHarnessRunnable": true,
   "schemaVersion": "0.3.0"

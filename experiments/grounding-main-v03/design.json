@@ -7,7 +7,7 @@
   "researchQuestions": [
     {
       "id": "RQ1",
-      "question": "Does UGP improve correct interpretation of a user-pointed UI referent and grounded business QA relative to visual, structural, and published-interface baselines?"
+      "question": "Does UGP improve correct interpretation of a user-pointed UI referent relative to visual, structural, and published-interface baselines?"
     },
     {
       "id": "RQ2",
@@ -110,6 +110,7 @@
       "capability": "pointed-referent-recognition",
       "primaryMetric": "strictSuccess",
       "plannedN": 650,
+      "robustnessN": 130,
       "stepBudget": 1,
       "negativeControl": false
     },
@@ -120,38 +121,9 @@
       "capability": "pixels-only-visible-qa",
       "primaryMetric": "strictSuccess",
       "plannedN": 800,
+      "robustnessN": 160,
       "stepBudget": 1,
       "negativeControl": true
-    },
-    {
-      "id": "dashboardqa-ref",
-      "label": "DashboardQA-Ref",
-      "sourceKind": "protocol-derived-diagnostic",
-      "capability": "pointed-dashboard-qa",
-      "primaryMetric": "strictSuccess",
-      "plannedN": 240,
-      "stepBudget": 8,
-      "negativeControl": false
-    },
-    {
-      "id": "workarena-qa-ref",
-      "label": "WorkArena-QA-Ref",
-      "sourceKind": "protocol-derived-diagnostic",
-      "capability": "pointed-enterprise-qa",
-      "primaryMetric": "strictSuccess",
-      "plannedN": 160,
-      "stepBudget": 12,
-      "negativeControl": false
-    },
-    {
-      "id": "webmall-qa-ref",
-      "label": "WebMall-QA-Ref",
-      "sourceKind": "protocol-derived-diagnostic",
-      "capability": "pointed-commerce-qa",
-      "primaryMetric": "strictSuccess",
-      "plannedN": 91,
-      "stepBudget": 12,
-      "negativeControl": false
     },
     {
       "id": "workarena-plus-plus",
@@ -160,6 +132,7 @@
       "capability": "long-horizon-enterprise-action",
       "primaryMetric": "strictSuccess",
       "plannedN": 128,
+      "robustnessN": 26,
       "stepBudget": 40,
       "negativeControl": false
     },
@@ -170,6 +143,7 @@
       "capability": "long-horizon-commerce-action",
       "primaryMetric": "strictSuccess",
       "plannedN": 91,
+      "robustnessN": 18,
       "stepBudget": 40,
       "negativeControl": false
     },
@@ -181,6 +155,7 @@
       "primaryMetric": "strictSuccess",
       "secondaryMetrics": ["CR", "CuP", "pCuP", "riskRatio"],
       "plannedN": 120,
+      "robustnessN": 24,
       "stepBudget": 40,
       "negativeControl": false
     }
@@ -189,6 +164,7 @@
     "primaryReplicates": 1,
     "robustnessReplicates": 3,
     "robustnessFraction": 0.2,
+    "plannedRobustnessTasks": 358,
     "randomizationSeed": 240828,
     "stratification": [
       "benchmark",
@@ -197,8 +173,8 @@
       "interactionLength"
     ],
     "selectionRule": "Public deterministic script fixed before outcome collection; no task is selected or removed using model outcomes.",
-    "plannedPrimaryEpisodes": 36480,
-    "plannedAdditionalRobustnessEpisodes": 14592
+    "plannedPrimaryEpisodes": 28624,
+    "plannedAdditionalRobustnessEpisodes": 11456
   },
   "actorLoop": {
     "freshContextPerStep": true,
@@ -213,7 +189,7 @@
   },
   "metrics": {
     "primaryCell": "mean(strictSuccess) * 100",
-    "macroAverage": "unweighted mean of the eight pre-registered benchmark-stratum strict-success rates",
+    "macroAverage": "unweighted mean of the five pre-registered benchmark-stratum strict-success rates",
     "interval": "task-cluster bootstrap 95% confidence interval, 10000 resamples",
     "secondary": [
       "nativeBenchmarkScore",
@@ -253,6 +229,7 @@
       "UGP without entity",
       "UGP without bindings",
       "UGP without operations",
+      "UGP with shuffled semantics",
       "equal-fact flat prose",
       "full MCP tool channel"
     ]

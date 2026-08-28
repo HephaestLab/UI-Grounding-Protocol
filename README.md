@@ -229,11 +229,12 @@ The v0.2 preparation commands validate controlled-fact parity, frozen Capsule
 fields, Skills, 24 RQ1 starter-condition packets, RQ2 artifacts, 50
 deterministic prepare/reset cycles, and four retrofit browser baselines. They do
 not invoke an experimental model or convert calibration into evidence. The v0.3
-preflight additionally validates the 16-row/128-cell grounding table, official
+preflight additionally validates the 16-row/80-cell grounding table, official
 source pins, fresh actor packets, leakage checks, response sealing,
 deterministic scoring, and environment readiness. It allows pilot execution but
-keeps confirmatory execution closed until all external, annotation, license,
-calibration, and hard-isolation gates pass.
+keeps confirmatory execution closed until all external, license, calibration,
+and hard-isolation gates pass. A clean-machine continuation guide is available
+in the [v0.3 handoff](experiments/grounding-main-v03/HANDOFF.md).
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) before opening a change. The accepted
 v0.1 roadmap remains in [DEVELOPMENT_PLAN.md](DEVELOPMENT_PLAN.md).

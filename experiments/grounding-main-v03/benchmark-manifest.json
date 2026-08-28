@@ -1,7 +1,7 @@
 {
   "schemaVersion": "0.3.0",
   "checkedOn": "2026-08-28",
-  "policy": "Official repositories and datasets are pinned. Derived strata are labeled and never presented as official benchmark tasks.",
+  "policy": "Every main-table stratum uses an official published benchmark source. No protocol-derived QA split is required.",
   "sources": [
     {
       "id": "screenpr",
@@ -38,23 +38,6 @@
       ]
     },
     {
-      "id": "dashboardqa",
-      "title": "DashboardQA",
-      "usedBy": ["dashboardqa-ref"],
-      "paperVenue": "EACL Findings 2026",
-      "repository": "https://github.com/vis-nlp/DashboardQA.git",
-      "commit": "f1ee56d2366f14d88547af6259c280f86994b02b",
-      "dataset": "https://huggingface.co/datasets/ahmed-masry/DashboardQA",
-      "access": "public-data-environment-dependent",
-      "license": "Apache-2.0 code; dashboard/third-party asset terms require manual review",
-      "nativeEntrypoint": "OSWorld/GCP-oriented benchmark runner",
-      "integrationStatus": "official-runner-external-environment",
-      "blockers": [
-        "Native interactive evaluation expects an OSWorld-capable VM",
-        "DashboardQA-Ref selection annotations must be generated and independently audited"
-      ]
-    },
-    {
       "id": "browsergym",
       "title": "BrowserGym",
       "usedBy": [
@@ -76,7 +59,7 @@
     {
       "id": "workarena",
       "title": "WorkArena / WorkArena++",
-      "usedBy": ["workarena-qa-ref", "workarena-plus-plus"],
+      "usedBy": ["workarena-plus-plus"],
       "paperVenue": "NeurIPS 2024 Datasets and Benchmarks",
       "repository": "https://github.com/ServiceNow/WorkArena.git",
       "commit": "a772230a94cf1caf4166b8ead3983f3b3786455b",
@@ -87,14 +70,13 @@
       "integrationStatus": "official-runner-gated-instance",
       "blockers": [
         "User approval and authentication for WorkArena-Instances",
-        "ServiceNow instances/configuration",
-        "WorkArena-QA-Ref annotations must be created and audited"
+        "ServiceNow instances/configuration"
       ]
     },
     {
       "id": "webmall",
       "title": "WebMall",
-      "usedBy": ["webmall-qa-ref", "webmall-action"],
+      "usedBy": ["webmall-action"],
       "paperVenue": "Web benchmark release",
       "repository": "https://github.com/wbsg-uni-mannheim/WebMall.git",
       "commit": "2697d35cdfcfedcf1ade89b7ad86722db8daa8a7",
@@ -107,8 +89,7 @@
         "Python 3.11 or 3.12",
         "Linux/WSL Docker Compose",
         "Eight shop/database containers",
-        "Repository-specific BrowserGym/AgentLab submodules",
-        "WebMall-QA-Ref annotations must be created and audited"
+        "Repository-specific BrowserGym/AgentLab submodules"
       ]
     },
     {

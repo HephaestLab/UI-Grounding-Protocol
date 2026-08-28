@@ -22,9 +22,6 @@ The registered main-table columns are:
 | ------------------------------ | -------------------- | --------------------------------- |
 | Pointed referent recognition   | ScreenPR Referent    | Official source                   |
 | Pixels-only visible QA         | ScreenQA Visible     | Official source; negative control |
-| Pointed dashboard QA           | DashboardQA-Ref      | Protocol-derived diagnostic       |
-| Pointed enterprise QA          | WorkArena-QA-Ref     | Protocol-derived diagnostic       |
-| Pointed commerce QA            | WebMall-QA-Ref       | Protocol-derived diagnostic       |
 | Long-horizon enterprise action | WorkArena++          | Official source                   |
 | Long-horizon commerce action   | WebMall Action       | Official source                   |
 | Policy-compliant web action    | ST-WebAgentBench CuP | Official source                   |
@@ -32,7 +29,9 @@ The registered main-table columns are:
 The registered method groups are Vision Only, HTML/AX, Tree-of-Lens adaptation,
 IAI-P4 operationalization, WebMall-Interfaces RAG, read-only MCP Resource, NLWeb
 context, and UGP. Each method has one row per actor model. The full table
-therefore contains 16 rows and 128 primary cells.
+therefore contains 16 rows and 80 primary cells. All five benchmark strata come
+from published sources; the three proposed protocol-derived QA splits were
+removed before outcome collection.
 
 `Tree-of-Lens`, `IAI-P4`, and the three WebMall-Interfaces conditions are marked
 as adaptations wherever the fixed-loop comparison changes their native system.
@@ -71,6 +70,10 @@ pnpm experiment:v03:score -- --trajectory .runs/smoke/episodes/<episode-id>/traj
 pnpm experiment:v03:summarize -- --run-id smoke
 pnpm experiment:v03:analyze -- --run-id smoke --bootstrap 10000
 ```
+
+For a clean-machine handoff, start with [`HANDOFF.md`](HANDOFF.md). It tells the
+next Codex exactly what it may run immediately, what remains externally blocked,
+and which evidence is required before any readiness gate can be changed.
 
 `prepare` never writes gold data into an actor packet. `score` accepts the
 answer key only after the trajectory exists and records only a digest plus
@@ -114,7 +117,6 @@ The harness intentionally does not fake dependencies it cannot provide:
 - ST-WebAgentBench publishes its tasks/evaluator, but still requires deployed
   WebArena/SuiteCRM services; its official leaderboard additionally uses a
   signing key.
-- DashboardQA's native agent evaluation is GCP/OSWorld-oriented.
 - ScreenPR publishes data and model code but its repository still lists detailed
   setup/evaluation scripts as TODO.
 - Publication-grade hard isolation cannot be guaranteed by Codex subagents.

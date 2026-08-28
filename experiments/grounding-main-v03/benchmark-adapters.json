@@ -27,42 +27,6 @@
       ]
     },
     {
-      "benchmarkId": "dashboardqa-ref",
-      "sourceId": "dashboardqa",
-      "mode": "external-interactive-jsonl",
-      "harnessContractReady": true,
-      "sourceIntegrationReady": false,
-      "deterministicScorer": "official DashboardQA scorer plus strict-success projection",
-      "remaining": [
-        "Provision OSWorld/GCP environment",
-        "Create and audit referent annotations"
-      ]
-    },
-    {
-      "benchmarkId": "workarena-qa-ref",
-      "sourceId": "workarena",
-      "mode": "browsergym-jsonl",
-      "harnessContractReady": true,
-      "sourceIntegrationReady": false,
-      "deterministicScorer": "BrowserGym task validator plus strict-success projection",
-      "remaining": [
-        "Obtain gated instance access",
-        "Create and audit referent annotations"
-      ]
-    },
-    {
-      "benchmarkId": "webmall-qa-ref",
-      "sourceId": "webmall",
-      "mode": "browsergym-jsonl",
-      "harnessContractReady": true,
-      "sourceIntegrationReady": false,
-      "deterministicScorer": "WebMall task validator plus strict-success projection",
-      "remaining": [
-        "Start official shop services",
-        "Create and audit referent annotations"
-      ]
-    },
-    {
       "benchmarkId": "workarena-plus-plus",
       "sourceId": "workarena",
       "mode": "browsergym-jsonl",

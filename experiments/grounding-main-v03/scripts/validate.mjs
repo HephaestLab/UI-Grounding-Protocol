@@ -42,8 +42,8 @@ assert(
   'Main design must register exactly eight grounding methods',
 );
 assert(
-  design.benchmarks.length === 8,
-  'Main design must register exactly eight benchmark strata',
+  design.benchmarks.length === 5,
+  'Main design must register exactly five official benchmark strata',
 );
 
 for (const [label, values] of [
@@ -63,11 +63,29 @@ assert(
   plannedPrimary === design.sampling.plannedPrimaryEpisodes,
   `Primary episode count mismatch: computed ${plannedPrimary}`,
 );
-const plannedAdditional = Math.round(
-  plannedPrimary *
-    design.sampling.robustnessFraction *
-    (design.sampling.robustnessReplicates - design.sampling.primaryReplicates),
+const plannedRobustnessTasks = design.benchmarks.reduce(
+  (sum, item) => sum + item.robustnessN,
+  0,
 );
+assert(
+  plannedRobustnessTasks === design.sampling.plannedRobustnessTasks,
+  `Robustness task count mismatch: computed ${plannedRobustnessTasks}`,
+);
+for (const benchmark of design.benchmarks) {
+  assert(
+    Math.abs(
+      benchmark.robustnessN / benchmark.plannedN -
+        design.sampling.robustnessFraction,
+    ) <=
+      1 / benchmark.plannedN,
+    `${benchmark.id} robustness subset is not the registered approximately 20% sample`,
+  );
+}
+const plannedAdditional =
+  plannedRobustnessTasks *
+  design.models.length *
+  design.groundingMethods.length *
+  (design.sampling.robustnessReplicates - design.sampling.primaryReplicates);
 assert(
   plannedAdditional === design.sampling.plannedAdditionalRobustnessEpisodes,
   `Additional robustness episode count mismatch: computed ${plannedAdditional}`,
