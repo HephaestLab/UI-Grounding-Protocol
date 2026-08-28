@@ -1,0 +1,16 @@
+{
+  "artifactType": "document-selection-export",
+  "focus": {
+    "items": [
+      {
+        "catalog": "clauses",
+        "uid": "clause-12",
+        "kindUri": "com.example.document.clause",
+        "caption": "Termination for convenience",
+        "attestedBy": "document-model"
+      }
+    ],
+    "selectionStatus": "settled",
+    "recommendedPolicy": "answer-from-selected-clause"
+  }
+}

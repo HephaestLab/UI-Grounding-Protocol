@@ -1,0 +1,40 @@
+{
+  "artifactType": "ugp-grounding-bundle",
+  "groundingId": "grounding:calibration:document-clause",
+  "selection": {
+    "selectionId": "selection:calibration:document-clause",
+    "surfaceId": "surface:document-editor",
+    "mode": "text",
+    "selectors": [
+      {
+        "type": "TextQuoteSelector",
+        "exact": "Either party may terminate this agreement with 30 days notice."
+      }
+    ],
+    "surfaceRevision": "document-r14",
+    "createdAt": "2026-08-28T00:00:00Z",
+    "source": "human"
+  },
+  "referents": [
+    {
+      "nodeId": "clause:12",
+      "type": "com.example.document.clause",
+      "entityRef": { "namespace": "clauses", "id": "clause-12" },
+      "label": "Termination for convenience",
+      "authority": "authoritative",
+      "confidence": 1,
+      "relation": "exact",
+      "evidence": [
+        {
+          "kind": "text-match",
+          "authority": "authoritative",
+          "anchorId": "text:clause:12",
+          "score": 1
+        }
+      ],
+      "surfaceRevision": "document-r14",
+      "nodeRevision": "clause-r3"
+    }
+  ],
+  "ambiguity": { "requiresDisambiguation": false }
+}

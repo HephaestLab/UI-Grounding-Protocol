@@ -1,0 +1,9 @@
+{
+  "artifactType": "sanitized-dom-ax",
+  "selection": {
+    "role": "mark",
+    "name": "Termination for convenience",
+    "text": "Either party may terminate this agreement with 30 days notice.",
+    "parent": { "role": "article", "name": "Supply Agreement" }
+  }
+}

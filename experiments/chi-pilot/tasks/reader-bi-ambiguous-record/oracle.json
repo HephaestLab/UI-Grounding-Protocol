@@ -1,0 +1,8 @@
+{
+  "primaryEntity": null,
+  "candidateEntityIds": ["orders/order-001724", "widgets/records"],
+  "requiresDisambiguation": true,
+  "safeNextAction": "clarify",
+  "reasonCode": "ambiguous",
+  "evidenceAuthority": "authoritative"
+}

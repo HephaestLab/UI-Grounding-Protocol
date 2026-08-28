@@ -1,0 +1,45 @@
+{
+  "taskId": "reader-workflow-stale",
+  "study": "RQ2",
+  "phase": "infrastructure-calibration",
+  "domain": "workflow-canvas",
+  "surface": "canvas-node",
+  "prompt": "prompt.md",
+  "answerSchema": "../../schemas/reader-answer.schema.json",
+  "controlledFactIds": [
+    "authority:unknown",
+    "candidate:none",
+    "stale:true",
+    "primary:none",
+    "safe-action:refresh"
+  ],
+  "conditions": {
+    "dom": {
+      "input": "conditions/dom/input.json",
+      "factIds": ["visible-label:approve-request"]
+    },
+    "adhoc": {
+      "input": "conditions/adhoc/input.json",
+      "guide": "conditions/adhoc/GUIDE.md",
+      "factIds": [
+        "authority:unknown",
+        "candidate:none",
+        "stale:true",
+        "primary:none",
+        "safe-action:refresh"
+      ]
+    },
+    "ugp": {
+      "input": "conditions/ugp/input.json",
+      "guide": "../../shared/ugp-reader-guide.md",
+      "factIds": [
+        "authority:unknown",
+        "candidate:none",
+        "stale:true",
+        "primary:none",
+        "safe-action:refresh"
+      ]
+    }
+  },
+  "oracle": "oracle.json"
+}

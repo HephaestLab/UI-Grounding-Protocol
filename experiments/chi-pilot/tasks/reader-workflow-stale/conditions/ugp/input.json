@@ -1,0 +1,22 @@
+{
+  "artifactType": "ugp-grounding-bundle",
+  "groundingId": "grounding:calibration:workflow-stale",
+  "selection": {
+    "selectionId": "selection:calibration:workflow-stale",
+    "surfaceId": "surface:workflow-canvas",
+    "mode": "point",
+    "selectors": [{ "type": "UGPSemanticSelector", "nodeId": "approval:483" }],
+    "surfaceRevision": "workflow-r7",
+    "createdAt": "2026-08-28T00:00:00Z",
+    "source": "human"
+  },
+  "referents": [],
+  "problem": {
+    "type": "https://ui-grounding.org/problems/surface-stale",
+    "title": "Surface state is stale",
+    "status": 409,
+    "detail": "The selection revision does not match the current surface revision workflow-r8.",
+    "code": "SURFACE_STALE",
+    "retryable": true
+  }
+}

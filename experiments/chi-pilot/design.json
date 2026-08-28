@@ -1,0 +1,19 @@
+{
+  "designVersion": "0.1.0-candidate",
+  "status": "calibration-only",
+  "researchQuestions": ["RQ1", "RQ2"],
+  "rq2Evidence": ["independent-agent-transfer", "human-ai-shared-grounding"],
+  "humanStudyStatus": "not-started",
+  "defaultPilotModel": "gpt-5.6-luna",
+  "defaultReasoningEffort": "medium",
+  "exactTokenUsageObservable": false,
+  "conditions": {
+    "RQ1": ["conventional", "generic", "ugp"],
+    "RQ2": ["dom", "adhoc", "ugp"]
+  },
+  "primaryContrasts": {
+    "RQ1": ["ugp", "conventional"],
+    "RQ2": ["ugp", "adhoc"]
+  },
+  "calibrationRunsAreInferential": false
+}

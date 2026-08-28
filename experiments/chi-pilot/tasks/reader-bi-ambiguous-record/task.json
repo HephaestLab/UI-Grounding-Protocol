@@ -1,0 +1,48 @@
+{
+  "taskId": "reader-bi-ambiguous-record",
+  "study": "RQ2",
+  "phase": "infrastructure-calibration",
+  "domain": "business-intelligence",
+  "surface": "virtualized-record-table",
+  "prompt": "prompt.md",
+  "answerSchema": "../../schemas/reader-answer.schema.json",
+  "controlledFactIds": [
+    "candidate:orders/order-001724",
+    "candidate:widgets/records",
+    "authority:authoritative",
+    "ambiguity:true",
+    "primary:none",
+    "safe-action:clarify"
+  ],
+  "conditions": {
+    "dom": {
+      "input": "conditions/dom/input.json",
+      "factIds": ["visible-label:order-001724", "visible-label:order-records"]
+    },
+    "adhoc": {
+      "input": "conditions/adhoc/input.json",
+      "guide": "conditions/adhoc/GUIDE.md",
+      "factIds": [
+        "candidate:orders/order-001724",
+        "candidate:widgets/records",
+        "authority:authoritative",
+        "ambiguity:true",
+        "primary:none",
+        "safe-action:clarify"
+      ]
+    },
+    "ugp": {
+      "input": "conditions/ugp/input.json",
+      "guide": "../../shared/ugp-reader-guide.md",
+      "factIds": [
+        "candidate:orders/order-001724",
+        "candidate:widgets/records",
+        "authority:authoritative",
+        "ambiguity:true",
+        "primary:none",
+        "safe-action:clarify"
+      ]
+    }
+  },
+  "oracle": "oracle.json"
+}

@@ -1,0 +1,11 @@
+{
+  "artifactType": "workflow-pointer-record",
+  "capture": {
+    "basis": "workflow-r7",
+    "live": "workflow-r8",
+    "visualLabel": "Approve request",
+    "targetHint": "approval:483",
+    "validity": "revision-mismatch",
+    "onMismatch": "reacquire"
+  }
+}

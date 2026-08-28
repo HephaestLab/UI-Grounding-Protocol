@@ -1,0 +1,12 @@
+{
+  "primaryEntity": {
+    "namespace": "clauses",
+    "id": "clause-12",
+    "type": "com.example.document.clause"
+  },
+  "candidateEntityIds": ["clauses/clause-12"],
+  "requiresDisambiguation": false,
+  "safeNextAction": "answer",
+  "reasonCode": "grounded",
+  "evidenceAuthority": "authoritative"
+}

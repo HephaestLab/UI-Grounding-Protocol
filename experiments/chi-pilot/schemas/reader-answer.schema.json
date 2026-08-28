@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ui-grounding.org/experiments/reader-answer.schema.json",
+  "title": "UGP reader experiment answer",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "primaryEntity",
+    "candidateEntityIds",
+    "requiresDisambiguation",
+    "safeNextAction",
+    "reasonCode",
+    "evidenceAuthority"
+  ],
+  "properties": {
+    "primaryEntity": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": ["namespace", "id", "type"],
+      "properties": {
+        "namespace": { "type": "string" },
+        "id": { "type": "string" },
+        "type": { "type": "string" }
+      }
+    },
+    "candidateEntityIds": {
+      "type": "array",
+      "items": { "type": "string" },
+      "uniqueItems": true
+    },
+    "requiresDisambiguation": { "type": "boolean" },
+    "safeNextAction": { "enum": ["answer", "clarify", "refresh"] },
+    "reasonCode": {
+      "enum": ["grounded", "ambiguous", "stale", "insufficient"]
+    },
+    "evidenceAuthority": {
+      "enum": ["authoritative", "derived", "inferred", "unknown"]
+    }
+  }
+}

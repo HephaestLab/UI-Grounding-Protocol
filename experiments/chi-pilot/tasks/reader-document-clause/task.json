@@ -1,0 +1,48 @@
+{
+  "taskId": "reader-document-clause",
+  "study": "RQ2",
+  "phase": "infrastructure-calibration",
+  "domain": "document-editor",
+  "surface": "rich-text-document",
+  "prompt": "prompt.md",
+  "answerSchema": "../../schemas/reader-answer.schema.json",
+  "controlledFactIds": [
+    "candidate:clauses/clause-12",
+    "authority:authoritative",
+    "ambiguity:false",
+    "primary:clauses/clause-12",
+    "safe-action:answer"
+  ],
+  "conditions": {
+    "dom": {
+      "input": "conditions/dom/input.json",
+      "factIds": [
+        "visible-label:termination-clause",
+        "visible-label:supply-agreement"
+      ]
+    },
+    "adhoc": {
+      "input": "conditions/adhoc/input.json",
+      "guide": "conditions/adhoc/GUIDE.md",
+      "factIds": [
+        "candidate:clauses/clause-12",
+        "authority:authoritative",
+        "ambiguity:false",
+        "primary:clauses/clause-12",
+        "safe-action:answer"
+      ]
+    },
+    "ugp": {
+      "input": "conditions/ugp/input.json",
+      "guide": "../../shared/ugp-reader-guide.md",
+      "factIds": [
+        "candidate:clauses/clause-12",
+        "authority:authoritative",
+        "ambiguity:false",
+        "primary:clauses/clause-12",
+        "safe-action:answer"
+      ]
+    }
+  },
+  "oracle": "oracle.json"
+}

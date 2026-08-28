@@ -1,0 +1,73 @@
+{
+  "artifactType": "ugp-grounding-bundle",
+  "groundingId": "grounding:calibration:virtual-record",
+  "selection": {
+    "selectionId": "selection:calibration:virtual-record",
+    "surfaceId": "surface:bi-dashboard",
+    "mode": "point",
+    "selectors": [
+      {
+        "type": "UGPGeometrySelector",
+        "geometry": {
+          "kind": "point",
+          "coordinateSpace": "viewport",
+          "x": 287.64,
+          "y": 760
+        }
+      }
+    ],
+    "surfaceRevision": "q-002",
+    "createdAt": "2026-08-27T17:19:21.205Z",
+    "source": "human"
+  },
+  "referents": [
+    {
+      "nodeId": "record:order-001724",
+      "type": "org.ugp.demo.bi.record",
+      "entityRef": { "namespace": "orders", "id": "order-001724" },
+      "label": "ORDER-001724",
+      "authority": "authoritative",
+      "confidence": 1,
+      "relation": "contains-selection",
+      "evidence": [
+        {
+          "kind": "anchor-hit",
+          "authority": "authoritative",
+          "anchorId": "dom:record:order-001724",
+          "score": 1,
+          "visibleRatio": 1
+        }
+      ],
+      "surfaceRevision": "q-002",
+      "nodeRevision": "data-001"
+    },
+    {
+      "nodeId": "widget:records",
+      "type": "org.ugp.demo.bi.widget",
+      "entityRef": { "namespace": "widgets", "id": "records" },
+      "label": "Order records",
+      "authority": "authoritative",
+      "confidence": 1,
+      "relation": "contains-selection",
+      "evidence": [
+        {
+          "kind": "anchor-hit",
+          "authority": "authoritative",
+          "anchorId": "dom:widget:records",
+          "score": 1,
+          "visibleRatio": 1
+        }
+      ],
+      "surfaceRevision": "q-002"
+    }
+  ],
+  "ambiguity": {
+    "requiresDisambiguation": true,
+    "reason": "Equally ranked referents require explicit disambiguation."
+  },
+  "problem": {
+    "code": "AMBIGUOUS_REFERENT",
+    "status": 422,
+    "retryable": false
+  }
+}

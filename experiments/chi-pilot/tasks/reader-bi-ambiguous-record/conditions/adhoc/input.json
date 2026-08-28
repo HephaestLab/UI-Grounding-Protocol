@@ -1,0 +1,28 @@
+{
+  "artifactType": "application-semantic-payload",
+  "pick": {
+    "objectsUnderPointer": [
+      {
+        "businessKind": "order-record",
+        "collection": "orders",
+        "key": "order-001724",
+        "schemaType": "org.ugp.demo.bi.record",
+        "displayName": "ORDER-001724",
+        "sourceTrust": "application-authoritative",
+        "matchRank": 1
+      },
+      {
+        "businessKind": "records-widget",
+        "collection": "widgets",
+        "key": "records",
+        "schemaType": "org.ugp.demo.bi.widget",
+        "displayName": "Order records",
+        "sourceTrust": "application-authoritative",
+        "matchRank": 1
+      }
+    ],
+    "preferredObject": "orders/order-001724",
+    "sameRankRequiresUserChoice": true,
+    "recommendedPolicy": "ask-before-business-action"
+  }
+}

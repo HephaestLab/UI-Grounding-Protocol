@@ -1,0 +1,10 @@
+{
+  "artifactType": "sanitized-canvas-accessibility-snapshot",
+  "pointer": { "x": 612, "y": 348 },
+  "hit": {
+    "role": "group",
+    "name": "Approve request",
+    "description": "Workflow step"
+  },
+  "visibleStatus": "Ready"
+}

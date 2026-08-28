@@ -1,0 +1,96 @@
+{
+  "summaryVersion": "opaque-calibration-v1",
+  "eligibleForInference": false,
+  "model": "gpt-5.6-luna",
+  "reasoning": "medium",
+  "forkTurns": "none",
+  "exactTokenUsageObservable": false,
+  "runs": [
+    {
+      "runId": "run-r2-b79b630a74f3",
+      "domain": "business-intelligence",
+      "condition": "dom",
+      "normalizedScore": 0.16666666666666666,
+      "inputUtf8Bytes": 2347,
+      "adaptationGuideUtf8Bytes": 0,
+      "wallClockMs": 40092
+    },
+    {
+      "runId": "run-r2-f5ad319e47d1",
+      "domain": "business-intelligence",
+      "condition": "adhoc",
+      "normalizedScore": 1,
+      "inputUtf8Bytes": 3281,
+      "adaptationGuideUtf8Bytes": 427,
+      "wallClockMs": 69530
+    },
+    {
+      "runId": "run-r2-d9928a85396a",
+      "domain": "business-intelligence",
+      "condition": "ugp",
+      "normalizedScore": 1,
+      "inputUtf8Bytes": 4560,
+      "adaptationGuideUtf8Bytes": 591,
+      "wallClockMs": 72383
+    },
+    {
+      "runId": "run-r2-2df7d85d857c",
+      "domain": "document-editor",
+      "condition": "dom",
+      "normalizedScore": 0.3333333333333333,
+      "inputUtf8Bytes": 2199,
+      "adaptationGuideUtf8Bytes": 0,
+      "wallClockMs": 62645
+    },
+    {
+      "runId": "run-r2-81eaf3106b34",
+      "domain": "document-editor",
+      "condition": "adhoc",
+      "normalizedScore": 1,
+      "inputUtf8Bytes": 2668,
+      "adaptationGuideUtf8Bytes": 345,
+      "wallClockMs": 40642
+    },
+    {
+      "runId": "run-r2-9450eedcb823",
+      "domain": "document-editor",
+      "condition": "ugp",
+      "normalizedScore": 1,
+      "inputUtf8Bytes": 3649,
+      "adaptationGuideUtf8Bytes": 591,
+      "wallClockMs": 58921
+    },
+    {
+      "runId": "run-r2-c5043fe24453",
+      "domain": "workflow-canvas",
+      "condition": "dom",
+      "normalizedScore": 0.5,
+      "inputUtf8Bytes": 2153,
+      "adaptationGuideUtf8Bytes": 0,
+      "wallClockMs": 38073
+    },
+    {
+      "runId": "run-r2-844a04fef374",
+      "domain": "workflow-canvas",
+      "condition": "adhoc",
+      "normalizedScore": 1,
+      "inputUtf8Bytes": 2546,
+      "adaptationGuideUtf8Bytes": 363,
+      "wallClockMs": 49055
+    },
+    {
+      "runId": "run-r2-0d74f0f6f226",
+      "domain": "workflow-canvas",
+      "condition": "ugp",
+      "normalizedScore": 1,
+      "inputUtf8Bytes": 3249,
+      "adaptationGuideUtf8Bytes": 591,
+      "wallClockMs": 71214
+    }
+  ],
+  "aggregate": {
+    "meanNormalizedScore": { "dom": 0.3333333333333333, "adhoc": 1, "ugp": 1 },
+    "uniqueAdaptationGuideUtf8Bytes": { "adhoc": 1135, "ugp": 591 },
+    "transmittedAdaptationGuideUtf8Bytes": { "adhoc": 1135, "ugp": 1773 }
+  }
+}

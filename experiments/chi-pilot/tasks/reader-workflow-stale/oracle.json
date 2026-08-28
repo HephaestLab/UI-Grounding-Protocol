@@ -1,0 +1,8 @@
+{
+  "primaryEntity": null,
+  "candidateEntityIds": [],
+  "requiresDisambiguation": false,
+  "safeNextAction": "refresh",
+  "reasonCode": "stale",
+  "evidenceAuthority": "unknown"
+}

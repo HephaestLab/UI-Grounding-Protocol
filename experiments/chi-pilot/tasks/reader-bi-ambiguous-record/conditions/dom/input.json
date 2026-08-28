@@ -1,0 +1,13 @@
+{
+  "artifactType": "sanitized-dom-ax",
+  "pointer": { "x": 287.64, "y": 760 },
+  "dom": {
+    "role": "row",
+    "name": "ORDER-001724 East $8,431",
+    "parent": {
+      "role": "table",
+      "name": "Order records"
+    }
+  },
+  "visibleText": ["ORDER-001724", "East", "$8,431", "Order records"]
+}

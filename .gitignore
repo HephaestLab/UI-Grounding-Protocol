@@ -9,6 +9,7 @@ tests/browser/__screenshots__/
 *.tgz
 conformance/reports/*.json
 conformance/reports/*.md
+experiments/chi-pilot/.runs/
 .DS_Store
 Thumbs.db
 .env
