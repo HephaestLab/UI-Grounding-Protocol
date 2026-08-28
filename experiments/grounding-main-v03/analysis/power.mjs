@@ -200,9 +200,15 @@ function plannedN(benchmarkId) {
 const availableBenchmarkIds = new Set(
   calibration.paired.map((stats) => stats.benchmarkId),
 );
+const deferredBenchmarkIds = new Set(
+  confirmatorySelection?.pendingBenchmarks ?? [],
+);
 const missingBenchmarks = design.benchmarks
   .map((benchmark) => benchmark.id)
   .filter((benchmarkId) => !availableBenchmarkIds.has(benchmarkId));
+const missingActiveBenchmarks = missingBenchmarks.filter(
+  (benchmarkId) => !deferredBenchmarkIds.has(benchmarkId),
+);
 const familyComparisons = design.groundingMethods.length - 1;
 const familyAlpha = 0.05 / familyComparisons;
 const equivalenceZCritical = 2.45;
@@ -291,8 +297,17 @@ const pooled = {
   },
   action: {
     benchmarks: [...new Set(actionParameters.map((item) => item.benchmarkId))],
-    missingBenchmarks: ['workarena-plus-plus'].filter((benchmarkId) =>
-      missingBenchmarks.includes(benchmarkId),
+    missingBenchmarks: [
+      'workarena-plus-plus',
+      'webmall-action',
+      'st-webagentbench-cup',
+    ].filter(
+      (benchmarkId) =>
+        missingActiveBenchmarks.includes(benchmarkId) &&
+        !deferredBenchmarkIds.has(benchmarkId),
+    ),
+    deferredBenchmarks: ['workarena-plus-plus'].filter((benchmarkId) =>
+      deferredBenchmarkIds.has(benchmarkId),
     ),
     power: actionParameters.length
       ? pooledPower(actionParameters, random)
@@ -305,7 +320,7 @@ pooled.action.passes =
 
 const report = {
   schemaVersion: '0.3.0',
-  phase: missingBenchmarks.includes('workarena-plus-plus')
+  phase: deferredBenchmarkIds.has('workarena-plus-plus')
     ? 'four-benchmark-preauthorization'
     : 'five-benchmark',
   simulations,
@@ -316,6 +331,8 @@ const report = {
   positivePowerThreshold: 0.8,
   pooledPowerThreshold: 0.9,
   missingBenchmarks,
+  missingActiveBenchmarks,
+  deferredBenchmarks: [...deferredBenchmarkIds].sort(),
   parameters,
   cells,
   pooled,
