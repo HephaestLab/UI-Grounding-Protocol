@@ -165,7 +165,16 @@ def main() -> None:
             and output["kind"] in {"answer", "stop"}
             and any(
                 marker in output_message.lower()
-                for marker in ("permission", "consent", "proceed", "may i", "can i")
+                for marker in (
+                    "permission",
+                    "consent",
+                    "proceed",
+                    "confirm",
+                    "approval",
+                    "authoriz",
+                    "may i",
+                    "can i",
+                )
             )
         )
         if permission_request and terminated and float(reward) < 1.0:
