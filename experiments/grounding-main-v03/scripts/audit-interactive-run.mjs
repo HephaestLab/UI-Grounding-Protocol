@@ -159,8 +159,9 @@ const actorRecords = [];
 for (const { directory } of activeEpisodes) {
   const requestPath = join(directory, 'request.json');
   try {
-    const [request, runner] = await Promise.all([
+    const [request, response, runner] = await Promise.all([
       readJson(requestPath),
+      readJson(join(directory, 'response.json')),
       readJson(join(directory, 'runner.json')),
     ]);
     validateOrThrow(
@@ -180,12 +181,51 @@ for (const { directory } of activeEpisodes) {
     ) {
       failures.push({ path: requestPath, kind: 'actor-isolation' });
     }
+    if (
+      runner.runner !== 'codex-exec' ||
+      typeof runner.version !== 'string' ||
+      runner.version.length === 0 ||
+      runner.model !== request.condition.model ||
+      runner.reasoningEffort !== request.condition.reasoningEffort ||
+      runner.authMode !== 'ChatGPT OAuth' ||
+      runner.ephemeral !== true ||
+      runner.ignoreUserConfig !== true ||
+      runner.ignoreRules !== true ||
+      runner.sandbox !== 'read-only' ||
+      runner.approvalPolicy !== 'never'
+    ) {
+      failures.push({ path: requestPath, kind: 'runner-identity' });
+    }
+    const expectedImageCount = Array.isArray(
+      request.actor.observation.imagePaths,
+    )
+      ? request.actor.observation.imagePaths.length
+      : 0;
+    if (
+      runner.imageCount !== expectedImageCount ||
+      !Array.isArray(runner.imageDigests) ||
+      runner.imageDigests.length !== expectedImageCount ||
+      !runner.imageDigests.every((digest) => /^[a-f0-9]{64}$/u.test(digest))
+    ) {
+      failures.push({ path: requestPath, kind: 'multimodal-transport' });
+    }
+    if (
+      typeof runner.transcriptDigest !== 'string' ||
+      runner.transcriptDigest !== response.runnerAudit?.transcriptDigest ||
+      runner.toolsEnforcedOff !== response.runnerAudit?.toolsEnforcedOff
+    ) {
+      failures.push({ path: requestPath, kind: 'transcript-integrity' });
+    }
     actorRecords.push({
       episodeId: request.episodeId,
       packetDigest: sha256(canonicalJson(request)),
       historyLength: request.actor.publicHistory.length,
       toolsEnforcedOff: runner.toolsEnforcedOff,
       exitCode: runner.exitCode,
+      runnerVersion: runner.version,
+      model: runner.model,
+      imageCount: runner.imageCount,
+      transcriptDigest: runner.transcriptDigest,
     });
   } catch (error) {
     if (error?.code !== 'ENOENT') {
@@ -212,6 +252,9 @@ const report = {
   ),
   actorPackets: actorRecords.length,
   actorIsolationChecks: actorRecords.length * 4,
+  runnerIdentityChecks: actorRecords.length * 10,
+  multimodalTransportChecks: actorRecords.length * 3,
+  transcriptIntegrityChecks: actorRecords.length * 3,
   recordsDigest: sha256(canonicalJson(records)),
   actorRecordsDigest: sha256(canonicalJson(actorRecords)),
   failures,
