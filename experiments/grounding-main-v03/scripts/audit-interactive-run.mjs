@@ -3,6 +3,8 @@ import { basename, join } from 'node:path';
 
 import {
   canonicalJson,
+  episodeDirectories,
+  findForbiddenKeys,
   parseArgs,
   readJson,
   required,
@@ -86,6 +88,51 @@ for (const path of await taskFiles(join(runRoot, 'tasks'))) {
   }
 }
 records.sort((left, right) => left.path.localeCompare(right.path));
+const actorRecords = [];
+for (const directory of await episodeDirectories(runId)) {
+  const requestPath = join(directory, 'request.json');
+  try {
+    const [request, runner] = await Promise.all([
+      readJson(requestPath),
+      readJson(join(directory, 'runner.json')),
+    ]);
+    validateOrThrow(
+      validators['actor-request.schema.json'],
+      request,
+      requestPath,
+    );
+    const forbidden = findForbiddenKeys(request);
+    if (forbidden.length > 0) {
+      failures.push({ path: requestPath, kind: 'forbidden-actor-keys' });
+    }
+    if (
+      request.audit.goldIncluded !== false ||
+      request.audit.toolsAllowed !== false ||
+      runner.toolsEnforcedOff !== true ||
+      runner.exitCode !== 0
+    ) {
+      failures.push({ path: requestPath, kind: 'actor-isolation' });
+    }
+    actorRecords.push({
+      episodeId: request.episodeId,
+      packetDigest: sha256(canonicalJson(request)),
+      historyLength: request.actor.publicHistory.length,
+      toolsEnforcedOff: runner.toolsEnforcedOff,
+      exitCode: runner.exitCode,
+    });
+  } catch (error) {
+    if (error?.code !== 'ENOENT') {
+      failures.push({
+        path: requestPath,
+        kind: 'actor-packet',
+        error: String(error.message ?? error),
+      });
+    }
+  }
+}
+actorRecords.sort((left, right) =>
+  left.episodeId.localeCompare(right.episodeId),
+);
 const report = {
   schemaVersion: '0.3.0',
   runId,
@@ -95,7 +142,10 @@ const report = {
     (sum, record) => sum + record.methods.length,
     0,
   ),
+  actorPackets: actorRecords.length,
+  actorIsolationChecks: actorRecords.length * 4,
   recordsDigest: sha256(canonicalJson(records)),
+  actorRecordsDigest: sha256(canonicalJson(actorRecords)),
   failures,
 };
 await writeJson(join(runRoot, 'audits', 'fact-parity.json'), report);

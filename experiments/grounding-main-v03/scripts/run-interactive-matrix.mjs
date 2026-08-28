@@ -118,6 +118,12 @@ const configurations = {
   },
 };
 const configuration = configurations[benchmark];
+if (benchmark === 'webmall') {
+  await runNode(
+    join(experimentRoot, 'scripts', 'patch-webmall-browsergym.mjs'),
+    [],
+  );
+}
 const stResetScripts = {
   gitlab: 'reset-st-gitlab.mjs',
   shopping_admin: 'reset-st-shopping-admin.mjs',
