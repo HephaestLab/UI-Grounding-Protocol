@@ -81,13 +81,28 @@ const [design, manifest, adapters, environment, vendor, confirmatoryPlan] =
     readJson(join(runsRoot, 'preflight', 'vendor-check.json')),
     readJson(join(experimentRoot, 'sampling', 'confirmatory-v1.json')),
   ]);
-const [confirmatorySelection, calibration, power, staticAudit] =
-  await Promise.all([
-    optionalJson(join(runsRoot, 'confirmatory', 'selection-v1.json')),
-    optionalJson(join(runsRoot, 'calibration', 'report-v1.json')),
-    optionalJson(join(runsRoot, 'power', 'power-v1.json')),
-    optionalJson(join(runsRoot, 'audits', 'static-materialization.json')),
-  ]);
+const [
+  confirmatorySelection,
+  calibrationSelection,
+  calibrationExtension,
+  calibration,
+  power,
+  staticAudit,
+] = await Promise.all([
+  optionalJson(join(runsRoot, 'confirmatory', 'selection-v1.json')),
+  optionalJson(join(runsRoot, 'calibration', 'selection.json')),
+  optionalJson(
+    join(
+      runsRoot,
+      'calibration',
+      'extensions',
+      'calibration-extension-v1.json',
+    ),
+  ),
+  optionalJson(join(runsRoot, 'calibration', 'report-v1.json')),
+  optionalJson(join(runsRoot, 'power', 'power-v1.json')),
+  optionalJson(join(runsRoot, 'audits', 'static-materialization.json')),
+]);
 const activeBenchmarkIds = new Set(confirmatoryPlan.activeBenchmarks ?? []);
 const activeAdapters = adapters.adapters.filter((adapter) =>
   activeBenchmarkIds.has(adapter.benchmarkId),
@@ -99,12 +114,26 @@ const calibrationAudits = calibration
       ),
     )
   : [];
+const expectedCalibrationTasks = new Map(
+  (calibrationSelection?.selections ?? []).map((selection) => [
+    selection.benchmarkId === 'st-webagentbench'
+      ? 'st-webagentbench-cup'
+      : selection.benchmarkId,
+    new Set(selection.taskIds),
+  ]),
+);
+for (const taskId of calibrationExtension?.taskIds ?? []) {
+  expectedCalibrationTasks.get('screenqa-visible')?.add(taskId);
+}
 const calibrationCoverage =
   calibration?.complete === true &&
   [...activeBenchmarkIds].every((benchmarkId) =>
     design.models.every((model) =>
       calibration.paired.some(
-        (row) => row.benchmarkId === benchmarkId && row.model === model.id,
+        (row) =>
+          row.benchmarkId === benchmarkId &&
+          row.model === model.id &&
+          row.n === expectedCalibrationTasks.get(benchmarkId)?.size,
       ),
     ),
   );
@@ -274,6 +303,12 @@ const readiness = {
     calibrationRunIds: calibration?.runIds ?? [],
     calibrationAudits: calibrationAudits.filter(Boolean).length,
     calibrationComplete: calibration?.complete ?? false,
+    expectedCalibrationTasks: Object.fromEntries(
+      [...expectedCalibrationTasks].map(([benchmarkId, taskIds]) => [
+        benchmarkId,
+        taskIds.size,
+      ]),
+    ),
     powerPhase: power?.phase ?? null,
     missingActiveBenchmarks: power?.missingActiveBenchmarks ?? [],
     staticMaterializationValid: staticAudit?.valid ?? false,
