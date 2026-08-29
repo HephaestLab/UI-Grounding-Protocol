@@ -7,24 +7,18 @@
       "sourceId": "screenpr",
       "mode": "static-single-step",
       "harnessContractReady": true,
-      "sourceIntegrationReady": false,
+      "sourceIntegrationReady": true,
       "deterministicScorer": "normalized exact referent/answer",
-      "remaining": [
-        "Materialize the public dataset",
-        "Reconstruct or independently validate the missing official evaluation path"
-      ]
+      "remaining": []
     },
     {
       "benchmarkId": "screenqa-visible",
       "sourceId": "screenqa",
       "mode": "static-single-step",
       "harnessContractReady": true,
-      "sourceIntegrationReady": false,
+      "sourceIntegrationReady": true,
       "deterministicScorer": "official normalized QA matching",
-      "remaining": [
-        "Acquire the corresponding RICO pixels",
-        "Freeze the stratified negative-control sample"
-      ]
+      "remaining": []
     },
     {
       "benchmarkId": "workarena-plus-plus",
@@ -44,13 +38,9 @@
       "sourceId": "webmall",
       "mode": "browsergym-jsonl",
       "harnessContractReady": true,
-      "sourceIntegrationReady": false,
+      "sourceIntegrationReady": true,
       "deterministicScorer": "official WebMall validator",
-      "remaining": [
-        "Install Python 3.11/3.12 under Linux/WSL",
-        "Start all Docker Compose services",
-        "Run native smoke task"
-      ]
+      "remaining": []
     },
     {
       "benchmarkId": "st-webagentbench-cup",
