@@ -24,9 +24,11 @@
       "status": "pending-access"
     }
   },
-  "screenprPowerDecision": "Run the full 642-task non-calibration population and label the gpt-5.4 7-point contrast underpowered if final power remains below 80%; do not reduce the effect threshold.",
   "screenqaDecision": "The 32-task extended calibration removed the initial ceiling; retain every one of the 768 non-calibration tasks in the frozen materialized selection.",
   "calibrationDecisions": {
     "webmall-action": "The sealed 8-task calibration has 0/8 success for both gpt-5.6-luna cells and 1/8 for both gpt-5.4 cells. Retain the complete 83-task eligible population, keep the registered 40-step budget and strict scorer, and report the low baseline and any resulting low power without task removal or threshold changes."
+  },
+  "powerDecisions": {
+    "screenpr-referent": "Run the full 642-task non-calibration population and label the gpt-5.4 7-point contrast underpowered if final power remains below 80%; do not reduce the effect threshold."
   }
 }
