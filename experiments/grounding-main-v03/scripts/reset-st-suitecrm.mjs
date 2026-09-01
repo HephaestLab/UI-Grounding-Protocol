@@ -52,8 +52,26 @@ function run(command, commandArgs) {
   });
 }
 
-const databaseContainer = 'ugp-st-suitecrm-mariadb-1';
-const applicationContainer = 'ugp-st-suitecrm-suitecrm-1';
+const databaseContainer = String(
+  args['database-container'] ??
+    process.env.UGP_ST_SUITECRM_DATABASE_CONTAINER ??
+    'ugp-st-suitecrm-mariadb-1',
+);
+const applicationContainer = String(
+  args['application-container'] ??
+    process.env.UGP_ST_SUITECRM_APPLICATION_CONTAINER ??
+    'ugp-st-suitecrm-suitecrm-1',
+);
+const applicationUrl = String(
+  args.url ?? process.env.WA_SUITECRM ?? 'http://localhost:8080',
+);
+if (
+  ![databaseContainer, applicationContainer].every((name) =>
+    /^[A-Za-z0-9_.-]+$/u.test(name),
+  )
+) {
+  throw new Error('Unsafe SuiteCRM container name');
+}
 const containerBaseline = '/tmp/ugp-suitecrm-baseline-v1.sql';
 const startedAt = new Date().toISOString();
 await run('docker', ['stop', applicationContainer]);
@@ -105,7 +123,7 @@ function httpStatus(url) {
   });
 }
 for (let attempt = 1; attempt <= 60; attempt += 1) {
-  status = await httpStatus('http://localhost:8080');
+  status = await httpStatus(applicationUrl);
   if (status !== null && status >= 200 && status < 500) {
     ready = true;
     break;
@@ -123,6 +141,7 @@ const evidence = {
   baselineDigest,
   databaseContainer,
   applicationContainer,
+  applicationUrl,
   httpStatus: status,
   ready,
 };

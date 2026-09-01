@@ -1,0 +1,63 @@
+{
+  "schemaVersion": "0.1.0",
+  "profile": "crm.module-state",
+  "frameTypes": {
+    "crm.module-state": {
+      "requiredRoles": [
+        "module",
+        "availableModules",
+        "records",
+        "interactionBindings",
+        "controls",
+        "fieldInventory",
+        "fieldRoutes",
+        "pendingRelationshipSelections",
+        "blockedCommits"
+      ],
+      "summaryTemplate": "Authoritative {module} state from the installed CRM runtime with {recordCount} returned records."
+    },
+    "crm.record": {
+      "requiredRoles": ["module", "attributes"]
+    },
+    "crm.control-binding": {
+      "requiredRoles": ["targetId", "uiRole", "operations"],
+      "fieldClosureRoles": [
+        "fieldName",
+        "fieldType",
+        "fieldMode",
+        "currentValue",
+        "queryValue",
+        "relationshipValueState",
+        "selectionConfirmed",
+        "selectionPending",
+        "selectionRequirement",
+        "allowedValues",
+        "choiceExecutionContract",
+        "compatibleCommits",
+        "verificationFactKey"
+      ]
+    }
+  },
+  "compatibleCapabilities": [
+    "crm.read",
+    "crm.record.commit",
+    "ui.activate",
+    "ui.choice.open",
+    "ui.choice.query",
+    "ui.field.set",
+    "ui.selection.change"
+  ],
+  "invariants": [
+    "Capabilities express compatible operations, never permission grants.",
+    "A control target is a live visible anchor; business field meaning comes from application field definitions and component state.",
+    "Editable field controls close the field-to-control-to-operation-to-commit-to-verification loop when a commit control is present.",
+    "Field inventory distinguishes schema presence, layout reachability, and current live binding; the existence of a record attribute never implies that a UI route exists.",
+    "Choice bindings distinguish the human semantic label from the exact action argument and require unchanged post-action state to be treated as a failed transition.",
+    "Opaque localization keys are never semantic labels; resolve them through application translation resources or a declared authoritative field-name fallback.",
+    "Relationship comboboxes, query inputs, live option overlays, and selected values preserve the parent field identity and remain in the editable-choice priority class.",
+    "Each live relationship option has one canonical executable Binding; non-actionable descendants are semantic context and never interaction targets.",
+    "Relationship query text, candidate entities, unresolved transitions, and selected entities are distinct states; query text never emits the business field current-value fact, and a pending query is transaction-scoped across local visibility changes. It suppresses commit until a post-query selected-identity transition, matching canonical candidate activation plus selected state, declared cancellation, or transaction-surface exit; a pre-query selected value alone is not completion evidence.",
+    "Interaction Bindings expose at least one declared executable operation; contextual descendants without operations remain outside the actionable Binding collection.",
+    "Unknown, blank, duplicate, or stale bindings fail closed instead of being guessed from benchmark task text."
+  ]
+}

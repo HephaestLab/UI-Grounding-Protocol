@@ -35,6 +35,7 @@ const protocolSchemaRoot = join(
 const protocolSchemas = await Promise.all(
   [
     'common.schema.json',
+    'authority-manifest.schema.json',
     'semantic-value.schema.json',
     'semantic-frame.schema.json',
     'profile-definition.schema.json',
@@ -58,6 +59,69 @@ for (const profile of profiles) {
     throw new Error(
       `Invalid ${profile.profileId}: ${JSON.stringify(validateProfile.errors)}`,
     );
+  for (const frame of profile.frames) {
+    const questions = new Map(
+      frame.competencyQuestions.map((question) => [question.id, question]),
+    );
+    if (
+      questions.size !== frame.competencyQuestions.length ||
+      !questions.has('identity') ||
+      !questions.has('meaning')
+    ) {
+      throw new Error(
+        `${profile.profileId}/${frame.type}: competency questions require unique identity and meaning entries`,
+      );
+    }
+    for (const requiredId of ['identity', 'meaning']) {
+      if (!questions.get(requiredId).includeInSummary) {
+        throw new Error(
+          `${profile.profileId}/${frame.type}: ${requiredId} must be included in summary`,
+        );
+      }
+    }
+    if (!questions.get('identity').answerPaths.includes('subject')) {
+      throw new Error(
+        `${profile.profileId}/${frame.type}: identity must include the canonical subject`,
+      );
+    }
+    if (
+      !questions
+        .get('meaning')
+        .answerPaths.some((path) => path.startsWith('roles.'))
+    ) {
+      throw new Error(
+        `${profile.profileId}/${frame.type}: meaning requires a semantic role answer`,
+      );
+    }
+    for (const question of frame.competencyQuestions) {
+      for (const path of question.answerPaths) {
+        const role = path.startsWith('roles.') ? path.slice(6) : null;
+        if (
+          role &&
+          (!frame.roles[role] || !frame.requiredRoles.includes(role))
+        ) {
+          throw new Error(
+            `${profile.profileId}/${frame.type}: competency answer role must exist and be required: ${role}`,
+          );
+        }
+        const included =
+          path === 'subject' ||
+          (role ? frame.summaryPlan.roles.includes(role) : false);
+        if (question.includeInSummary && !included) {
+          throw new Error(
+            `${profile.profileId}/${frame.type}: summary omits ${path}`,
+          );
+        }
+      }
+    }
+    for (const role of frame.summaryPlan.roles) {
+      if (!frame.roles[role] || !frame.requiredRoles.includes(role)) {
+        throw new Error(
+          `${profile.profileId}/${frame.type}: summary role must exist and be required: ${role}`,
+        );
+      }
+    }
+  }
 }
 const transfer = await readJson(join(experimentRoot, 'transfer.json'));
 if (transfer.study !== 'RQ2') throw new Error('Transfer session must test RQ2');
@@ -76,6 +140,44 @@ if (
 
 const combinations = new Set();
 const taskIds = new Set();
+const profileFrames = new Map(
+  profiles.flatMap((profile) =>
+    profile.frames.map((frame) => [
+      `${profile.profileId}\u0000${frame.type}`,
+      frame,
+    ]),
+  ),
+);
+
+function formatSemanticValue(value) {
+  if (value === null || typeof value !== 'object') return String(value);
+  if (value.kind === 'entity') return value.label ?? value.ref;
+  if (value.kind === 'quantity') return `${value.value} ${value.unit}`;
+  if (value.kind === 'instant') return value.value;
+  if (value.kind === 'interval')
+    return value.label ?? `${value.start}..${value.endExclusive ?? ''}`;
+  if (value.kind === 'collection')
+    return value.items.map(formatSemanticValue).join(', ');
+  if (value.kind === 'frame')
+    return value.value.subject.label ?? value.value.subject.ref;
+  throw new Error(`Unknown semantic value: ${JSON.stringify(value)}`);
+}
+
+function summaryRoleLabel(role) {
+  return role
+    .replace(/[._-]+/gu, ' ')
+    .replace(/^\p{Ll}/u, (initial) => initial.toLocaleUpperCase('en-US'));
+}
+
+function canonicalSummary(frameDefinition, frame) {
+  const subject = frame.subject.label ?? frame.subject.ref;
+  const facts = frameDefinition.summaryPlan.roles.map(
+    (role) =>
+      `${summaryRoleLabel(role)}: ${formatSemanticValue(frame.roles[role])}`,
+  );
+  return `${subject} — ${facts.join('; ')}`;
+}
+
 for (const task of bank.tasks) {
   if (taskIds.has(task.taskId))
     throw new Error(`Duplicate task: ${task.taskId}`);
@@ -102,6 +204,18 @@ for (const task of bank.tasks) {
   if (!validateCapsule(ugp)) {
     throw new Error(
       `${task.taskId}: invalid UGP Capsule ${JSON.stringify(validateCapsule.errors)}`,
+    );
+  }
+  const profileFrame = profileFrames.get(
+    `${ugp.description.profile}\u0000${ugp.description.frame.type}`,
+  );
+  if (!profileFrame) {
+    throw new Error(`${task.taskId}: unknown Profile frame`);
+  }
+  const expectedSummary = canonicalSummary(profileFrame, ugp.description.frame);
+  if (ugp.description.summary !== expectedSummary) {
+    throw new Error(
+      `${task.taskId}: summary is not the canonical Frame projection`,
     );
   }
   const adhocText = JSON.stringify(adhoc);
@@ -171,7 +285,15 @@ const capsuleSchema = await readJson(
 const capsuleFields = Object.keys(capsuleSchema.properties).sort();
 if (
   stableStringify(capsuleFields) !==
-  stableStringify(['at', 'can', 'description', 'id', 'problem', 'v'])
+  stableStringify([
+    'at',
+    'can',
+    'description',
+    'id',
+    'problem',
+    'referent',
+    'v',
+  ])
 ) {
   throw new Error('GroundingCapsule Core fields changed');
 }

@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "0.3.0",
+  "adapterId": "suitecrm-8.8.1-runtime-v8",
+  "application": "suitecrm",
+  "applicationVersion": "8.8.1",
+  "image": {
+    "reference": "docker.io/bitnamilegacy/suitecrm:8.8.1-debian-12-r3",
+    "digest": "sha256:fa2ada7bf3d467b5fb156dcba040b80b78094cf58708097a9661ddeaf29ccfe1"
+  },
+  "binding": {
+    "acceptedOrigin": "same-origin",
+    "installation": "application-static-sidecar-before-angular-bootstrap",
+    "apiPath": "/api/graphql"
+  },
+  "forbiddenInputs": [
+    "benchmark-task-text",
+    "selected-task-ids",
+    "gold-answers",
+    "private-scorer-implementation",
+    "model-outcomes"
+  ]
+}

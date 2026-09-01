@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ui-grounding.org/schema/v0.2-draft/authority-manifest.schema.json",
+  "title": "AuthorityManifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "manifestId",
+    "application",
+    "applicationVersion",
+    "sources",
+    "knownGaps"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "0.2-draft" },
+    "manifestId": { "$ref": "common.schema.json#/$defs/identifier" },
+    "application": { "$ref": "common.schema.json#/$defs/identifier" },
+    "applicationVersion": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/source" }
+    },
+    "knownGaps": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1, "maxLength": 4096 }
+    }
+  },
+  "$defs": {
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind", "locator", "revision"],
+      "properties": {
+        "id": { "$ref": "common.schema.json#/$defs/identifier" },
+        "kind": {
+          "enum": [
+            "domain-model",
+            "backend-code",
+            "api-schema",
+            "official-docs",
+            "validated-live-state",
+            "typed-props",
+            "translation-catalog"
+          ]
+        },
+        "locator": { "type": "string", "minLength": 1, "maxLength": 4096 },
+        "revision": { "type": "string", "minLength": 1, "maxLength": 512 }
+      }
+    }
+  }
+}

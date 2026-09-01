@@ -77,9 +77,13 @@ model-only result may be described as proof of human-AI collaboration quality.
    The host re-authorizes every invocation.
 7. **No hidden semantic invention.** If the authoring agent cannot find an
    authoritative source, it reports an unresolved gap instead of guessing.
-8. **Task-sufficient minimality.** A default Description answers what, current
-   value/state, scope, basis, and available next step when those concepts apply.
-   Larger detail is expanded only when requested.
+8. **Referent-sufficient minimality.** A default Description independently
+   identifies and explains the grounded referent. Its content is not minimized
+   against benchmark task text. Larger detail is expanded only when requested.
+9. **Referent-level addressability.** A surface index may discover children, but
+   a page aggregate cannot replace a selected component's Description.
+10. **Fact-level traceability.** Node identity, subject, roles, revision, and
+    capabilities cite declared Authority Manifest sources.
 
 ## 4. v0.2 object model
 
@@ -103,22 +107,25 @@ mean. A Profile defines and validates them.
 ### ProfileDefinition
 
 A reusable vocabulary contract that defines frame types, required roles, role
-value kinds, optional vocabularies, a deterministic summary template, and
-compatible capability identifiers.
+value kinds, optional vocabularies, a canonical summary role plan, and
+compatible capability identifiers. Each frame also declares mandatory `identity`
+and `meaning` competency questions plus any Profile-specific questions and their
+answer paths.
 
 ### SemanticBinding
 
 An authoring-time, typed sidecar mapping from real application data to a
 SemanticFrame. Bindings are executable SDK code rather than wire-protocol JSON.
 They are responsible for canonical subject identity, roles, revision, and
-capability references.
+capability references. They also record fact-level provenance; the authoring
+audit resolves every citation against the frozen Authority Manifest.
 
 ### GroundingCapsule
 
 The compact agent-facing result:
 
 ```text
-version + grounding id + surface revision
+version + grounding id + surface revision + grounded node/revision
   + structured Description(summary + frame)
   + capability identifiers
   + optional grounding problem

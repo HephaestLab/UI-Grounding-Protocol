@@ -1,0 +1,238 @@
+{
+  "profileId": "profile:crm",
+  "version": "8.0.0-development",
+  "title": "SuiteCRM application referents",
+  "description": "Referent-level SuiteCRM module, record, property, and application-action meanings.",
+  "frames": [
+    {
+      "type": "crm.module",
+      "title": "CRM module",
+      "description": "An application module containing one CRM record type.",
+      "roles": {
+        "moduleName": {
+          "description": "Canonical module name",
+          "valueKinds": ["string"]
+        },
+        "recordType": {
+          "description": "Record type owned by the module",
+          "valueKinds": ["string"]
+        },
+        "returnedRecordCount": {
+          "description": "Authoritatively returned records on the current page",
+          "valueKinds": ["number"]
+        }
+      },
+      "requiredRoles": ["moduleName", "recordType", "returnedRecordCount"],
+      "competencyQuestions": [
+        {
+          "id": "identity",
+          "question": "Which SuiteCRM module is this?",
+          "answerPaths": ["subject"],
+          "includeInSummary": true
+        },
+        {
+          "id": "meaning",
+          "question": "Which application record type does it contain?",
+          "answerPaths": ["roles.moduleName", "roles.recordType"],
+          "includeInSummary": true
+        }
+      ],
+      "summaryPlan": {
+        "roles": ["moduleName", "recordType", "returnedRecordCount"]
+      },
+      "capabilities": ["crm.module.open", "crm.read"]
+    },
+    {
+      "type": "crm.record",
+      "title": "CRM record",
+      "description": "A canonical application record returned by SuiteCRM.",
+      "roles": {
+        "recordType": {
+          "description": "Canonical record type",
+          "valueKinds": ["string"]
+        },
+        "currentModule": {
+          "description": "Containing application module",
+          "valueKinds": ["string"]
+        },
+        "attributes": {
+          "description": "Source-backed current record attributes",
+          "valueKinds": ["collection"]
+        }
+      },
+      "requiredRoles": ["recordType", "currentModule", "attributes"],
+      "competencyQuestions": [
+        {
+          "id": "identity",
+          "question": "Which SuiteCRM record is this?",
+          "answerPaths": ["subject"],
+          "includeInSummary": true
+        },
+        {
+          "id": "meaning",
+          "question": "What type of record is it and where is it currently represented?",
+          "answerPaths": ["roles.recordType", "roles.currentModule"],
+          "includeInSummary": true
+        }
+      ],
+      "summaryPlan": { "roles": ["recordType", "currentModule"] },
+      "capabilities": ["crm.read"]
+    },
+    {
+      "type": "crm.field",
+      "title": "CRM record property",
+      "description": "A source-backed property of the current SuiteCRM record type.",
+      "roles": {
+        "propertyName": {
+          "description": "Canonical field-definition name",
+          "valueKinds": ["string"]
+        },
+        "propertyLabel": {
+          "description": "Application-localized display label",
+          "valueKinds": ["string"]
+        },
+        "owningRecordType": {
+          "description": "Record type that owns the property",
+          "valueKinds": ["string"]
+        },
+        "valueType": {
+          "description": "Application field value type",
+          "valueKinds": ["string", "null"]
+        },
+        "editability": {
+          "description": "Current application editability state",
+          "valueKinds": ["string"]
+        },
+        "currentValue": {
+          "description": "Current committed application value when bound",
+          "valueKinds": ["string", "number", "boolean", "null", "collection"]
+        },
+        "relationshipTargetType": {
+          "description": "Related module for a relationship property",
+          "valueKinds": ["string", "null"]
+        },
+        "selectionState": {
+          "description": "Committed or pending relationship-selection state",
+          "valueKinds": ["string"]
+        },
+        "constraint": {
+          "description": "Current application constraint on the property",
+          "valueKinds": ["string"]
+        }
+      },
+      "requiredRoles": [
+        "propertyName",
+        "propertyLabel",
+        "owningRecordType",
+        "valueType",
+        "editability",
+        "currentValue",
+        "relationshipTargetType",
+        "selectionState",
+        "constraint"
+      ],
+      "competencyQuestions": [
+        {
+          "id": "identity",
+          "question": "Which canonical record property is this?",
+          "answerPaths": ["subject"],
+          "includeInSummary": true
+        },
+        {
+          "id": "meaning",
+          "question": "What property does it represent and which record type owns it?",
+          "answerPaths": [
+            "roles.propertyName",
+            "roles.propertyLabel",
+            "roles.owningRecordType",
+            "roles.valueType"
+          ],
+          "includeInSummary": true
+        },
+        {
+          "id": "state",
+          "question": "What are its current value and mutation constraints?",
+          "answerPaths": [
+            "roles.editability",
+            "roles.currentValue",
+            "roles.selectionState",
+            "roles.constraint"
+          ],
+          "includeInSummary": true
+        }
+      ],
+      "summaryPlan": {
+        "roles": [
+          "propertyName",
+          "propertyLabel",
+          "owningRecordType",
+          "valueType",
+          "editability",
+          "currentValue",
+          "selectionState",
+          "constraint"
+        ]
+      },
+      "capabilities": [
+        "crm.field.propose-value",
+        "crm.field.choose-value",
+        "crm.field.choose-related-record"
+      ]
+    },
+    {
+      "type": "crm.application-action",
+      "title": "CRM application action",
+      "description": "A stable application action exposed by the current SuiteCRM surface.",
+      "roles": {
+        "actionLabel": {
+          "description": "Application-localized action label",
+          "valueKinds": ["string"]
+        },
+        "actionKind": {
+          "description": "Stable application action kind",
+          "valueKinds": ["string"]
+        },
+        "scope": {
+          "description": "Business object or module affected by the action",
+          "valueKinds": ["string"]
+        },
+        "consequenceClass": {
+          "description": "General consequence category",
+          "valueKinds": ["string"]
+        }
+      },
+      "requiredRoles": [
+        "actionLabel",
+        "actionKind",
+        "scope",
+        "consequenceClass"
+      ],
+      "competencyQuestions": [
+        {
+          "id": "identity",
+          "question": "Which stable SuiteCRM action is this?",
+          "answerPaths": ["subject"],
+          "includeInSummary": true
+        },
+        {
+          "id": "meaning",
+          "question": "What application transition does it represent and what does it affect?",
+          "answerPaths": [
+            "roles.actionKind",
+            "roles.scope",
+            "roles.consequenceClass"
+          ],
+          "includeInSummary": true
+        }
+      ],
+      "summaryPlan": {
+        "roles": ["actionLabel", "actionKind", "scope", "consequenceClass"]
+      },
+      "capabilities": [
+        "crm.record.commit",
+        "crm.view.open-section",
+        "crm.application.invoke"
+      ]
+    }
+  ]
+}

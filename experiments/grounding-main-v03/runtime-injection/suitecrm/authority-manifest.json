@@ -1,0 +1,121 @@
+{
+  "schemaVersion": "0.1.0",
+  "adapterId": "suitecrm-8.8.1-runtime-v7",
+  "application": "suitecrm",
+  "applicationVersion": "8.8.1",
+  "image": {
+    "reference": "docker.io/bitnamilegacy/suitecrm:8.8.1-debian-12-r3",
+    "digest": "sha256:fa2ada7bf3d467b5fb156dcba040b80b78094cf58708097a9661ddeaf29ccfe1"
+  },
+  "sources": [
+    {
+      "id": "suitecrm.field-definitions",
+      "kind": "backend-code",
+      "locator": "/bitnami/suitecrm/core/backend/FieldDefinitions",
+      "treeDigest": "665034285d828b061a718f493b3b601f217ac61715c53a657e431061d358abe3",
+      "supports": ["record.attributes.*", "module.fields.*"]
+    },
+    {
+      "id": "suitecrm.module-domain",
+      "kind": "domain-model",
+      "locator": "/bitnami/suitecrm/core/modules",
+      "treeDigest": "190c549b9802c6f9a64f731a715a4d39016333b2d8f57e6ae82443ed78c86219",
+      "supports": ["module.identity", "record.type", "record.relationships.*"]
+    },
+    {
+      "id": "suitecrm.api-v8",
+      "kind": "api-schema",
+      "locator": "/bitnami/suitecrm/public/legacy/Api",
+      "treeDigest": "d916f16549a8fafee5aee4990f49aac2fbf53a4b75af16636b332fd72487deda",
+      "supports": [
+        "record.canonical-id",
+        "record.attributes.*",
+        "record.relationships.*",
+        "collection.pagination.*"
+      ]
+    },
+    {
+      "id": "suitecrm.legacy-modules",
+      "kind": "backend-code",
+      "locator": "/bitnami/suitecrm/public/legacy/modules/{Accounts,Contacts,Opportunities,Leads,Cases,Meetings,Users}",
+      "treeDigest": "5209f544807c255164f13ab4270db4f261e6a341b7ca2e645273504713480cee",
+      "supports": [
+        "module.identity",
+        "record.type",
+        "record.attributes.*",
+        "record.relationships.*"
+      ]
+    },
+    {
+      "id": "suitecrm.graphql-live-state",
+      "kind": "validated-live-state",
+      "locator": "same-origin:/api/graphql",
+      "version": "SuiteCRM 8.8.1 GraphQL application API",
+      "supports": [
+        "module.current",
+        "module.capabilities.*",
+        "record.canonical-id",
+        "record.attributes.*",
+        "record.acl.*",
+        "application.translations.*",
+        "collection.pagination.*"
+      ]
+    },
+    {
+      "id": "suitecrm.angular-field-binding",
+      "kind": "frontend-code-and-validated-live-state",
+      "locator": "/bitnami/suitecrm/core/app/core/src/lib/fields/dynamic-field/dynamic-field.component.ts",
+      "fileDigest": "5cc3a9e9f405fa9a2b8730e18bc4ee728eedb1c91b976a6ffdbf71483712b61c",
+      "supports": [
+        "form.fields.*.current-value",
+        "control.field-name",
+        "control.field-type",
+        "control.field-mode",
+        "control.localized-label",
+        "control.relationship-choice-overlay",
+        "control.relationship-query-state",
+        "control.relationship-candidate-identity",
+        "control.relationship-unresolved-transition",
+        "control.relationship-transaction-lifecycle",
+        "control.relationship-selection-transition-evidence",
+        "control.commit-blockers",
+        "control.relationship-selected-entity-state"
+      ]
+    }
+  ],
+  "binding": {
+    "acceptedOrigin": "same-origin",
+    "installation": "application-static-sidecar-before-angular-bootstrap",
+    "apiPath": "/api/graphql",
+    "moduleRoutes": [
+      "accounts",
+      "contacts",
+      "opportunities",
+      "leads",
+      "cases",
+      "meetings",
+      "calls",
+      "tasks",
+      "notes",
+      "users"
+    ]
+  },
+  "knownGaps": [
+    "DOM-only benchmark injections are intentionally not treated as authoritative application semantics.",
+    "A page without a matching successful same-origin GraphQL state response fails closed.",
+    "The adapter describes records returned to the current page; it does not infer unreturned records or permissions.",
+    "A schema or record attribute that has no record-layout field is reported as lacking a UI route rather than exposed as actionable.",
+    "An unresolved localization token is not emitted as a semantic label; the adapter falls back to translated application metadata, visible option text, or a humanized authoritative field name.",
+    "Relationship-picker comboboxes, query inputs, canonical executable options, and selected values retain the parent authoritative field identity and are prioritized as editable choices; non-actionable option descendants remain context rather than interaction Bindings.",
+    "Relationship query text is exposed only as query state, never as the selected business-field value; a nonempty query remains transaction-scoped and suppresses commit across local visibility changes until application state verifies a post-query selected-identity transition, observes a matching canonical candidate activation, or declares cancellation. A pre-query selected value is not completion evidence.",
+    "Fail-closed snapshots retain the complete versioned semantic-quality schema with explicit zero counts, so infrastructure and semantic-quality failures remain distinguishable.",
+    "Mutation execution is outside the read-only bridge; capabilities describe compatible host-resolved operations, never permission grants."
+  ],
+  "forbiddenInputs": [
+    "benchmark-task-text",
+    "selected-task-ids",
+    "gold-answers",
+    "private-scorer-implementation",
+    "model-outcomes"
+  ]
+}

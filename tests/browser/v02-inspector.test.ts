@@ -29,7 +29,21 @@ const commerceProfile = defineProfile({
         total: { description: 'Order total', valueKinds: ['quantity'] },
       },
       requiredRoles: ['state', 'total'],
-      summaryTemplate: '{subject} is {state} with total {total}.',
+      competencyQuestions: [
+        {
+          id: 'identity',
+          question: 'Which order is this?',
+          answerPaths: ['subject'],
+          includeInSummary: true,
+        },
+        {
+          id: 'meaning',
+          question: 'What is its current state and total?',
+          answerPaths: ['roles.state', 'roles.total'],
+          includeInSummary: true,
+        },
+      ],
+      summaryPlan: { roles: ['state', 'total'] },
       capabilities: ['commerce.inspect-order'],
     },
   ],
@@ -57,6 +71,18 @@ const orderBinding = defineBinding<{
   }),
   revision: (order) => order.revision,
   capabilities: ['commerce.inspect-order'],
+  provenance: {
+    nodeId: ['frontend.order-row'],
+    subject: ['domain.orders'],
+    roles: {
+      state: ['api.orders'],
+      total: ['api.orders'],
+    },
+    revision: ['api.orders'],
+    capabilities: {
+      'commerce.inspect-order': ['domain.order-capabilities'],
+    },
+  },
 });
 
 async function until(assertion: () => void): Promise<void> {
@@ -129,7 +155,7 @@ describe('UGP v0.2 optional Inspector', () => {
     const capsule = inspector.inspect(selection);
 
     expect(capsule.description?.summary).toBe(
-      'Order 42 is pending-payment with total 8431 USD.',
+      'Order 42 — State: pending-payment; Total: 8431 USD',
     );
     expect(capsule.description?.frame.roles).toMatchObject({
       state: 'pending-payment',

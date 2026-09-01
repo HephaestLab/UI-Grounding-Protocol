@@ -1,3 +1,4 @@
+import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
 import Ajv2020 from 'ajv/dist/2020.js';
@@ -17,22 +18,69 @@ import {
   workspaceRoot,
 } from './lib.mjs';
 
-const [design, manifest, adapterManifest, fixture, response, gold, validators] =
-  await Promise.all([
-    readJson(join(experimentRoot, 'design.json')),
-    readJson(join(experimentRoot, 'benchmark-manifest.json')),
-    readJson(join(experimentRoot, 'benchmark-adapters.json')),
-    readJson(join(experimentRoot, 'fixtures', 'tasks', 'bi-kpi-qa.json')),
-    readJson(
-      join(experimentRoot, 'fixtures', 'responses', 'bi-kpi-correct.json'),
+const [
+  design,
+  manifest,
+  adapterManifest,
+  fixture,
+  response,
+  gold,
+  developmentPlan,
+  authorityManifest,
+  runtimeAdapterMetadata,
+  crmProfile,
+  officialStTasks,
+  validators,
+] = await Promise.all([
+  readJson(join(experimentRoot, 'design.json')),
+  readJson(join(experimentRoot, 'benchmark-manifest.json')),
+  readJson(join(experimentRoot, 'benchmark-adapters.json')),
+  readJson(join(experimentRoot, 'fixtures', 'tasks', 'bi-kpi-qa.json')),
+  readJson(
+    join(experimentRoot, 'fixtures', 'responses', 'bi-kpi-correct.json'),
+  ),
+  readJson(join(experimentRoot, 'fixtures', 'gold', 'bi-kpi-qa.gold.json')),
+  readJson(join(experimentRoot, 'sampling', 'suitecrm-development-v1.json')),
+  readJson(
+    join(
+      experimentRoot,
+      'runtime-injection',
+      'suitecrm-v8',
+      'authority-manifest.json',
     ),
-    readJson(join(experimentRoot, 'fixtures', 'gold', 'bi-kpi-qa.gold.json')),
-    schemaValidators(),
-  ]);
+  ),
+  readJson(
+    join(
+      experimentRoot,
+      'runtime-injection',
+      'suitecrm-v8',
+      'adapter-metadata.json',
+    ),
+  ),
+  readJson(
+    join(
+      experimentRoot,
+      'runtime-injection',
+      'suitecrm-v8',
+      'profiles',
+      'crm.profile.json',
+    ),
+  ),
+  readJson(
+    join(
+      experimentRoot,
+      'vendor',
+      'st-webagentbench',
+      'stwebagentbench',
+      'test.raw.json',
+    ),
+  ),
+  schemaValidators(),
+]);
 
 assert(
-  design.status === 'frozen-for-preflight',
-  'Design must remain frozen-for-preflight before outcomes',
+  design.status === 'runtime-injection-development',
+  'Design must identify the adaptive runtime-injection development phase',
 );
 assert(
   design.models.length === 2,
@@ -82,6 +130,89 @@ for (const benchmark of design.benchmarks) {
     `${benchmark.id} robustness subset is not the registered approximately 20% sample`,
   );
 }
+
+const officialSuiteCrmIds = officialStTasks
+  .filter((task) => task.sites?.[0] === 'suitecrm')
+  .map((task) => `st:${task.task_id}`)
+  .sort();
+assert(
+  sameSet(developmentPlan.taskIds, officialSuiteCrmIds),
+  'SuiteCRM development plan must include the complete official application slice',
+);
+assert(
+  developmentPlan.taskCount === developmentPlan.taskIds.length &&
+    developmentPlan.taskCount === 170,
+  'SuiteCRM development task count must remain 170',
+);
+assert(
+  sameSet(
+    developmentPlan.methods,
+    design.groundingMethods.map((method) => method.id),
+  ) &&
+    sameSet(
+      developmentPlan.models,
+      design.models.map((model) => model.id),
+    ),
+  'SuiteCRM development matrix factors diverge from the design',
+);
+assert(
+  developmentPlan.primaryEpisodes ===
+    developmentPlan.taskCount *
+      developmentPlan.methods.length *
+      developmentPlan.models.length *
+      developmentPlan.primaryReplicates,
+  'SuiteCRM primary episode count is stale',
+);
+assert(
+  developmentPlan.robustnessSourceTaskIds.length ===
+    developmentPlan.robustnessTaskCount &&
+    developmentPlan.robustnessSourceTaskIds.every((taskId) =>
+      developmentPlan.taskIds.includes(taskId),
+    ),
+  'SuiteCRM robustness subset is invalid',
+);
+assert(
+  developmentPlan.additionalRobustnessEpisodes ===
+    developmentPlan.robustnessTaskCount *
+      developmentPlan.methods.length *
+      developmentPlan.models.length *
+      (developmentPlan.robustnessReplicates -
+        developmentPlan.primaryReplicates) &&
+    developmentPlan.totalEpisodes ===
+      developmentPlan.primaryEpisodes +
+        developmentPlan.additionalRobustnessEpisodes,
+  'SuiteCRM robustness or total episode count is stale',
+);
+assert(
+  runtimeAdapterMetadata.adapterId === 'suitecrm-8.8.1-runtime-v8' &&
+    authorityManifest.application === runtimeAdapterMetadata.application &&
+    authorityManifest.applicationVersion === '8.8.1' &&
+    authorityManifest.sources.length >= 6 &&
+    authorityManifest.sources.every(
+      (source) =>
+        typeof source.id === 'string' &&
+        typeof source.locator === 'string' &&
+        typeof source.revision === 'string',
+    ),
+  'SuiteCRM runtime authority manifest is incomplete',
+);
+const runtimeAdapterSource = await readFile(
+  join(experimentRoot, 'runtime-injection', 'suitecrm-v8', 'adapter.js'),
+  'utf8',
+);
+assert(
+  runtimeAdapterSource.includes('__ADAPTER_DIGEST__') &&
+    runtimeAdapterSource.includes('__AUTHORITY_MANIFEST_DIGEST__') &&
+    runtimeAdapterSource.includes('__UGP_EXPERIMENT_BRIDGE__') &&
+    runtimeAdapterSource.includes('pendingRelationshipFields') &&
+    runtimeAdapterSource.includes('hiddenPendingRelationshipSelectionCount') &&
+    runtimeAdapterSource.includes('activationMatchesSelection') &&
+    runtimeAdapterSource.includes("'crm.field'") &&
+    runtimeAdapterSource.includes('referentIndex') &&
+    runtimeAdapterSource.includes('describeReferent') &&
+    runtimeAdapterSource.includes("origin: 'application-runtime'"),
+  'SuiteCRM runtime adapter is missing provenance or bridge markers',
+);
 const plannedAdditional =
   plannedRobustnessTasks *
   design.models.length *
@@ -185,8 +316,10 @@ const protocolSchemaRoot = join(
 );
 const protocolSchemaNames = [
   'common.schema.json',
+  'authority-manifest.schema.json',
   'semantic-value.schema.json',
   'semantic-frame.schema.json',
+  'profile-definition.schema.json',
   'grounding-capsule.schema.json',
 ];
 const protocolAjv = new Ajv2020({ allErrors: true, strict: false });
@@ -197,7 +330,45 @@ for (const name of protocolSchemaNames) {
 const validateCapsule = protocolAjv.getSchema(
   'https://ui-grounding.org/schema/v0.2-draft/grounding-capsule.schema.json',
 );
+const validateAuthorityManifest = protocolAjv.getSchema(
+  'https://ui-grounding.org/schema/v0.2-draft/authority-manifest.schema.json',
+);
+const validateProfile = protocolAjv.getSchema(
+  'https://ui-grounding.org/schema/v0.2-draft/profile-definition.schema.json',
+);
 assert(validateCapsule, 'Could not compile the UGP v0.2 Capsule schema');
+assert(
+  validateAuthorityManifest && validateAuthorityManifest(authorityManifest),
+  `Invalid v8 Authority Manifest: ${JSON.stringify(validateAuthorityManifest?.errors)}`,
+);
+assert(
+  validateProfile && validateProfile(crmProfile),
+  `Invalid v8 CRM Profile: ${JSON.stringify(validateProfile?.errors)}`,
+);
+for (const frame of crmProfile.frames) {
+  const questions = new Map(
+    frame.competencyQuestions.map((question) => [question.id, question]),
+  );
+  assert(
+    questions.get('identity')?.answerPaths.includes('subject') &&
+      questions.get('identity')?.includeInSummary === true &&
+      questions.get('meaning')?.includeInSummary === true,
+    `${frame.type} lacks canonical identity/meaning competency coverage`,
+  );
+  for (const question of frame.competencyQuestions) {
+    for (const path of question.answerPaths) {
+      const role = path.startsWith('roles.') ? path.slice(6) : null;
+      assert(
+        !role ||
+          (frame.roles[role] &&
+            frame.requiredRoles.includes(role) &&
+            (!question.includeInSummary ||
+              frame.summaryPlan.roles.includes(role))),
+        `${frame.type} has an invalid competency answer path: ${path}`,
+      );
+    }
+  }
+}
 const fixtureCapsule =
   fixture.sourceObservation.channels.ugp.representation.capsule;
 if (!validateCapsule(fixtureCapsule)) {

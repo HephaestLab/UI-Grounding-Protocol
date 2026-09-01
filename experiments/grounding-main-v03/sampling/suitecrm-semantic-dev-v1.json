@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "0.1.0",
+  "status": "blocked-offline-gates",
+  "purpose": "Fast diagnostic iteration after referent-level UGP realignment",
+  "benchmark": "st-webagentbench-suitecrm",
+  "developmentModelCount": 1,
+  "methods": ["html-ax", "ugp"],
+  "pairedTaskCount": 12,
+  "plannedEpisodes": 24,
+  "taskIds": [],
+  "requiredTaskClasses": [
+    "navigation",
+    "read",
+    "edit",
+    "enum-choice",
+    "compound-choice",
+    "hidden-or-reachable-field",
+    "commit",
+    "postcondition-verification"
+  ],
+  "promotion": {
+    "heldOutPairedTaskCount": 20,
+    "heldOutPlannedEpisodes": 40,
+    "confirmatoryEpisodes": 200
+  },
+  "constraints": [
+    "No task ID is selected before all offline semantic gates pass.",
+    "Development and held-out task IDs are disjoint.",
+    "Each adapter version changes only task-agnostic semantics.",
+    "Never mix episodes across adapter digests."
+  ]
+}

@@ -1,15 +1,16 @@
 ---
 name: ugp-retrofit
 description:
-  Add UGP semantics to an existing frontend through a sidecar and the smallest
-  lifecycle-safe component links while preserving its behavior and visual
-  output. Use for minimum-change upgrades of established UI codebases.
+  Add independently complete UGP referent descriptions and fact-level source
+  provenance to an existing frontend through a sidecar and minimal lifecycle
+  links while preserving behavior and visual output. Use for established UI
+  codebases that need application-owned semantics without product refactoring.
 ---
 
 # UGP minimum-change retrofit
 
 Preserve the existing product while adding a verifiable semantic sidecar. Do not
-use the retrofit as an excuse for component, state-management, styling, or API
+use the retrofit to justify unrelated component, state, styling, or API
 refactoring.
 
 Before editing, read
@@ -17,35 +18,54 @@ Before editing, read
 
 ## Workflow
 
-1. Record the current functional, accessibility, visual, build, and test
-   baselines. Identify existing user changes and keep them intact.
-2. Inspect without editing. Map target visible referents to their component,
-   live props/state, API/domain source, lifecycle, and stable identity.
-3. Write competency questions and a semantic-gap list. Do not use DOM labels to
-   fill facts that the application cannot authoritatively establish.
-4. Add `src/ugp/` Profiles, typed Bindings, capability identifiers, surfaces,
-   and tests. Keep them independent of view structure.
-5. Add the minimum component link: normally one Binding import, one link hook,
-   and one existing element ref. Preserve DOM shape, public props, layout,
-   styling, keyboard behavior, state flow, and API behavior.
-6. Compare against the frozen baseline. Revert or narrow unrelated diffs and
-   verify selection-to-Capsule behavior plus failure and cleanup paths.
+1. Record functional, accessibility, visual, build, and test baselines. Preserve
+   existing user changes.
+2. Inspect without editing. Inventory meaning-bearing visible referents, their
+   component and dynamic lifecycle, canonical identity, live state, and
+   authoritative backend/domain/API/documentation sources.
+3. Freeze an Authority Manifest and a semantic-gap report. In evaluation work,
+   exclude task text, selected task IDs, gold, scorers, and outcomes from
+   authoring sources.
+4. Define Profiles with mandatory `identity` and `meaning` competency questions
+   plus referent-specific state, scope, relation, effect, constraint, or
+   completion questions. Reject a shape-valid but semantically hollow Frame.
+5. Add sidecar Bindings with per-fact source citations, then add the smallest
+   lifecycle-safe component links. Keep transient UI targets and exact action
+   arguments separate from the business Description.
+6. Model compound controls by application transitions: distinguish proposed
+   input, executable candidates, committed values, cancellation, transaction
+   lifetime, and postcondition evidence. Do not encode one observed widget's DOM
+   shape as a universal rule.
+7. Verify every linked referent independently produces its own Capsule. Use a
+   compact surface index for discovery; never substitute one page aggregate for
+   component Descriptions.
+8. Run semantic and provenance audits, exercise dynamic mount/update/unmount and
+   fail-closed paths, compare against the frozen product baseline, and freeze a
+   new adapter version before actor evaluation.
 
 ## Stop conditions
 
-Pause and report rather than guess when canonical identity or required business
-meaning cannot be traced. Request direction before changing a public component
-API, shared state architecture, authorization flow, or product behavior solely
-to make UGP easier to install.
+Pause rather than guess when canonical identity, required business meaning, or
+fact provenance cannot be established. Request direction before changing a
+public component API, shared state architecture, authorization flow, or product
+behavior solely to install UGP.
 
 ## Invariants
 
-- Extend Profiles, never Core fields, for domain meaning.
-- Summary is a deterministic projection of the frame.
-- Capability discovery grants no authority and triggers no execution.
-- The optional Inspector is a consumer, not an application dependency.
+- `description.frame` is normative; the summary is its deterministic projection
+  and includes required identity and meaning answers.
+- Every emitted semantic fact cites a declared authoritative source. DOM/AX can
+  anchor or label but cannot be its sole business authority.
+- Every meaning-bearing component is independently addressable; surface
+  aggregation is discovery, not description substitution.
+- Capability discovery grants no authority and contains no transient target.
+- Proposed input, committed state, and postcondition evidence remain distinct;
+  unresolved transitions follow the application transaction, not temporary
+  visibility.
+- Runtime evaluation Capsules come from the installed sidecar and live Binding
+  registry, never a harness-side DOM-to-Capsule transformer.
 - A successful retrofit has no unexplained functional, visual, accessibility, or
   API regression.
 
-Finish with changed view lines/files, sidecar artifacts, semantic coverage and
-gaps, baseline comparison, and verification results.
+Finish with changed view lines, sidecar artifacts, competency and provenance
+coverage, unsupported referents, baseline comparison, and verification results.

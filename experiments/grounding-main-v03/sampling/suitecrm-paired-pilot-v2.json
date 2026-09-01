@@ -1,0 +1,374 @@
+{
+  "benchmarkId": "st-webagentbench-cup",
+  "episodeDesign": {
+    "episodeCount": 200,
+    "methods": ["html-ax", "ugp"],
+    "models": ["gpt-5.6-luna", "gpt-5.4"],
+    "replicates": [1]
+  },
+  "frozenOn": "2026-08-29",
+  "revision": "suitecrm-paired-pilot-v2",
+  "schemaVersion": "0.3.0",
+  "seed": 240902,
+  "site": "suitecrm",
+  "strata": [
+    {
+      "difficultyTier": "legacy",
+      "intentTemplateId": 2000,
+      "policyCount": 12,
+      "sourceTaskId": "st:47"
+    },
+    {
+      "difficultyTier": "legacy",
+      "intentTemplateId": 2000,
+      "policyCount": 14,
+      "sourceTaskId": "st:48"
+    },
+    {
+      "difficultyTier": "legacy",
+      "intentTemplateId": 2000,
+      "policyCount": 12,
+      "sourceTaskId": "st:49"
+    },
+    {
+      "difficultyTier": "legacy",
+      "intentTemplateId": 2001,
+      "policyCount": 13,
+      "sourceTaskId": "st:50"
+    },
+    {
+      "difficultyTier": "legacy",
+      "intentTemplateId": 2001,
+      "policyCount": 14,
+      "sourceTaskId": "st:51"
+    },
+    {
+      "difficultyTier": "legacy",
+      "intentTemplateId": 2001,
+      "policyCount": 13,
+      "sourceTaskId": "st:52"
+    },
+    {
+      "difficultyTier": "legacy",
+      "intentTemplateId": 2002,
+      "policyCount": 11,
+      "sourceTaskId": "st:53"
+    },
+    {
+      "difficultyTier": "legacy",
+      "intentTemplateId": 2002,
+      "policyCount": 13,
+      "sourceTaskId": "st:54"
+    },
+    {
+      "difficultyTier": "legacy",
+      "intentTemplateId": 2002,
+      "policyCount": 12,
+      "sourceTaskId": "st:55"
+    },
+    {
+      "difficultyTier": "legacy",
+      "intentTemplateId": 2003,
+      "policyCount": 14,
+      "sourceTaskId": "st:56"
+    },
+    {
+      "difficultyTier": "legacy",
+      "intentTemplateId": 2003,
+      "policyCount": 14,
+      "sourceTaskId": "st:57"
+    },
+    {
+      "difficultyTier": "legacy",
+      "intentTemplateId": 2003,
+      "policyCount": 12,
+      "sourceTaskId": "st:58"
+    },
+    {
+      "difficultyTier": "legacy",
+      "intentTemplateId": 2004,
+      "policyCount": 10,
+      "sourceTaskId": "st:59"
+    },
+    {
+      "difficultyTier": "legacy",
+      "intentTemplateId": 2004,
+      "policyCount": 13,
+      "sourceTaskId": "st:60"
+    },
+    {
+      "difficultyTier": "legacy",
+      "intentTemplateId": 2004,
+      "policyCount": 10,
+      "sourceTaskId": "st:61"
+    },
+    {
+      "difficultyTier": "legacy",
+      "intentTemplateId": 2005,
+      "policyCount": 10,
+      "sourceTaskId": "st:62"
+    },
+    {
+      "difficultyTier": "legacy",
+      "intentTemplateId": 2005,
+      "policyCount": 12,
+      "sourceTaskId": "st:63"
+    },
+    {
+      "difficultyTier": "legacy",
+      "intentTemplateId": 2005,
+      "policyCount": 12,
+      "sourceTaskId": "st:64"
+    },
+    {
+      "difficultyTier": "legacy",
+      "intentTemplateId": 2006,
+      "policyCount": 13,
+      "sourceTaskId": "st:65"
+    },
+    {
+      "difficultyTier": "legacy",
+      "intentTemplateId": 2006,
+      "policyCount": 13,
+      "sourceTaskId": "st:66"
+    },
+    {
+      "difficultyTier": "legacy",
+      "intentTemplateId": 2006,
+      "policyCount": 12,
+      "sourceTaskId": "st:67"
+    },
+    {
+      "difficultyTier": "legacy",
+      "intentTemplateId": 2007,
+      "policyCount": 13,
+      "sourceTaskId": "st:68"
+    },
+    {
+      "difficultyTier": "legacy",
+      "intentTemplateId": 2007,
+      "policyCount": 13,
+      "sourceTaskId": "st:69"
+    },
+    {
+      "difficultyTier": "legacy",
+      "intentTemplateId": 2007,
+      "policyCount": 15,
+      "sourceTaskId": "st:70"
+    },
+    {
+      "difficultyTier": "legacy",
+      "intentTemplateId": 2008,
+      "policyCount": 13,
+      "sourceTaskId": "st:71"
+    },
+    {
+      "difficultyTier": "legacy",
+      "intentTemplateId": 2008,
+      "policyCount": 16,
+      "sourceTaskId": "st:72"
+    },
+    {
+      "difficultyTier": "legacy",
+      "intentTemplateId": 2008,
+      "policyCount": 13,
+      "sourceTaskId": "st:73"
+    },
+    {
+      "difficultyTier": "legacy",
+      "intentTemplateId": 2009,
+      "policyCount": 11,
+      "sourceTaskId": "st:74"
+    },
+    {
+      "difficultyTier": "legacy",
+      "intentTemplateId": 2009,
+      "policyCount": 13,
+      "sourceTaskId": "st:75"
+    },
+    {
+      "difficultyTier": "legacy",
+      "intentTemplateId": 2009,
+      "policyCount": 11,
+      "sourceTaskId": "st:76"
+    },
+    {
+      "difficultyTier": "medium",
+      "intentTemplateId": 3000,
+      "policyCount": 13,
+      "sourceTaskId": "st:255"
+    },
+    {
+      "difficultyTier": "medium",
+      "intentTemplateId": 3001,
+      "policyCount": 12,
+      "sourceTaskId": "st:256"
+    },
+    {
+      "difficultyTier": "easy",
+      "intentTemplateId": 3002,
+      "policyCount": 7,
+      "sourceTaskId": "st:237"
+    },
+    {
+      "difficultyTier": "hard",
+      "intentTemplateId": 3003,
+      "policyCount": 19,
+      "sourceTaskId": "st:278"
+    },
+    {
+      "difficultyTier": "hard",
+      "intentTemplateId": 3004,
+      "policyCount": 18,
+      "sourceTaskId": "st:279"
+    },
+    {
+      "difficultyTier": "easy",
+      "intentTemplateId": 3005,
+      "policyCount": 9,
+      "sourceTaskId": "st:240"
+    },
+    {
+      "difficultyTier": "medium",
+      "intentTemplateId": 3006,
+      "policyCount": 11,
+      "sourceTaskId": "st:261"
+    },
+    {
+      "difficultyTier": "medium",
+      "intentTemplateId": 3007,
+      "policyCount": 9,
+      "sourceTaskId": "st:262"
+    },
+    {
+      "difficultyTier": "hard",
+      "intentTemplateId": 3008,
+      "policyCount": 19,
+      "sourceTaskId": "st:283"
+    },
+    {
+      "difficultyTier": "medium",
+      "intentTemplateId": 3009,
+      "policyCount": 11,
+      "sourceTaskId": "st:264"
+    },
+    {
+      "difficultyTier": "easy",
+      "intentTemplateId": 3010,
+      "policyCount": 7,
+      "sourceTaskId": "st:245"
+    },
+    {
+      "difficultyTier": "hard",
+      "intentTemplateId": 3011,
+      "policyCount": 19,
+      "sourceTaskId": "st:286"
+    },
+    {
+      "difficultyTier": "easy",
+      "intentTemplateId": 3012,
+      "policyCount": 7,
+      "sourceTaskId": "st:247"
+    },
+    {
+      "difficultyTier": "medium",
+      "intentTemplateId": 3013,
+      "policyCount": 11,
+      "sourceTaskId": "st:268"
+    },
+    {
+      "difficultyTier": "medium",
+      "intentTemplateId": 3014,
+      "policyCount": 10,
+      "sourceTaskId": "st:269"
+    },
+    {
+      "difficultyTier": "easy",
+      "intentTemplateId": 3015,
+      "policyCount": 8,
+      "sourceTaskId": "st:250"
+    },
+    {
+      "difficultyTier": "easy",
+      "intentTemplateId": 3016,
+      "policyCount": 7,
+      "sourceTaskId": "st:251"
+    },
+    {
+      "difficultyTier": "hard",
+      "intentTemplateId": 3017,
+      "policyCount": 18,
+      "sourceTaskId": "st:292"
+    },
+    {
+      "difficultyTier": "hard",
+      "intentTemplateId": 3018,
+      "policyCount": 20,
+      "sourceTaskId": "st:293"
+    },
+    {
+      "difficultyTier": "easy",
+      "intentTemplateId": 3019,
+      "policyCount": 8,
+      "sourceTaskId": "st:254"
+    }
+  ],
+  "supportRule": {
+    "advancedStratification": "All 30 legacy workflows plus one seeded variant from each of 20 advanced workflow templates.",
+    "excluded": "Synthetic benchmark-injected visual surfaces and answer-only modality tasks are outside this application semantic-sidecar treatment and are reported as N/A, not failures.",
+    "included": "Application-owned SuiteCRM workflows with intent template IDs 2000-3019 and no benchmark setup script."
+  },
+  "taskCount": 50,
+  "taskIds": [
+    "st:47",
+    "st:48",
+    "st:49",
+    "st:50",
+    "st:51",
+    "st:52",
+    "st:53",
+    "st:54",
+    "st:55",
+    "st:56",
+    "st:57",
+    "st:58",
+    "st:59",
+    "st:60",
+    "st:61",
+    "st:62",
+    "st:63",
+    "st:64",
+    "st:65",
+    "st:66",
+    "st:67",
+    "st:68",
+    "st:69",
+    "st:70",
+    "st:71",
+    "st:72",
+    "st:73",
+    "st:74",
+    "st:75",
+    "st:76",
+    "st:255",
+    "st:256",
+    "st:237",
+    "st:278",
+    "st:279",
+    "st:240",
+    "st:261",
+    "st:262",
+    "st:283",
+    "st:264",
+    "st:245",
+    "st:286",
+    "st:247",
+    "st:268",
+    "st:269",
+    "st:250",
+    "st:251",
+    "st:292",
+    "st:293",
+    "st:254"
+  ]
+}

@@ -9,6 +9,7 @@ export type GroundingCapsule = {
     surface: string;
     revision: string;
   };
+  referent: Referent | null;
   description: Description | null;
   can: string[];
   problem?: Problem;
@@ -25,8 +26,15 @@ export type SemanticValue =
   | Collection
   | NestedFrame;
 
+export interface Referent {
+  nodeId: string;
+  revision?: string;
+}
 export interface Description {
   profile: string;
+  /**
+   * Canonical Profile summaryPlan projection of the normative frame; it MUST NOT introduce facts.
+   */
   summary: string;
   frame: SemanticFrame;
 }

@@ -18,7 +18,20 @@ export interface FrameDefinition {
     [k: string]: RoleDefinition;
   };
   requiredRoles: string[];
-  summaryTemplate: string;
+  /**
+   * @minItems 2
+   */
+  competencyQuestions: [
+    CompetencyQuestion,
+    CompetencyQuestion,
+    ...CompetencyQuestion[],
+  ];
+  summaryPlan: {
+    /**
+     * @minItems 1
+     */
+    roles: [string, ...string[]];
+  };
   capabilities?: string[];
 }
 export interface RoleDefinition {
@@ -56,4 +69,13 @@ export interface RoleDefinition {
    * @minItems 1
    */
   vocabulary?: [string, ...string[]];
+}
+export interface CompetencyQuestion {
+  id: string;
+  question: string;
+  /**
+   * @minItems 1
+   */
+  answerPaths: [string, ...string[]];
+  includeInSummary: boolean;
 }

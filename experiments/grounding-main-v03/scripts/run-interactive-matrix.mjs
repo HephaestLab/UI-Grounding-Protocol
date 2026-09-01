@@ -1,5 +1,5 @@
 import { spawn } from 'node:child_process';
-import { access, mkdir, writeFile } from 'node:fs/promises';
+import { access, mkdir, readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { setTimeout as delay } from 'node:timers/promises';
 
@@ -20,8 +20,11 @@ const args = parseArgs(process.argv.slice(2));
 const benchmark = required(args, 'benchmark');
 const runId = required(args, 'run-id');
 const taskListPath = resolveInput(required(args, 'task-list'));
+const taskField = String(args['task-field'] ?? 'taskIds');
 const maxSteps = Number(args['max-steps'] ?? 40);
 const maxInfraRetries = Number(args['max-infra-retries'] ?? 3);
+const shardCount = Number(args['shard-count'] ?? 1);
+const shardIndex = Number(args['shard-index'] ?? 0);
 const methods = String(args.methods ?? 'vision-only,ugp')
   .split(',')
   .filter(Boolean);
@@ -44,6 +47,14 @@ assert(
   Number.isInteger(maxInfraRetries) && maxInfraRetries >= 0,
   '--max-infra-retries must be a nonnegative integer',
 );
+assert(
+  Number.isInteger(shardCount) &&
+    shardCount >= 1 &&
+    Number.isInteger(shardIndex) &&
+    shardIndex >= 0 &&
+    shardIndex < shardCount,
+  '--shard-count must be positive and --shard-index must be in range',
+);
 assert(methods.length > 0 && models.length > 0, 'Matrix factors are empty');
 assert(
   methods.every((value) => !/\s/u.test(value)) &&
@@ -57,9 +68,11 @@ assert(
 );
 
 const taskList = await readJson(taskListPath);
-let taskIds = Array.isArray(taskList) ? taskList : taskList.taskIds;
+let taskIds = Array.isArray(taskList) ? taskList : taskList[taskField];
 assert(Array.isArray(taskIds) && taskIds.length > 0, 'Task list is empty');
 if (args.limit) taskIds = taskIds.slice(0, Number(args.limit));
+const matrixSeed = Number(args.seed ?? taskList.seed ?? 240828);
+assert(Number.isInteger(matrixSeed), '--seed must be an integer');
 const stTaskSites =
   benchmark === 'st'
     ? new Map(
@@ -76,7 +89,7 @@ const stTaskSites =
         ).map((task) => [`st:${task.task_id}`, task.sites?.[0]]),
       )
     : null;
-const jobs = taskIds
+const globalJobs = taskIds
   .flatMap((sourceTaskId) =>
     methods.flatMap((method) =>
       models.flatMap((model) =>
@@ -87,16 +100,45 @@ const jobs = taskIds
           replicate,
           site: stTaskSites?.get(sourceTaskId) ?? null,
           rank: sha256(
-            `240828:${runId}:${sourceTaskId}:${method}:${model}:${replicate}`,
+            `${matrixSeed}:${runId}:${sourceTaskId}:${method}:${model}:${replicate}`,
           ),
         })),
       ),
     ),
   )
   .sort((left, right) => left.rank.localeCompare(right.rank));
+const jobs = globalJobs.filter((_, index) => index % shardCount === shardIndex);
 assert(
-  benchmark !== 'st' || jobs.every((job) => job.site),
+  benchmark !== 'st' || globalJobs.every((job) => job.site),
   'One or more ST tasks have no official site mapping',
+);
+const suiteCrmOnly =
+  benchmark === 'st' && globalJobs.every((job) => job.site === 'suitecrm');
+const runtimeAdapter = suiteCrmOnly
+  ? await (async () => {
+      const adapterRoot = join(
+        experimentRoot,
+        'runtime-injection',
+        'suitecrm-v8',
+      );
+      const authorityManifest = await readJson(
+        join(adapterRoot, 'authority-manifest.json'),
+      );
+      const adapterMetadata = await readJson(
+        join(adapterRoot, 'adapter-metadata.json'),
+      );
+      return {
+        adapterId: adapterMetadata.adapterId,
+        adapterDigest: sha256(await readFile(join(adapterRoot, 'adapter.js'))),
+        authorityManifestDigest: sha256(canonicalJson(authorityManifest)),
+        application: adapterMetadata.application,
+        applicationVersion: adapterMetadata.applicationVersion,
+      };
+    })()
+  : null;
+assert(
+  benchmark !== 'st' || suiteCrmOnly,
+  'This runtime-injection runner currently supports only the SuiteCRM development slice',
 );
 
 const configurations = {
@@ -131,27 +173,34 @@ const stResetScripts = {
 };
 const runRoot = join(runsRoot, runId);
 await mkdir(runRoot, { recursive: true });
-await writeJson(join(runRoot, 'matrix-plan.json'), {
-  schemaVersion: '0.3.0',
-  kind: 'interactive-matrix',
-  benchmark,
-  runId,
-  taskListPath,
-  taskListDigest: sha256(JSON.stringify(taskIds)),
-  taskCount: taskIds.length,
-  methods,
-  models,
-  replicates,
-  maxSteps,
-  maxInfraRetries,
-  episodeCount: jobs.length,
-  orderDigest: sha256(jobs.map((job) => job.rank).join('\n')),
-  jobs,
-});
+if (shardIndex === 0)
+  await writeJson(join(runRoot, 'matrix-plan.json'), {
+    schemaVersion: '0.3.0',
+    kind: 'interactive-matrix',
+    benchmark,
+    runId,
+    taskListPath,
+    taskField,
+    taskListDigest: sha256(JSON.stringify(taskIds)),
+    matrixSeed,
+    runtimeAdapter,
+    taskCount: taskIds.length,
+    methods,
+    models,
+    replicates,
+    maxSteps,
+    maxInfraRetries,
+    episodeCount: globalJobs.length,
+    shardCount,
+    orderDigest: sha256(globalJobs.map((job) => job.rank).join('\n')),
+    jobs: globalJobs,
+  });
 
 const progress = {
   schemaVersion: '0.3.0',
   runId,
+  shardCount,
+  shardIndex,
   total: jobs.length,
   completed: 0,
   skipped: 0,
@@ -159,8 +208,12 @@ const progress = {
   updatedAt: new Date().toISOString(),
   failures: [],
 };
-const progressPath = join(runRoot, 'progress.json');
-const failureLogPath = join(runRoot, 'infra-failures.jsonl');
+const shardSuffix =
+  shardCount === 1
+    ? ''
+    : `.shard-${String(shardIndex).padStart(2, '0')}-of-${String(shardCount).padStart(2, '0')}`;
+const progressPath = join(runRoot, `progress${shardSuffix}.json`);
+const failureLogPath = join(runRoot, `infra-failures${shardSuffix}.jsonl`);
 
 async function exists(path) {
   try {

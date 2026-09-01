@@ -1,0 +1,58 @@
+{
+  "schemaVersion": "0.2-draft",
+  "manifestId": "manifest:suitecrm-8.8.1-runtime-v8",
+  "application": "suitecrm",
+  "applicationVersion": "8.8.1",
+  "sources": [
+    {
+      "id": "suitecrm.field-definitions",
+      "kind": "backend-code",
+      "locator": "/bitnami/suitecrm/core/backend/FieldDefinitions",
+      "revision": "665034285d828b061a718f493b3b601f217ac61715c53a657e431061d358abe3"
+    },
+    {
+      "id": "suitecrm.module-domain",
+      "kind": "domain-model",
+      "locator": "/bitnami/suitecrm/core/modules",
+      "revision": "190c549b9802c6f9a64f731a715a4d39016333b2d8f57e6ae82443ed78c86219"
+    },
+    {
+      "id": "suitecrm.api-v8",
+      "kind": "api-schema",
+      "locator": "/bitnami/suitecrm/public/legacy/Api",
+      "revision": "d916f16549a8fafee5aee4990f49aac2fbf53a4b75af16636b332fd72487deda"
+    },
+    {
+      "id": "suitecrm.legacy-modules",
+      "kind": "backend-code",
+      "locator": "/bitnami/suitecrm/public/legacy/modules/{Accounts,Contacts,Opportunities,Leads,Cases,Meetings,Users}",
+      "revision": "5209f544807c255164f13ab4270db4f261e6a341b7ca2e645273504713480cee"
+    },
+    {
+      "id": "suitecrm.graphql-live-state",
+      "kind": "validated-live-state",
+      "locator": "same-origin:/api/graphql",
+      "revision": "SuiteCRM 8.8.1 GraphQL application API"
+    },
+    {
+      "id": "suitecrm.angular-field-binding",
+      "kind": "typed-props",
+      "locator": "/bitnami/suitecrm/core/app/core/src/lib/fields/dynamic-field/dynamic-field.component.ts",
+      "revision": "5cc3a9e9f405fa9a2b8730e18bc4ee728eedb1c91b976a6ffdbf71483712b61c"
+    },
+    {
+      "id": "suitecrm.angular-actions",
+      "kind": "typed-props",
+      "locator": "/bitnami/suitecrm/core/app/core/src/lib",
+      "revision": "suitecrm-8.8.1@sha256:fa2ada7bf3d467b5fb156dcba040b80b78094cf58708097a9661ddeaf29ccfe1"
+    }
+  ],
+  "knownGaps": [
+    "SuiteCRM field definitions identify property names, types, relations, required state, and live values but do not provide a complete business glossary. The adapter emits structured source-backed roles and does not invent narrative descriptions.",
+    "DOM-only benchmark injections are not authoritative application semantics.",
+    "A page without a matching successful same-origin GraphQL state response fails closed.",
+    "The adapter describes records returned to the current page and fields declared by the current record layout; it does not infer unreturned records or permissions.",
+    "Transient browser target IDs and exact action arguments remain in interaction Bindings and never become Description roles.",
+    "Mutation execution and authorization remain outside the read-only bridge."
+  ]
+}

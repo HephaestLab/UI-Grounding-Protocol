@@ -52,6 +52,15 @@ function emptyCapsule(
   grounding: GroundingBundle,
   problem: NonNullable<GroundingCapsule['problem']>,
 ): GroundingCapsule {
+  const referent =
+    grounding.referents.length === 1
+      ? {
+          nodeId: grounding.referents[0]!.nodeId,
+          ...(grounding.referents[0]!.nodeRevision
+            ? { revision: grounding.referents[0]!.nodeRevision }
+            : {}),
+        }
+      : null;
   return {
     v: '0.2-draft',
     id: `capsule:${grounding.groundingId}`,
@@ -59,6 +68,7 @@ function emptyCapsule(
       surface: grounding.selection.surfaceId,
       revision: grounding.selection.surfaceRevision,
     },
+    referent,
     description: null,
     can: [],
     problem,
@@ -138,12 +148,24 @@ export class SemanticDescriptionRegistry {
       if (referent.nodeRevision && binding.revision !== referent.nodeRevision) {
         throw new Error('Binding revision does not match the grounded node');
       }
+      const descriptionValidation = this.profiles.validateDescription(
+        binding.profile,
+        binding.frame,
+        binding.summary,
+      );
+      if (!descriptionValidation.valid) {
+        throw new Error(descriptionValidation.issues.join('; '));
+      }
       return {
         v: '0.2-draft',
         id: `capsule:${grounding.groundingId}`,
         at: {
           surface: grounding.selection.surfaceId,
           revision: grounding.selection.surfaceRevision,
+        },
+        referent: {
+          nodeId: binding.nodeId,
+          ...(binding.revision ? { revision: binding.revision } : {}),
         },
         description: {
           profile: binding.profile,

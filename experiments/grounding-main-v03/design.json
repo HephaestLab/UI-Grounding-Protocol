@@ -1,9 +1,29 @@
 {
   "schemaVersion": "0.3.0",
   "experimentId": "ugp-grounding-main-v03",
-  "status": "frozen-for-preflight",
+  "status": "runtime-injection-development",
   "frozenOn": "2026-08-28",
-  "claimBoundary": "The confirmatory study estimates the effect of the current-step grounding representation under a fixed minimal actor loop; it does not estimate the value of a complete vendor agent stack.",
+  "revisedOn": "2026-08-29",
+  "revision": "runtime-injection-v1",
+  "claimBoundary": "The end-to-end study estimates the effect of an installed UGP runtime sidecar under a fixed minimal actor loop. UGP Capsules must originate in live application Bindings backed by frozen authoritative code, domain models, official API/schema, or product documentation. Static screenshot representation studies are auxiliary and are not evidence of native UGP deployment.",
+  "authoringAuthority": {
+    "allowed": [
+      "frontend-code",
+      "backend-code",
+      "domain-model",
+      "official-api-schema",
+      "validated-live-state",
+      "official-product-documentation"
+    ],
+    "closedSourceRule": "An official API/schema plus validated live state and product documentation may substitute for unavailable backend source.",
+    "domRule": "DOM/AX may locate an anchor or supply a label but cannot be the sole authority for canonical identity, business meaning, permission, or capability.",
+    "forbiddenDuringAuthoring": [
+      "held-out-task-selection",
+      "gold-answers",
+      "private-evaluator-rules",
+      "model-outcomes"
+    ]
+  },
   "researchQuestions": [
     {
       "id": "RQ1",
@@ -112,7 +132,9 @@
       "plannedN": 650,
       "robustnessN": 130,
       "stepBudget": 1,
-      "negativeControl": false
+      "negativeControl": false,
+      "studyRole": "auxiliary-representation",
+      "ugpFidelity": "harness-derived-not-native"
     },
     {
       "id": "screenqa-visible",
@@ -123,7 +145,9 @@
       "plannedN": 800,
       "robustnessN": 160,
       "stepBudget": 1,
-      "negativeControl": true
+      "negativeControl": true,
+      "studyRole": "auxiliary-representation",
+      "ugpFidelity": "harness-derived-not-native"
     },
     {
       "id": "workarena-plus-plus",
@@ -134,7 +158,9 @@
       "plannedN": 128,
       "robustnessN": 26,
       "stepBudget": 40,
-      "negativeControl": false
+      "negativeControl": false,
+      "studyRole": "end-to-end-external-validation",
+      "ugpFidelity": "official-api-schema-runtime"
     },
     {
       "id": "webmall-action",
@@ -145,7 +171,9 @@
       "plannedN": 91,
       "robustnessN": 18,
       "stepBudget": 40,
-      "negativeControl": false
+      "negativeControl": false,
+      "studyRole": "end-to-end-external-validation",
+      "ugpFidelity": "application-runtime"
     },
     {
       "id": "st-webagentbench-cup",
@@ -157,7 +185,11 @@
       "plannedN": 120,
       "robustnessN": 24,
       "stepBudget": 40,
-      "negativeControl": false
+      "negativeControl": false,
+      "studyRole": "end-to-end-mixed",
+      "ugpFidelity": "application-runtime",
+      "developmentApplication": "suitecrm",
+      "externalValidationApplications": ["gitlab", "shopping_admin"]
     }
   ],
   "sampling": {
@@ -189,7 +221,7 @@
   },
   "metrics": {
     "primaryCell": "mean(strictSuccess) * 100",
-    "macroAverage": "unweighted mean of the five pre-registered benchmark-stratum strict-success rates",
+    "macroAverage": "unweighted mean of the end-to-end WorkArena, WebMall, and ST-WebAgentBench strict-success rates; ScreenPR and ScreenQA are reported separately as auxiliary representation studies",
     "interval": "task-cluster bootstrap 95% confidence interval, 10000 resamples",
     "secondary": [
       "nativeBenchmarkScore",
@@ -214,10 +246,10 @@
       "adjustedP"
     ],
     "exclusions": "Only predeclared infrastructure failures; invalid model output remains failure.",
-    "negativeControlExpectation": "UGP is not expected to materially improve ScreenQA items answerable from visible pixels without referent or business semantics."
+    "negativeControlExpectation": "The auxiliary ScreenQA representation study is diagnostic only and is not interpreted as a native UGP deployment effect."
   },
   "fidelityTables": {
-    "causalMain": "fixed actor, adapted representations, common actions",
+    "causalMain": "fixed actor and common actions; UGP comes from an installed runtime sidecar while equal-authority semantic controls project the same frozen authority facts",
     "nativeSystems": [
       "Tree-of-Lens official pipeline",
       "Ferret-UI native checkpoint",
@@ -241,10 +273,26 @@
     "deterministicHiddenScorers",
     "actorFilesystemAndToolsIsolated",
     "exactRunnerIdentityRecorded",
-    "factParityAudited",
+    "runtimeCapsuleProvenanceAudited",
+    "semanticBaselineParityAudited",
     "calibrationHasNoCeilingOrFloor",
     "sampleSizeJustified",
     "multimodalActorTransportVerified",
     "allInfrastructureSmokeTestsPass"
-  ]
+  ],
+  "developmentStudy": {
+    "id": "suitecrm-runtime-injection-development-v1",
+    "purpose": "Run the complete SuiteCRM application slice to estimate initial effect and diagnose Skill, Profile, Binding, lifecycle, capability, and fail-closed design defects before external validation.",
+    "benchmark": "st-webagentbench-cup",
+    "application": "suitecrm",
+    "taskCount": 170,
+    "methods": 8,
+    "models": 2,
+    "primaryEpisodes": 2720,
+    "robustnessTasks": 34,
+    "robustnessReplicates": 3,
+    "additionalRobustnessEpisodes": 1088,
+    "totalEpisodes": 3808,
+    "outcomeUse": "development-only; SuiteCRM outcomes may drive protocol changes and are excluded from later confirmatory generalization claims"
+  }
 }

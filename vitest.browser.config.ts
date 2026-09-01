@@ -36,6 +36,9 @@ export default defineConfig({
   },
   test: {
     browser: {
+      api: {
+        host: '127.0.0.1',
+      },
       enabled: true,
       headless: true,
       instances: [

@@ -76,6 +76,10 @@ keeps diagnostic geometry, ranking evidence, ambiguity, and staleness. The v0.2
 research candidate combines that result with an application Binding to produce a
 smaller agent-facing `GroundingCapsule`.
 
+The grounded referent is the semantic unit. A surface may index child referents,
+but a generic page snapshot cannot replace an independently complete component
+Description.
+
 ## Minimal general grammar
 
 UGP v0.2 uses four concepts:
@@ -83,10 +87,11 @@ UGP v0.2 uses four concepts:
 - `SemanticValue`: scalar, quantity, entity, instant, interval, collection, or
   nested frame;
 - `SemanticFrame`: a typed statement with one canonical subject and named roles;
-- `ProfileDefinition`: domain vocabulary, role constraints, deterministic
-  summary template, and compatible capabilities;
-- `GroundingCapsule`: surface revision, structured description, capability
-  identifiers, and an optional grounding problem.
+- `ProfileDefinition`: domain vocabulary, role constraints, a canonical summary
+  role plan, mandatory identity/meaning competency questions, and compatible
+  capabilities;
+- `GroundingCapsule`: grounded node/revision, surface revision, structured
+  description, capability identifiers, and an optional grounding problem.
 
 Domain meaning belongs in Profile roles. BI can define `metric`, `value`, and
 `scope`; a contract Profile can define `effect` and `noticePeriod`; a workflow
@@ -100,9 +105,13 @@ Profile can define `state`, `assignee`, and `prerequisite`. None changes Core.
     "surface": "surface:orders",
     "revision": "surface-r1"
   },
+  "referent": {
+    "nodeId": "order:42",
+    "revision": "order-r3"
+  },
   "description": {
     "profile": "profile:commerce",
-    "summary": "Order 42 is pending-payment with total 8431 USD.",
+    "summary": "Order 42 — State: pending-payment; Total: 8431 USD",
     "frame": {
       "type": "commerce.order",
       "subject": {
@@ -124,10 +133,17 @@ Profile can define `state`, `assignee`, and `prerequisite`. None changes Core.
 }
 ```
 
-`description.frame` is normative. `description.summary` is generated from the
-validated frame and Profile template; it is never a second independently
-maintained description. A pointer to a query, API, or resource may expand the
+`description.frame` is normative. `description.summary` is the canonical
+`subject — Role: value` projection selected by the Profile's `summaryPlan`; it
+is never a second independently maintained description. Arbitrary factual text
+is forbidden in the summary plan, so every factual phrase must come from a
+validated Frame role. A pointer to a query, API, or resource may expand the
 meaning, but cannot replace the immediate structured description.
+
+Each Binding also keeps fact-level source citations for node identity, subject,
+roles, revision, and capabilities. Those citations are checked against a frozen
+Authority Manifest during authoring and audit; they are not duplicated into the
+compact Capsule.
 
 ## Authoring model
 
@@ -160,6 +176,7 @@ props, the authoring workflow records a semantic gap instead of guessing from
 rendered text.
 
 See the [v0.2 authoring contract](spec/drafts/v0.2/AUTHORING.md) and the
+[first-principles constraints](spec/drafts/v0.2/FIRST_PRINCIPLES.md), plus the
 repository Skills in [`skills/`](skills/).
 
 ## Optional Inspector and host boundary

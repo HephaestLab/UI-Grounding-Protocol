@@ -4,7 +4,7 @@
   "title": "GroundingCapsule",
   "type": "object",
   "additionalProperties": false,
-  "required": ["v", "id", "at", "description", "can"],
+  "required": ["v", "id", "at", "referent", "description", "can"],
   "properties": {
     "v": { "const": "0.2-draft" },
     "id": { "$ref": "common.schema.json#/$defs/identifier" },
@@ -16,6 +16,9 @@
         "surface": { "$ref": "common.schema.json#/$defs/identifier" },
         "revision": { "type": "string", "minLength": 1, "maxLength": 128 }
       }
+    },
+    "referent": {
+      "oneOf": [{ "$ref": "#/$defs/referent" }, { "type": "null" }]
     },
     "description": {
       "oneOf": [{ "$ref": "#/$defs/description" }, { "type": "null" }]
@@ -30,6 +33,13 @@
   "allOf": [
     {
       "if": {
+        "properties": { "description": { "$ref": "#/$defs/description" } },
+        "required": ["description"]
+      },
+      "then": { "properties": { "referent": { "$ref": "#/$defs/referent" } } }
+    },
+    {
+      "if": {
         "properties": { "description": { "type": "null" } },
         "required": ["description"]
       },
@@ -37,13 +47,27 @@
     }
   ],
   "$defs": {
+    "referent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["nodeId"],
+      "properties": {
+        "nodeId": { "$ref": "common.schema.json#/$defs/identifier" },
+        "revision": { "type": "string", "minLength": 1, "maxLength": 128 }
+      }
+    },
     "description": {
       "type": "object",
       "additionalProperties": false,
       "required": ["profile", "summary", "frame"],
       "properties": {
         "profile": { "$ref": "common.schema.json#/$defs/identifier" },
-        "summary": { "type": "string", "minLength": 1, "maxLength": 4096 },
+        "summary": {
+          "description": "Canonical Profile summaryPlan projection of the normative frame; it MUST NOT introduce facts.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096
+        },
         "frame": { "$ref": "semantic-frame.schema.json" }
       }
     },

@@ -13,7 +13,6 @@ import {
   resolveInput,
   responseSchemaForActor,
   runsRoot,
-  sameSet,
   schemaValidators,
   sha256,
   validateOrThrow,
@@ -47,8 +46,10 @@ assert(model, `Unknown actor model: ${modelId}`);
 const channel = task.sourceObservation.channels[methodId];
 assert(channel, `Task has no ${methodId} representation`);
 assert(
-  sameSet(channel.factKeys, task.sourceObservation.factKeys),
-  `${methodId} representation failed declared fact-parity check`,
+  channel.factKeys.every((factKey) =>
+    task.sourceObservation.factKeys.includes(factKey),
+  ),
+  `${methodId} representation declares facts outside the source observation`,
 );
 
 const computedFactDigest = sha256(
@@ -65,11 +66,21 @@ for (const [index, entry] of publicHistory.entries()) {
       typeof entry.action === 'string' &&
       entry.result &&
       typeof entry.result.url === 'string' &&
+      (!entry.result.chatMessages ||
+        (Array.isArray(entry.result.chatMessages) &&
+          entry.result.chatMessages.every(
+            (message) =>
+              message &&
+              typeof message.role === 'string' &&
+              typeof message.message === 'string',
+          ))) &&
       Object.keys(entry).every((key) =>
         ['step', 'action', 'result'].includes(key),
       ) &&
-      Object.keys(entry.result).every((key) => key === 'url'),
-    `Public history item ${index} must contain only step, action, and result.url`,
+      Object.keys(entry.result).every((key) =>
+        ['url', 'chatMessages'].includes(key),
+      ),
+    `Public history item ${index} has an invalid public step result`,
   );
 }
 

@@ -2,12 +2,14 @@ import type { GroundingBundle } from '@ui-grounding/protocol';
 import { describe, expect, it } from 'vitest';
 
 import {
+  auditBindingProvenance,
   defineBinding,
   defineProfile,
   entityRefFromSubject,
   materializeBinding,
   ProfileRegistry,
   SemanticDescriptionRegistry,
+  type AuthorityManifest,
   type ProfileDefinition,
 } from './index.js';
 
@@ -28,7 +30,21 @@ const profiles = [
           query: { description: 'Query reference', valueKinds: ['entity'] },
         },
         requiredRoles: ['metric', 'value', 'scope'],
-        summaryTemplate: '{subject} is {value} for {scope}.',
+        competencyQuestions: [
+          {
+            id: 'identity',
+            question: 'Which observation is this?',
+            answerPaths: ['subject'],
+            includeInSummary: true,
+          },
+          {
+            id: 'meaning',
+            question: 'What was observed under which scope?',
+            answerPaths: ['roles.value', 'roles.scope'],
+            includeInSummary: true,
+          },
+        ],
+        summaryPlan: { roles: ['value', 'scope'] },
         capabilities: ['bi.describe'],
       },
     ],
@@ -50,7 +66,21 @@ const profiles = [
           },
         },
         requiredRoles: ['effect'],
-        summaryTemplate: '{subject}: {effect}.',
+        competencyQuestions: [
+          {
+            id: 'identity',
+            question: 'Which clause is this?',
+            answerPaths: ['subject'],
+            includeInSummary: true,
+          },
+          {
+            id: 'meaning',
+            question: 'What normative effect does it have?',
+            answerPaths: ['roles.effect'],
+            includeInSummary: true,
+          },
+        ],
+        summaryPlan: { roles: ['effect'] },
       },
     ],
   } satisfies ProfileDefinition),
@@ -72,7 +102,21 @@ const profiles = [
           assignee: { description: 'Assigned actor', valueKinds: ['entity'] },
         },
         requiredRoles: ['state', 'assignee'],
-        summaryTemplate: '{subject} is {state}, assigned to {assignee}.',
+        competencyQuestions: [
+          {
+            id: 'identity',
+            question: 'Which workflow step is this?',
+            answerPaths: ['subject'],
+            includeInSummary: true,
+          },
+          {
+            id: 'meaning',
+            question: 'What is its state and assignment?',
+            answerPaths: ['roles.state', 'roles.assignee'],
+            includeInSummary: true,
+          },
+        ],
+        summaryPlan: { roles: ['state', 'assignee'] },
       },
     ],
   } satisfies ProfileDefinition),
@@ -90,7 +134,21 @@ const profiles = [
           total: { description: 'Order total', valueKinds: ['quantity'] },
         },
         requiredRoles: ['state', 'total'],
-        summaryTemplate: '{subject} is {state} with total {total}.',
+        competencyQuestions: [
+          {
+            id: 'identity',
+            question: 'Which order is this?',
+            answerPaths: ['subject'],
+            includeInSummary: true,
+          },
+          {
+            id: 'meaning',
+            question: 'What is its current state and total?',
+            answerPaths: ['roles.state', 'roles.total'],
+            includeInSummary: true,
+          },
+        ],
+        summaryPlan: { roles: ['state', 'total'] },
         capabilities: ['commerce.inspect-order'],
       },
     ],
@@ -119,7 +177,53 @@ const commerceBinding = defineBinding<{
   }),
   revision: (order) => order.revision,
   capabilities: ['commerce.inspect-order'],
+  provenance: {
+    nodeId: ['frontend.order-row'],
+    subject: ['domain.orders'],
+    roles: {
+      state: ['api.orders'],
+      total: ['api.orders'],
+    },
+    revision: ['api.orders'],
+    capabilities: {
+      'commerce.inspect-order': ['domain.order-capabilities'],
+    },
+  },
 });
+
+const authorityManifest = {
+  schemaVersion: '0.2-draft',
+  manifestId: 'manifest:commerce-test',
+  application: 'commerce-test',
+  applicationVersion: '1',
+  sources: [
+    {
+      id: 'frontend.order-row',
+      kind: 'typed-props',
+      locator: 'src/components/OrderRow.tsx',
+      revision: 'test-revision',
+    },
+    {
+      id: 'domain.orders',
+      kind: 'domain-model',
+      locator: 'src/domain/Order.ts',
+      revision: 'test-revision',
+    },
+    {
+      id: 'api.orders',
+      kind: 'api-schema',
+      locator: 'openapi.json#/Order',
+      revision: 'test-revision',
+    },
+    {
+      id: 'domain.order-capabilities',
+      kind: 'backend-code',
+      locator: 'src/domain/order-capabilities.ts',
+      revision: 'test-revision',
+    },
+  ],
+  knownGaps: [],
+} satisfies AuthorityManifest;
 
 function grounding(overrides: Partial<GroundingBundle> = {}): GroundingBundle {
   return {
@@ -209,6 +313,7 @@ describe('UGP v0.2 authoring candidate', () => {
       'Missing required role: assignee',
       'Role state contains an unknown vocabulary value',
       'Unknown role: extra',
+      'meaning: Missing competency answer: roles.assignee',
     ]);
   });
 
@@ -221,15 +326,133 @@ describe('UGP v0.2 authoring candidate', () => {
       revision: 'order-r3',
     });
     expect(materialized.summary).toBe(
-      'Order 42 is pending-payment with total 8431 USD.',
+      'Order 42 — State: pending-payment; Total: 8431 USD',
     );
     expect(materialized.nodeId).toBe('order:42');
     expect(materialized.revision).toBe('order-r3');
     expect(materialized.capabilities).toEqual(['commerce.inspect-order']);
+    expect(auditBindingProvenance(materialized, authorityManifest)).toEqual({
+      valid: true,
+      issues: [],
+    });
     expect(entityRefFromSubject(materialized.frame.subject)).toEqual({
       namespace: 'orders',
       id: '42',
       type: 'commerce.order',
+    });
+    expect(
+      registry.validateDescription(
+        materialized.profile,
+        materialized.frame,
+        materialized.summary,
+      ),
+    ).toEqual({ valid: true, issues: [] });
+    expect(
+      registry.validateDescription(
+        materialized.profile,
+        materialized.frame,
+        'A hand-written summary that drifted from the Frame.',
+      ),
+    ).toEqual({
+      valid: false,
+      issues: ['Summary is not the canonical projection of the Frame'],
+    });
+  });
+
+  it('rejects semantically hollow Profiles and untraceable Binding facts', () => {
+    expect(() =>
+      defineProfile({
+        profileId: 'profile:hollow',
+        version: '1',
+        title: 'Hollow',
+        frames: [
+          {
+            type: 'test.hollow',
+            title: 'Hollow frame',
+            description: 'Shape-valid but meaning-incomplete.',
+            roles: {
+              state: { description: 'State', valueKinds: ['string'] },
+              basis: { description: 'Basis', valueKinds: ['string'] },
+            },
+            requiredRoles: ['state', 'basis'],
+            competencyQuestions: [
+              {
+                id: 'identity',
+                question: 'What is it?',
+                answerPaths: ['subject'],
+                includeInSummary: true,
+              },
+              {
+                id: 'meaning',
+                question: 'What does it mean?',
+                answerPaths: ['roles.state'],
+                includeInSummary: true,
+              },
+            ],
+            summaryPlan: { roles: ['basis'] },
+          },
+        ],
+      }),
+    ).toThrow('summary omits competency answer: roles.state');
+
+    expect(() =>
+      defineProfile({
+        profileId: 'profile:identity-fragment',
+        version: '1',
+        title: 'Identity fragment',
+        frames: [
+          {
+            type: 'test.identity-fragment',
+            title: 'Identity fragment',
+            description: 'Uses an identity attribute instead of the subject.',
+            roles: {
+              meaning: {
+                description: 'Referent meaning',
+                valueKinds: ['string'],
+              },
+            },
+            requiredRoles: ['meaning'],
+            competencyQuestions: [
+              {
+                id: 'identity',
+                question: 'What is it?',
+                answerPaths: ['subject.type'],
+                includeInSummary: true,
+              },
+              {
+                id: 'meaning',
+                question: 'What does it mean?',
+                answerPaths: ['roles.meaning'],
+                includeInSummary: true,
+              },
+            ],
+            summaryPlan: { roles: ['meaning'] },
+          },
+        ],
+      }),
+    ).toThrow('identity must include the canonical subject');
+
+    const materialized = materializeBinding(
+      new ProfileRegistry(profiles),
+      commerceBinding,
+      {
+        id: '42',
+        state: 'pending-payment',
+        total: 8431,
+        revision: 'order-r3',
+      },
+    );
+    const incompleteManifest: AuthorityManifest = {
+      ...authorityManifest,
+      sources: [
+        authorityManifest.sources[0],
+        authorityManifest.sources[1],
+        authorityManifest.sources[3],
+      ],
+    };
+    expect(auditBindingProvenance(materialized, incompleteManifest)).toEqual({
+      valid: false,
+      issues: ['Undeclared authority source: api.orders'],
     });
   });
 
@@ -267,9 +490,10 @@ describe('UGP v0.2 authoring candidate', () => {
       v: '0.2-draft',
       id: 'capsule:grounding:test',
       at: { surface: 'surface:orders', revision: 'surface-r1' },
+      referent: { nodeId: 'order:42', revision: 'order-r3' },
       description: {
         profile: 'profile:commerce',
-        summary: 'Order 42 is pending-payment with total 8431 USD.',
+        summary: 'Order 42 — State: pending-payment; Total: 8431 USD',
       },
       can: ['commerce.inspect-order'],
     });
@@ -337,6 +561,14 @@ describe('UGP v0.2 authoring candidate', () => {
       summary: 'Wrong order',
       authority: 'authoritative',
       capabilities: [],
+      provenance: {
+        nodeId: ['frontend.order-row'],
+        subject: ['domain.orders'],
+        roles: {
+          state: ['api.orders'],
+          total: ['api.orders'],
+        },
+      },
     }));
     expect(descriptions.createCapsule(grounding()).problem?.code).toBe(
       'invalid-description',

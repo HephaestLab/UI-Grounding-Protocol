@@ -26,7 +26,8 @@
         "description",
         "roles",
         "requiredRoles",
-        "summaryTemplate"
+        "competencyQuestions",
+        "summaryPlan"
       ],
       "properties": {
         "type": { "$ref": "common.schema.json#/$defs/semanticType" },
@@ -47,16 +48,48 @@
           "uniqueItems": true,
           "items": { "$ref": "common.schema.json#/$defs/identifier" }
         },
-        "summaryTemplate": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 2048
+        "competencyQuestions": {
+          "type": "array",
+          "minItems": 2,
+          "items": { "$ref": "#/$defs/competencyQuestion" }
+        },
+        "summaryPlan": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["roles"],
+          "properties": {
+            "roles": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": { "$ref": "common.schema.json#/$defs/identifier" }
+            }
+          }
         },
         "capabilities": {
           "type": "array",
           "uniqueItems": true,
           "items": { "$ref": "common.schema.json#/$defs/identifier" }
         }
+      }
+    },
+    "competencyQuestion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "question", "answerPaths", "includeInSummary"],
+      "properties": {
+        "id": { "$ref": "common.schema.json#/$defs/identifier" },
+        "question": { "type": "string", "minLength": 1, "maxLength": 1024 },
+        "answerPaths": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^(?:subject(?:\\.(?:ref|type|label))?|roles\\.[A-Za-z0-9][A-Za-z0-9._~:/@-]*)$"
+          }
+        },
+        "includeInSummary": { "type": "boolean" }
       }
     },
     "roleDefinition": {

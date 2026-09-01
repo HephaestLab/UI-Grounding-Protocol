@@ -1,5 +1,6 @@
 import hashlib
 import json
+import os
 import subprocess
 import time
 from pathlib import Path
@@ -10,8 +11,11 @@ from PIL import Image
 
 EXPERIMENT_ROOT = Path(__file__).resolve().parents[1]
 WORKSPACE_ROOT = EXPERIMENT_ROOT.parents[1]
-RUNS_ROOT = EXPERIMENT_ROOT / ".runs"
+RUNS_ROOT = Path(
+    os.environ.get("UGP_RUNS_ROOT", str(EXPERIMENT_ROOT / ".runs"))
+).resolve()
 SCRIPTS_ROOT = EXPERIMENT_ROOT / "scripts"
+RUNTIME_SIDECAR_ROOT = EXPERIMENT_ROOT / "runtime-injection"
 
 
 def stable_json(value: Any) -> str:
@@ -159,7 +163,7 @@ def dom_semantic_nodes(
                 for key, value in attributes.items()
                 if key in allowed_attributes
                 or key.startswith("aria-")
-                or key.startswith("data-")
+                or (key.startswith("data-") and not key.startswith("data-ugp-"))
             }
             identity = " ".join(
                 public_attributes.get(key, "") for key in ("id", "name", "type")
@@ -207,6 +211,98 @@ def dom_semantic_nodes(
         key=lambda item: (item["document"], item["order"]),
     )
     return [item["node"] for item in selected]
+
+
+def runtime_adapter_metadata(application: str) -> dict[str, str]:
+    """Return frozen sidecar provenance without modifying the browser runtime.
+
+    The application image/volume must install and load the sidecar before the
+    benchmark starts. Keeping this function read-only makes harness-side
+    ``add_init_script`` treatment impossible by construction.
+    """
+
+    adapter_root = RUNTIME_SIDECAR_ROOT / f"{application}-v8"
+    adapter_path = adapter_root / "adapter.js"
+    manifest_path = adapter_root / "authority-manifest.json"
+    metadata_path = adapter_root / "adapter-metadata.json"
+    adapter_source = adapter_path.read_text(encoding="utf-8")
+    manifest = read_json(manifest_path)
+    metadata = read_json(metadata_path)
+    adapter_digest = hashlib.sha256(adapter_source.encode("utf-8")).hexdigest()
+    manifest_digest = sha256(stable_json(manifest))
+    return {
+        "adapterId": str(metadata["adapterId"]),
+        "adapterDigest": adapter_digest,
+        "authorityManifestDigest": manifest_digest,
+    }
+
+
+def runtime_snapshot(
+    environment: Any, *, capsule_budget: int | None = 48
+) -> dict[str, Any]:
+    page = environment.unwrapped.page
+    snapshot = page.evaluate(
+        """async (capsuleBudget) => {
+          const bridge = globalThis.__UGP_EXPERIMENT_BRIDGE__;
+          if (
+            !bridge ||
+            typeof bridge.snapshot !== 'function' ||
+            typeof bridge.describe !== 'function'
+          ) return null;
+          const snapshot = await bridge.snapshot();
+          const referentIndex = Array.isArray(snapshot?.referentIndex)
+            ? snapshot.referentIndex
+            : [];
+          const frameRanks = {
+            'crm.module': 0,
+            'crm.field': 1,
+            'crm.application-action': 2,
+            'crm.record': 3,
+          };
+          const ranked = [...referentIndex].sort((left, right) =>
+            Number(Boolean(right.visible)) - Number(Boolean(left.visible)) ||
+            (frameRanks[left.frameType] ?? 9) -
+              (frameRanks[right.frameType] ?? 9) ||
+            left.nodeId.localeCompare(right.nodeId)
+          );
+          const selected = capsuleBudget === null
+            ? ranked
+            : ranked.slice(0, capsuleBudget);
+          const capsules = [];
+          for (const referent of selected) {
+            capsules.push(await bridge.describe(referent.capsuleHandle));
+          }
+          return {
+            ...snapshot,
+            capsules,
+            capsuleSelection: {
+              policy: 'visible-then-frame-type-then-node-id',
+              budget: capsuleBudget,
+              indexed: referentIndex.length,
+              selected: selected.length,
+            },
+          };
+        }""",
+        capsule_budget,
+    )
+    if not isinstance(snapshot, dict):
+        raise RuntimeError("Application runtime did not expose a UGP bridge snapshot")
+    return snapshot
+
+
+def public_chat_messages(observation: dict[str, Any]) -> list[dict[str, str]]:
+    """Project the benchmark's public chat into a stable actor-visible form."""
+
+    output = []
+    for raw in observation.get("chat_messages") or []:
+        if not isinstance(raw, dict):
+            continue
+        role = str(raw.get("role") or "user")[:64]
+        message = str(raw.get("message") or raw.get("msg") or "").strip()
+        if not message:
+            continue
+        output.append({"role": role, "message": message[:4096]})
+    return output
 
 
 def save_screenshot(observation: dict[str, Any], path: Path) -> None:
@@ -270,11 +366,15 @@ def materialize_step(input_path: Path, task_path: Path) -> None:
 
 
 def action_string(
-    output: dict[str, Any], *, stop_function: str = "send_msg_to_user"
+    output: dict[str, Any],
+    *,
+    stop_function: str = "send_msg_to_user",
+    answer_function: str | None = None,
 ) -> str:
     kind = output["kind"]
     if kind == "answer":
-        return f"{stop_function}({str(output.get('answer') or '')!r})"
+        function_name = answer_function or stop_function
+        return f"{function_name}({str(output.get('answer') or '')!r})"
     if kind == "click":
         target = str(output.get("target", ""))
         if target.startswith(("http://", "https://")):

@@ -115,6 +115,8 @@ for (const episodeId of [...activeEpisodeIds].sort()) {
 }
 
 const records = [];
+const semanticMethods = ['rag-context', 'mcp-resource', 'nlweb-context', 'ugp'];
+const structuralMethods = ['vision-only', 'html-ax', 'tree-of-lens', 'iai-p4'];
 for (const { taskPath: path } of activeEpisodes) {
   const task = await readJson(path);
   try {
@@ -129,15 +131,88 @@ for (const { taskPath: path } of activeEpisodes) {
     if (methods.length !== 8) {
       failures.push({ path, kind: 'method-count', observed: methods.length });
     }
-    for (const method of methods) {
-      if (
-        !sameSet(
-          task.sourceObservation.channels[method].factKeys,
-          task.sourceObservation.factKeys,
-        )
-      ) {
-        failures.push({ path, kind: 'fact-parity', method });
+    const ugpChannel = task.sourceObservation.channels.ugp;
+    const authorityFactKeys = ugpChannel?.factKeys ?? [];
+    for (const method of semanticMethods) {
+      const channel = task.sourceObservation.channels[method];
+      if (!channel || !sameSet(channel.factKeys, authorityFactKeys)) {
+        failures.push({ path, kind: 'semantic-authority-parity', method });
       }
+    }
+    for (const method of structuralMethods) {
+      const channel = task.sourceObservation.channels[method];
+      if (
+        !channel ||
+        channel.factKeys.some((factKey) => factKey.startsWith('authority:'))
+      ) {
+        failures.push({ path, kind: 'structural-authority-leak', method });
+      }
+      if (canonicalJson(channel?.representation ?? {}).includes('data-ugp-')) {
+        failures.push({ path, kind: 'structural-ugp-attribute-leak', method });
+      }
+    }
+    const provenance = ugpChannel?.representation?.runtimeProvenance;
+    const ugpRepresentation = ugpChannel?.representation;
+    const referentIndex = ugpRepresentation?.referentIndex;
+    const capsules = ugpRepresentation?.capsules;
+    const indexedNodeIds = new Set(
+      Array.isArray(referentIndex)
+        ? referentIndex.map((referent) => referent.nodeId)
+        : [],
+    );
+    const capsuleNodeIds = new Set(
+      Array.isArray(capsules)
+        ? capsules.map((capsule) => capsule?.referent?.nodeId)
+        : [],
+    );
+    if (
+      ugpRepresentation?.kind !== 'ugp-referent-set' ||
+      !Array.isArray(referentIndex) ||
+      !Array.isArray(capsules) ||
+      indexedNodeIds.size !== referentIndex.length ||
+      capsuleNodeIds.size !== capsules.length ||
+      ![...capsuleNodeIds].every((nodeId) => indexedNodeIds.has(nodeId)) ||
+      ugpRepresentation?.capsuleSelection?.policy !==
+        'visible-then-frame-type-then-node-id' ||
+      ugpRepresentation?.capsuleSelection?.indexed !== referentIndex.length ||
+      ugpRepresentation?.capsuleSelection?.selected !== capsules.length ||
+      !capsules.every(
+        (capsule) =>
+          capsule?.description?.frame?.subject?.ref &&
+          capsule?.description?.summary,
+      )
+    ) {
+      failures.push({ path, kind: 'runtime-referent-set-integrity' });
+    }
+    if (
+      provenance?.origin !== 'application-runtime' ||
+      !/^[a-f0-9]{64}$/u.test(provenance?.adapterDigest ?? '') ||
+      !/^[a-f0-9]{64}$/u.test(provenance?.authorityManifestDigest ?? '') ||
+      provenance?.taskSpecificInputsExcluded !== true ||
+      provenance?.goldAccess !== false ||
+      !Number.isInteger(provenance?.referentCount) ||
+      provenance?.referentCount !== referentIndex?.length ||
+      !Number.isInteger(provenance?.selectedCapsuleCount) ||
+      provenance?.selectedCapsuleCount !== capsules?.length ||
+      !/^[a-f0-9]{64}$/u.test(provenance?.profileDigest ?? '') ||
+      !/^[a-f0-9]{64}$/u.test(provenance?.referentProvenanceDigest ?? '') ||
+      !/^[a-f0-9]{64}$/u.test(provenance?.capsuleSelectionDigest ?? '') ||
+      provenance?.capsuleSelectionDigest !==
+        sha256(canonicalJson(ugpRepresentation?.capsuleSelection))
+    ) {
+      failures.push({ path, kind: 'runtime-capsule-provenance' });
+    }
+    if (
+      matrixPlan.runtimeAdapter &&
+      (provenance?.adapterId !== matrixPlan.runtimeAdapter.adapterId ||
+        provenance?.adapterDigest !== matrixPlan.runtimeAdapter.adapterDigest ||
+        provenance?.authorityManifestDigest !==
+          matrixPlan.runtimeAdapter.authorityManifestDigest ||
+        provenance?.application !== matrixPlan.runtimeAdapter.application ||
+        provenance?.applicationVersion !==
+          matrixPlan.runtimeAdapter.applicationVersion)
+    ) {
+      failures.push({ path, kind: 'runtime-adapter-plan-mismatch' });
     }
     records.push({
       path,
@@ -145,6 +220,8 @@ for (const { taskPath: path } of activeEpisodes) {
       step: task.step,
       methods,
       factBundleDigest: task.sourceObservation.factBundleDigest,
+      adapterDigest: provenance?.adapterDigest ?? null,
+      authorityManifestDigest: provenance?.authorityManifestDigest ?? null,
     });
   } catch (error) {
     failures.push({
@@ -246,10 +323,9 @@ const report = {
   valid: failures.length === 0,
   scoredJobs,
   taskPackets: records.length,
-  methodFactParityChecks: records.reduce(
-    (sum, record) => sum + record.methods.length,
-    0,
-  ),
+  semanticBaselineParityChecks: records.length * semanticMethods.length,
+  structuralIsolationChecks: records.length * structuralMethods.length * 2,
+  runtimeCapsuleProvenanceChecks: records.length * 5,
   actorPackets: actorRecords.length,
   actorIsolationChecks: actorRecords.length * 4,
   runnerIdentityChecks: actorRecords.length * 10,

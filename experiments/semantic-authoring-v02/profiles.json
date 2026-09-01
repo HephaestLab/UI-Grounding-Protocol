@@ -39,7 +39,28 @@
           "scope.period",
           "basis"
         ],
-        "summaryTemplate": "{subject}: {value} {unit} for {scope.region} in {scope.period}.",
+        "competencyQuestions": [
+          {
+            "id": "identity",
+            "question": "Which application-owned observation is this?",
+            "answerPaths": ["subject"],
+            "includeInSummary": true
+          },
+          {
+            "id": "meaning",
+            "question": "What value was observed under which scope?",
+            "answerPaths": [
+              "roles.value",
+              "roles.unit",
+              "roles.scope.region",
+              "roles.scope.period"
+            ],
+            "includeInSummary": true
+          }
+        ],
+        "summaryPlan": {
+          "roles": ["value", "unit", "scope.region", "scope.period"]
+        },
         "capabilities": ["bi.explain-observation"]
       }
     ]
@@ -88,7 +109,21 @@
           }
         },
         "requiredRoles": ["effect", "basis"],
-        "summaryTemplate": "{subject}: {effect} Basis {basis}.",
+        "competencyQuestions": [
+          {
+            "id": "identity",
+            "question": "Which clause or section is this?",
+            "answerPaths": ["subject"],
+            "includeInSummary": true
+          },
+          {
+            "id": "meaning",
+            "question": "What normative effect does it have and on what basis?",
+            "answerPaths": ["roles.effect", "roles.basis"],
+            "includeInSummary": true
+          }
+        ],
+        "summaryPlan": { "roles": ["effect", "basis"] },
         "capabilities": [
           "document.open-source-clause",
           "document.open-policy-source"
@@ -133,7 +168,21 @@
           }
         },
         "requiredRoles": ["state", "assignee", "basis"],
-        "summaryTemplate": "{subject} is {state}, assigned to {assignee}.",
+        "competencyQuestions": [
+          {
+            "id": "identity",
+            "question": "Which workflow step is this?",
+            "answerPaths": ["subject"],
+            "includeInSummary": true
+          },
+          {
+            "id": "meaning",
+            "question": "What is its current state and assignment?",
+            "answerPaths": ["roles.state", "roles.assignee"],
+            "includeInSummary": true
+          }
+        ],
+        "summaryPlan": { "roles": ["state", "assignee"] },
         "capabilities": ["workflow.open-request", "workflow.open-incident"]
       }
     ]
@@ -180,7 +229,21 @@
           }
         },
         "requiredRoles": ["state", "currency", "basis"],
-        "summaryTemplate": "{subject} is {state}. Basis {basis}.",
+        "competencyQuestions": [
+          {
+            "id": "identity",
+            "question": "Which commerce record is this?",
+            "answerPaths": ["subject"],
+            "includeInSummary": true
+          },
+          {
+            "id": "meaning",
+            "question": "What is its current operational state and authoritative basis?",
+            "answerPaths": ["roles.state", "roles.basis"],
+            "includeInSummary": true
+          }
+        ],
+        "summaryPlan": { "roles": ["state", "basis"] },
         "capabilities": ["commerce.inspect-order", "commerce.inspect-return"]
       }
     ]

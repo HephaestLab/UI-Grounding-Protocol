@@ -193,6 +193,12 @@ function commonChannels({
         v: '0.2-draft',
         id: selection ? `selection.${sha256(surface).slice(0, 16)}` : surface,
         at: { surface, revision: generatedBy },
+        referent: {
+          nodeId:
+            (selection ? targetIds[0] : null) ??
+            (selection ? `selection.${sha256(surface).slice(0, 16)}` : surface),
+          revision: generatedBy,
+        },
         description: {
           profile: selection ? 'ui.pointed-referent' : 'ui.visible-screen',
           summary: selection

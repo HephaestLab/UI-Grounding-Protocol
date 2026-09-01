@@ -11,7 +11,9 @@ export const experimentRoot = resolve(
   '..',
 );
 export const workspaceRoot = resolve(experimentRoot, '..', '..');
-export const runsRoot = join(experimentRoot, '.runs');
+export const runsRoot = resolve(
+  process.env.UGP_RUNS_ROOT ?? join(experimentRoot, '.runs'),
+);
 
 function sortValue(value) {
   if (Array.isArray(value)) return value.map(sortValue);

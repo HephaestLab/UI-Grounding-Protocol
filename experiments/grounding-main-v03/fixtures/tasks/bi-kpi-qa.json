@@ -183,6 +183,10 @@
               "surface": "dashboard.executive-overview",
               "revision": "fixture-1"
             },
+            "referent": {
+              "nodeId": "metric.net_revenue",
+              "revision": "fixture-1"
+            },
             "description": {
               "profile": "bi.metric-observation",
               "summary": "The selected tile is the Net Revenue business metric, showing 4.2 million USD for FY2026 Q2.",

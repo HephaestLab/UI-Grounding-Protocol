@@ -20,8 +20,10 @@ Every request is a self-contained JSON document. An actor invocation receives:
 It must not receive prior tasks, benchmark IDs with semantic meaning, source
 task IDs, answer keys, scorer code, hidden state, or another condition's
 representation. Interactive history, when required, is supplied as a normalized
-list of previously executed actions and public environment observations; it is
-not model-authored memory.
+list of previously executed actions, public environment observations, and public
+benchmark chat messages (including user confirmation or clarification); it is
+not model-authored memory. A runner must not discard a public user reply and
+replace it with an inferred permission flag.
 
 ## Request
 
@@ -87,7 +89,7 @@ object:
 | RAG          | Read-only retrieved passages                                              |
 | MCP Resource | Read-only MCP resource contents; no tool execution                        |
 | NLWeb        | Read-only NLWeb-style response/context                                    |
-| UGP          | Valid UGP capsule and optional resolvable resource links                  |
+| UGP          | Complete referent index, bounded valid Capsules, and interaction overlay  |
 
 Adapters must not change the action vocabulary, step budget, task wording, model
 settings, or exposed source facts. Every generated packet records source and

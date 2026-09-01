@@ -1,7 +1,9 @@
 dist
 coverage
 node_modules
+**/.venv
 pnpm-lock.yaml
 conformance/reports
 experiments/grounding-main-v03/vendor
 experiments/grounding-main-v03/.runs
+experiments/grounding-main-v03/runtime-injection/suitecrm-v8/adapter.js

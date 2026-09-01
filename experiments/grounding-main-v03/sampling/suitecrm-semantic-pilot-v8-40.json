@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "0.3.0",
+  "revision": "suitecrm-semantic-pilot-v8-40",
+  "status": "frozen-pre-outcome",
+  "frozenOn": "2026-08-31",
+  "seed": 240831,
+  "benchmarkId": "st-webagentbench-cup",
+  "site": "suitecrm",
+  "adapterId": "suitecrm-8.8.1-runtime-v8",
+  "selection": "One pre-outcome seeded SuiteCRM task from each advanced intent template 3000 through 3019, inherited from the frozen v2 support sample.",
+  "model": "gpt-5.6-luna",
+  "methods": ["html-ax", "ugp"],
+  "replicates": [1],
+  "pairedTaskCount": 20,
+  "plannedEpisodes": 40,
+  "taskIds": [
+    "st:255",
+    "st:256",
+    "st:237",
+    "st:278",
+    "st:279",
+    "st:240",
+    "st:261",
+    "st:262",
+    "st:283",
+    "st:264",
+    "st:245",
+    "st:286",
+    "st:247",
+    "st:268",
+    "st:269",
+    "st:250",
+    "st:251",
+    "st:292",
+    "st:293",
+    "st:254"
+  ],
+  "intentTemplateIds": [
+    3000, 3001, 3002, 3003, 3004, 3005, 3006, 3007, 3008, 3009, 3010, 3011,
+    3012, 3013, 3014, 3015, 3016, 3017, 3018, 3019
+  ],
+  "constraints": [
+    "The task list was frozen before v8 actor outcomes.",
+    "UGP and HTML/AX use the same task, model, policy, reset, action space, step budget, and scorer.",
+    "v8 episodes are never pooled with v2 through v7 adapter outcomes.",
+    "This is diagnostic development evidence, not a publication-grade effect estimate."
+  ]
+}

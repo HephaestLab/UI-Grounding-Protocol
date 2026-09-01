@@ -1,0 +1,30 @@
+services:
+  mariadb:
+    image: docker.io/bitnamilegacy/mariadb:11.4.7-debian-12-r2
+    platform: linux/amd64
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - MARIADB_USER=bn_suitecrm
+      - MARIADB_DATABASE=bitnami_suitecrm
+      - MARIADB_PASSWORD=bitnami123
+    volumes:
+      - mariadb_data:/bitnami/mariadb
+  suitecrm:
+    image: docker.io/bitnamilegacy/suitecrm:8.8.1-debian-12-r3
+    platform: linux/amd64
+    ports:
+      - '${UGP_SUITECRM_PORT}:8080'
+    environment:
+      - SUITECRM_DATABASE_HOST=mariadb
+      - SUITECRM_DATABASE_PORT_NUMBER=3306
+      - SUITECRM_DATABASE_USER=bn_suitecrm
+      - SUITECRM_DATABASE_NAME=bitnami_suitecrm
+      - SUITECRM_DATABASE_PASSWORD=bitnami123
+      - ALLOW_EMPTY_PASSWORD=yes
+    volumes:
+      - suitecrm_data:/bitnami/suitecrm
+    depends_on:
+      - mariadb
+volumes:
+  mariadb_data:
+  suitecrm_data:

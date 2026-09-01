@@ -70,6 +70,27 @@ function titleCase(value) {
   );
 }
 
+function summaryRoleLabel(role) {
+  return role
+    .replace(/[._-]+/gu, ' ')
+    .replace(/^\p{Ll}/u, (initial) => initial.toLocaleUpperCase('en-US'));
+}
+
+function formatSummaryValue(value) {
+  if (Array.isArray(value)) return value.map(formatSummaryValue).join(', ');
+  if (value === null || typeof value !== 'object') return String(value);
+  if (value.kind === 'entity') return value.label ?? value.ref;
+  if (value.kind === 'quantity') return `${value.value} ${value.unit}`;
+  if (value.kind === 'instant') return value.value;
+  if (value.kind === 'interval')
+    return value.label ?? `${value.start}..${value.endExclusive ?? ''}`;
+  if (value.kind === 'collection')
+    return value.items.map(formatSummaryValue).join(', ');
+  if (value.kind === 'frame')
+    return value.value.subject.label ?? value.value.subject.ref;
+  throw new Error(`Unknown summary value: ${JSON.stringify(value)}`);
+}
+
 function appFiles(task) {
   const facts = Object.fromEntries(
     task.controlledFacts.map((fact) => [fact.id, fact.value]),
@@ -398,19 +419,28 @@ export function readerArtifact(task, condition) {
         ? { kind: 'collection', items: fact.value }
         : fact.value,
     ]);
-  const summaries = {
-    bi: `${task.target.label}: ${facts.value} ${facts.unit} for ${facts['scope.region']} in ${facts['scope.period']}.`,
-    document: `${task.target.label}: ${facts.effect} Basis ${facts.basis}.`,
-    workflow: `${task.target.label} is ${facts.state}, assigned to ${facts.assignee}.`,
-    commerce: `${task.target.label} is ${facts.state}. Basis ${facts.basis}.`,
-  };
+  const summaryRoles = {
+    bi: ['value', 'unit', 'scope.region', 'scope.period'],
+    document: ['effect', 'basis'],
+    workflow: ['state', 'assignee'],
+    commerce: ['state', 'basis'],
+  }[task.domain];
+  const summary = `${task.target.label} — ${summaryRoles
+    .map(
+      (role) => `${summaryRoleLabel(role)}: ${formatSummaryValue(facts[role])}`,
+    )
+    .join('; ')}`;
   return {
     v: '0.2-draft',
     id: `capsule:${task.target.id}`,
     at: { surface: `surface:${task.taskId}`, revision: String(facts.basis) },
+    referent: {
+      nodeId: task.target.id,
+      revision: String(facts.basis),
+    },
     description: {
       profile: `profile:${task.domain}`,
-      summary: summaries[task.domain],
+      summary,
       frame: {
         type: `${task.domain}.${task.domain === 'bi' ? 'observation' : task.domain === 'document' ? 'normative-text' : task.domain === 'workflow' ? 'stateful-step' : 'record'}`,
         subject: {
